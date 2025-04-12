@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import static com.minpay.Comiqueria.utils.TestsUtils.*;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -28,20 +30,65 @@ public class ProvinciaTest {
     @Autowired
     private MockMvc mockMvc;
     
+    private static Long idPais;
     private static Long idProvincia;
+    private static Long idLocalidad;
+    private static String paisResponse;
     private static String provinciaResponse;
+    private static String localidadResponse;
 
     @BeforeAll
     static void setup() {
         idProvincia = null;
     }
+    
+    @BeforeEach
+    void ensurePaisExists() throws Exception {
+        if (idPais == null) {
+            String nombrePais = "ARGENTINA";
+            paisResponse = crearMediantePost(
+                mockMvc,
+                "/paises",
+                "nombre",
+                nombrePais,
+                MediaType.TEXT_PLAIN
+            );
+            idPais = extraerIdDeResponse(paisResponse);
+        }
+    }
 
     @BeforeEach
     void ensureProvinciaExists() throws Exception {
         if (idProvincia == null) {
-            String nombreProvincia = "Buenos Aires";
-            provinciaResponse = crearMediantePost(mockMvc, "/provincias", nombreProvincia, MediaType.TEXT_PLAIN);
+            String nombreProvincia = "BUENOS AIRES";
+            Map<String, Object> parametrosOpcionales = new HashMap<>();
+            parametrosOpcionales.put("idPais", idPais);
+            provinciaResponse = crearMediantePost(
+                mockMvc,
+                "/provincias",
+                "nombre",
+                nombreProvincia,
+                parametrosOpcionales,
+                MediaType.TEXT_PLAIN
+            );
             idProvincia = extraerIdDeResponse(provinciaResponse);
+        }
+    }
+    
+    private void ensureLocalidadExists() throws Exception {
+        if (idLocalidad == null) {
+            String nombreLocalidad = "SAN LORENZO";
+            Map<String, Object> parametrosOpcionales = new HashMap<>();
+            parametrosOpcionales.put("idProvincia", idProvincia);
+            localidadResponse = crearMediantePost(
+                mockMvc,
+                "/localidades",
+                "nombre",
+                nombreLocalidad,
+                parametrosOpcionales,
+                MediaType.TEXT_PLAIN
+            );
+            idLocalidad = extraerIdDeResponse(localidadResponse);
         }
     }
     
@@ -51,10 +98,9 @@ public class ProvinciaTest {
         mockMvc.perform(get("/provincias/" + idProvincia))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(idProvincia))
-                .andExpect(jsonPath("$.nombre").value("Buenos Aires"))
+                .andExpect(jsonPath("$.nombre").value("BUENOS AIRES"))
                 .andExpect(jsonPath("$.localidades").isArray())
-                .andExpect(jsonPath("$.localidades").isEmpty())
-                .andExpect(jsonPath("$.pais").isEmpty());
+                .andExpect(jsonPath("$.localidades").isEmpty());
     }
     
     @Test
@@ -64,39 +110,42 @@ public class ProvinciaTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[" + (idProvincia - 1) + "].id").value(idProvincia))
-                .andExpect(jsonPath("$[" + (idProvincia - 1) + "].nombre").value("Buenos Aires"))
+                .andExpect(jsonPath("$[" + (idProvincia - 1) + "].nombre").value("BUENOS AIRES"))
                 .andExpect(jsonPath("$[" + (idProvincia - 1) + "].localidades").isArray())
-                .andExpect(jsonPath("$[" + (idProvincia - 1) + "].localidades").isEmpty())
-                .andExpect(jsonPath("$[" + (idProvincia - 1) + "].pais").isEmpty());
+                .andExpect(jsonPath("$[" + (idProvincia - 1) + "].localidades").isEmpty());
     }
     
     @Test
     @Order(3)
     void shouldCreateAndReturnProvincia() throws Exception {
         // Crea un JSON representando un autor
-        String nombreProvincia = "Tucumán";
+        String nombreProvincia = "TUCUMAN";
 
         // Realiza una petición POST al controlador
         mockMvc.perform(post("/provincias")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(nombreProvincia))
+                .param("nombre", nombreProvincia)
+                .param("idPais", String.valueOf(idPais))
+                .contentType(MediaType.TEXT_PLAIN))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.nombre").value("Tucumán"))
-                .andExpect(jsonPath("$.localidades").isEmpty())
-                .andExpect(jsonPath("$.pais").isEmpty());
+                .andExpect(jsonPath("$.nombre").value("TUCUMAN"))
+                .andExpect(jsonPath("$.localidades").isEmpty());
     }
 
     @Test
     @Order(4)
     void shouldEditAndReturnProvincia() throws Exception {
-        String provinciaCorregidaJson = "Santa Fe";
+        String provinciaCorregidaJson = "SANTA FE";
+        this.ensureLocalidadExists();
 
         mockMvc.perform(patch("/provincias/" + idProvincia)
-                .contentType(MediaType.TEXT_PLAIN)
-                .content(provinciaCorregidaJson))
+                .param("nombre", provinciaCorregidaJson)
+                .param("idPais", String.valueOf(idPais))
+                .param("idLocalidades", String.valueOf(idLocalidad))
+                .contentType(MediaType.TEXT_PLAIN))
                 .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$.nombre").value("Santa Fe"));
+                .andExpect(jsonPath("$.nombre").value("SANTA FE"))
+                .andExpect(jsonPath("$.localidades[0].nombre").value("SAN LORENZO"));
     }
 
     @Test
