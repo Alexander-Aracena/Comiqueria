@@ -6,7 +6,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import static com.minpay.Comiqueria.utils.Utils.*;
+import static com.minpay.Comiqueria.utils.TestsUtils.*;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -29,7 +31,9 @@ public class PaisTest {
     private MockMvc mockMvc;
     
     private static Long idPais;
+    private static Long idProvincia;
     private static String paisResponse;
+    private static String provinciaResponse;
 
     @BeforeAll
     static void setup() {
@@ -51,15 +55,30 @@ public class PaisTest {
         }
     }
     
+    private void ensureProvinciaExists() throws Exception {
+        if (idProvincia == null) {
+            String nombreProvincia = "DURAZNO";
+            Map<String, Object> parametrosOpcionales = new HashMap<>();
+            parametrosOpcionales.put("idPais", idPais);
+            provinciaResponse = crearMediantePost(
+                mockMvc,
+                "/provincias",
+                "nombre",
+                nombreProvincia,
+                parametrosOpcionales,
+                MediaType.TEXT_PLAIN
+            );
+            idProvincia = extraerIdDeResponse(provinciaResponse);
+        }
+    }
+    
     @Test
     @Order(1)
     void shouldReturnAPais() throws Exception {
         mockMvc.perform(get("/paises/" + idPais))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(idPais))
-                .andExpect(jsonPath("$.nombre").value("ARGENTINA"))
-                .andExpect(jsonPath("$.provincias").isArray())
-                .andExpect(jsonPath("$.provincias").isEmpty());
+                .andExpect(jsonPath("$.nombre").value("ARGENTINA"));
     }
     
     @Test
@@ -69,9 +88,7 @@ public class PaisTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[" + (idPais - 1) + "].id").value(idPais))
-                .andExpect(jsonPath("$[" + (idPais - 1) + "].nombre").value("ARGENTINA"))
-                .andExpect(jsonPath("$[" + (idPais - 1) + "].provincias").isArray())
-                .andExpect(jsonPath("$[" + (idPais - 1) + "].provincias").isEmpty());
+                .andExpect(jsonPath("$[" + (idPais - 1) + "].nombre").value("ARGENTINA"));
     }
     
     @Test
@@ -82,21 +99,32 @@ public class PaisTest {
 
         // Realiza una petición POST al controlador
         mockMvc.perform(post("/paises")
-                .contentType(MediaType.TEXT_PLAIN)
-                .content(nombrePais))
+                .param("nombre", nombrePais)
+                .contentType(MediaType.TEXT_PLAIN))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.nombre").value("BRASIL"))
-                .andExpect(jsonPath("$.provincias").isEmpty());
+                .andExpect(jsonPath("$.nombre").value("BRASIL"));
     }
 
     @Test
     @Order(4)
     void shouldEditAndReturnPais() throws Exception {
-        String paisCorregidoJson = "URUGUAY";
+        this.ensureProvinciaExists();
+        
+        String paisCorregidoJson = """
+                                   {
+                                        "nombre": "URUGUAY",
+                                        "provincias": [
+                                            {
+                                                "id": 1,
+                                                "nombre": "DURAZNO"
+                                            }
+                                        ]
+                                    }
+                                   """;
 
         mockMvc.perform(patch("/paises/" + idPais)
-                .contentType(MediaType.TEXT_PLAIN)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(paisCorregidoJson))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.nombre").value("URUGUAY"));

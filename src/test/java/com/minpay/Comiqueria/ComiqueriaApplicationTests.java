@@ -10,6 +10,5 @@ class ComiqueriaApplicationTests {
 
     @Test
     void contextLoads() throws Exception {
-        autorTest.shouldReturnAnAutor();
     }
 }

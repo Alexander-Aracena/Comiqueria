@@ -9,12 +9,13 @@ import org.springframework.stereotype.Component;
 public class VentaDTOToVenta implements IMapper<VentaDTO, Venta> {    
     @Override
     public Venta map(VentaDTO ventaDTO) {
-        return new Venta(
-                LocalDate.now(),
-                ventaDTO.getTotal(),
-                ventaDTO.getLineas(),
-                ventaDTO.getCliente()
-        );
+        Venta venta = new Venta();
+        venta.setFecha_venta(LocalDate.now());
+        venta.setTotal(ventaDTO.getTotal());
+        venta.setLineas(ventaDTO.getLineas());
+        venta.setCliente(ventaDTO.getCliente());
+        
+        return venta;
     }
 
     @Override

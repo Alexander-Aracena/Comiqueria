@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @UtilityClass
-public final class Utils {
+public final class TestsUtils {
     public static Long extraerIdDeResponse(String response) {
         Long id = Long.valueOf(JsonPath.read(response, "$.id").toString());
         Assertions.assertNotNull(id, "El ID no debe ser nulo");

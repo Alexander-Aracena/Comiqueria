@@ -3,12 +3,17 @@ package com.minpay.Comiqueria.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Data
 @Entity
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +50,7 @@ public class Cliente {
     
     @NonNull
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
-    private Set<Domicilio> domicilios;
+    private Set<Domicilio> domicilios = new HashSet<>();
     
     @NonNull
     @Column(name = "cte_telefono")
@@ -57,7 +62,7 @@ public class Cliente {
         joinColumns = @JoinColumn(name = "cte_id"), 
         inverseJoinColumns = @JoinColumn(name = "prod_id")
     )
-    private Set<Producto> favoritos;
+    private Set<Producto> favoritos = new HashSet<>();
     
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private Set<Venta> ventas;

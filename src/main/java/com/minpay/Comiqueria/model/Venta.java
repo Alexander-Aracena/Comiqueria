@@ -10,12 +10,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Data
 @Entity
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +38,7 @@ public class Venta {
     @NonNull
     @Column(name = "vta_linea_id", nullable = false)
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
-    private Set<LineaVenta> lineas;
+    private Set<LineaVenta> lineas = new HashSet<>();
     
     @NonNull
     @ManyToOne

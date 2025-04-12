@@ -2,6 +2,7 @@ package com.minpay.Comiqueria.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,5 +27,5 @@ public class Categoria {
     
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
-    private Set<Subcategoria> subcategorias;
+    private Set<Subcategoria> subcategorias = new HashSet<>();
 }

@@ -2,8 +2,10 @@ package com.minpay.Comiqueria.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.Set;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +25,9 @@ public class Provincia {
     @Column(name = "prov_nombre", length = 30)
     private String nombre;
     
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "provincia", cascade = CascadeType.ALL)
-    private Set<Localidad> localidades;
+    private Set<Localidad> localidades = new HashSet<>();
     
     @ManyToOne
     @JoinColumn(name = "prov_pais_id")
