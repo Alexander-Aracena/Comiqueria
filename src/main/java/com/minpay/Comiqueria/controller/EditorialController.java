@@ -1,5 +1,6 @@
 package com.minpay.Comiqueria.controller;
 
+import com.minpay.Comiqueria.dto.EditorialDTO;
 import com.minpay.Comiqueria.model.Editorial;
 import com.minpay.Comiqueria.service.interfaces.IEditorialService;
 import java.util.List;
@@ -14,8 +15,9 @@ public class EditorialController {
     private IEditorialService editorialService;
     
     @GetMapping("/{id}")
-    public Editorial traerEditorial(@PathVariable Long id){
-        return this.editorialService.getEditorial(id);
+    public EditorialDTO traerEditorial(@PathVariable Long id){
+        Editorial editorial = this.editorialService.getEditorial(id);
+        return this.editorialService.getEditorialDTO(editorial);
     }
     
     @GetMapping
@@ -25,13 +27,13 @@ public class EditorialController {
     
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Editorial guardarEditorial(@RequestBody String nombre){
+    public Editorial guardarEditorial(@RequestParam String nombre){
         return this.editorialService.createEditorial(nombre);
     }
     
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Editorial editarEditorial(@PathVariable Long id, @RequestBody String nombre){
+    public Editorial editarEditorial(@PathVariable Long id, @RequestParam String nombre){
         return this.editorialService.editEditorialById(id, nombre);
     }
     

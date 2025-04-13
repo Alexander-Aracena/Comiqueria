@@ -27,21 +27,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource("classpath:application-test.properties")
 @TestMethodOrder(OrderAnnotation.class)
 public class ProvinciaTest {
+
     @Autowired
     private MockMvc mockMvc;
-    
-    private static Long idPais;
-    private static Long idProvincia;
-    private static Long idLocalidad;
-    private static String paisResponse;
-    private static String provinciaResponse;
-    private static String localidadResponse;
+
+    private static Long idPais, idProvincia, idLocalidad;
+    private static String paisResponse, provinciaResponse, localidadResponse;
 
     @BeforeAll
     static void setup() {
         idProvincia = null;
     }
-    
+
     @BeforeEach
     void ensurePaisExists() throws Exception {
         if (idPais == null) {
@@ -74,7 +71,7 @@ public class ProvinciaTest {
             idProvincia = extraerIdDeResponse(provinciaResponse);
         }
     }
-    
+
     private void ensureLocalidadExists() throws Exception {
         if (idLocalidad == null) {
             String nombreLocalidad = "SAN LORENZO";
@@ -91,30 +88,30 @@ public class ProvinciaTest {
             idLocalidad = extraerIdDeResponse(localidadResponse);
         }
     }
-    
+
     @Test
     @Order(1)
     void shouldReturnAProvincia() throws Exception {
         mockMvc.perform(get("/provincias/" + idProvincia))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(idProvincia))
-                .andExpect(jsonPath("$.nombre").value("BUENOS AIRES"))
-                .andExpect(jsonPath("$.localidades").isArray())
-                .andExpect(jsonPath("$.localidades").isEmpty());
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(idProvincia))
+            .andExpect(jsonPath("$.nombre").value("BUENOS AIRES"))
+            .andExpect(jsonPath("$.localidades").isArray())
+            .andExpect(jsonPath("$.localidades").isEmpty());
     }
-    
+
     @Test
     @Order(2)
     void shouldReturnAllProvincias() throws Exception {
         mockMvc.perform(get("/provincias"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[" + (idProvincia - 1) + "].id").value(idProvincia))
-                .andExpect(jsonPath("$[" + (idProvincia - 1) + "].nombre").value("BUENOS AIRES"))
-                .andExpect(jsonPath("$[" + (idProvincia - 1) + "].localidades").isArray())
-                .andExpect(jsonPath("$[" + (idProvincia - 1) + "].localidades").isEmpty());
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$[" + (idProvincia - 1) + "].id").value(idProvincia))
+            .andExpect(jsonPath("$[" + (idProvincia - 1) + "].nombre").value("BUENOS AIRES"))
+            .andExpect(jsonPath("$[" + (idProvincia - 1) + "].localidades").isArray())
+            .andExpect(jsonPath("$[" + (idProvincia - 1) + "].localidades").isEmpty());
     }
-    
+
     @Test
     @Order(3)
     void shouldCreateAndReturnProvincia() throws Exception {
@@ -123,13 +120,13 @@ public class ProvinciaTest {
 
         // Realiza una petición POST al controlador
         mockMvc.perform(post("/provincias")
-                .param("nombre", nombreProvincia)
-                .param("idPais", String.valueOf(idPais))
-                .contentType(MediaType.TEXT_PLAIN))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.nombre").value("TUCUMAN"))
-                .andExpect(jsonPath("$.localidades").isEmpty());
+            .param("nombre", nombreProvincia)
+            .param("idPais", String.valueOf(idPais))
+            .contentType(MediaType.TEXT_PLAIN))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.id").exists())
+            .andExpect(jsonPath("$.nombre").value("TUCUMAN"))
+            .andExpect(jsonPath("$.localidades").isEmpty());
     }
 
     @Test
@@ -139,23 +136,23 @@ public class ProvinciaTest {
         this.ensureLocalidadExists();
 
         mockMvc.perform(patch("/provincias/" + idProvincia)
-                .param("nombre", provinciaCorregidaJson)
-                .param("idPais", String.valueOf(idPais))
-                .param("idLocalidades", String.valueOf(idLocalidad))
-                .contentType(MediaType.TEXT_PLAIN))
-                .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$.nombre").value("SANTA FE"))
-                .andExpect(jsonPath("$.localidades[0].nombre").value("SAN LORENZO"));
+            .param("nombre", provinciaCorregidaJson)
+            .param("idPais", String.valueOf(idPais))
+            .param("idLocalidades", String.valueOf(idLocalidad))
+            .contentType(MediaType.TEXT_PLAIN))
+            .andExpect(status().isAccepted())
+            .andExpect(jsonPath("$.nombre").value("SANTA FE"))
+            .andExpect(jsonPath("$.localidades[0].nombre").value("SAN LORENZO"));
     }
 
     @Test
     @Order(5)
     void shouldDeleteAProvincia() throws Exception {
         mockMvc.perform(delete("/provincias/" + idProvincia))
-                .andExpect(status().isAccepted());
+            .andExpect(status().isAccepted());
 
         // Intenta obtener la pais eliminada y verifica el 404
         mockMvc.perform(get("/provincias/" + idProvincia))
-                .andExpect(status().isNotFound());
+            .andExpect(status().isNotFound());
     }
 }

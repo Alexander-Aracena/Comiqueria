@@ -28,10 +28,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource("classpath:application-test.properties")
 @TestMethodOrder(OrderAnnotation.class)
 public class SubcategoriaTest {
-    
+
     @Autowired
     private MockMvc mockMvc;
-    
+
     private static Long idCategoria;
     private static Long idSubcategoria;
     private static String categoriaResponse;
@@ -47,16 +47,16 @@ public class SubcategoriaTest {
         if (idCategoria == null) {
             String nombreCategoria = "COMICS";
             categoriaResponse = crearMediantePost(mockMvc, "/categorias", nombreCategoria,
-                    MediaType.TEXT_PLAIN);
+                MediaType.TEXT_PLAIN);
             idCategoria = extraerIdDeResponse(categoriaResponse);
         }
-        
+
         if (idSubcategoria == null) {
             String nombreSubcategoria = "USA";
-            
+
             Map<String, Object> opcionales = new HashMap<>();
             opcionales.put("idCategoria", idCategoria);
-            
+
             idSubcategoria = Long.valueOf(
                 JsonPath.read(crearMediantePost(
                     mockMvc,
@@ -66,29 +66,29 @@ public class SubcategoriaTest {
                     opcionales,
                     MediaType.APPLICATION_JSON
                 ), "$.idSubcategoria"
-            ).toString());
+                ).toString());
         }
     }
-    
+
     @Test
     @Order(1)
     void shouldReturnASubcategoria() throws Exception {
         mockMvc.perform(get("/subcategorias/" + idSubcategoria))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.idSubcategoria").value(idSubcategoria))
-                .andExpect(jsonPath("$.nombreSubcategoria").value("USA"));
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.idSubcategoria").value(idSubcategoria))
+            .andExpect(jsonPath("$.nombreSubcategoria").value("USA"));
     }
-    
+
     @Test
     @Order(2)
     void shouldReturnAllSubcategorias() throws Exception {
         mockMvc.perform(get("/subcategorias"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[" + (idSubcategoria - 1) + "].idSubcategoria").value(idSubcategoria))
-                .andExpect(jsonPath("$[" + (idSubcategoria - 1) + "].nombreSubcategoria").value("USA"));
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$[" + (idSubcategoria - 1) + "].idSubcategoria").value(idSubcategoria))
+            .andExpect(jsonPath("$[" + (idSubcategoria - 1) + "].nombreSubcategoria").value("USA"));
     }
-    
+
     @Test
     @Order(3)
     void shouldCreateAndReturnSubcategoria() throws Exception {
@@ -97,12 +97,12 @@ public class SubcategoriaTest {
 
         // Realiza una petición POST al controlador
         mockMvc.perform(post("/subcategorias")
-                .param("nombreSubcategoria", nombreSubcategoria)
-                .param("idCategoria", String.valueOf(idCategoria))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.idSubcategoria").exists())
-                .andExpect(jsonPath("$.nombreSubcategoria").value("SHONEN"));
+            .param("nombreSubcategoria", nombreSubcategoria)
+            .param("idCategoria", String.valueOf(idCategoria))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.idSubcategoria").exists())
+            .andExpect(jsonPath("$.nombreSubcategoria").value("SHONEN"));
     }
 
     @Test
@@ -111,21 +111,21 @@ public class SubcategoriaTest {
         String nombreSubcategoria = "NACIONAL";
 
         mockMvc.perform(patch("/subcategorias/" + idSubcategoria)
-                .param("nombreSubcategoria", nombreSubcategoria)
-                .param("idCategoria", String.valueOf(idCategoria))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$.nombreSubcategoria").value("NACIONAL"));
+            .param("nombreSubcategoria", nombreSubcategoria)
+            .param("idCategoria", String.valueOf(idCategoria))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isAccepted())
+            .andExpect(jsonPath("$.nombreSubcategoria").value("NACIONAL"));
     }
 
     @Test
     @Order(5)
     void shouldDeleteASubcategoria() throws Exception {
         mockMvc.perform(delete("/subcategorias/" + idSubcategoria))
-                .andExpect(status().isAccepted());
+            .andExpect(status().isAccepted());
 
         // Intenta obtener la pais eliminada y verifica el 404
         mockMvc.perform(get("/subcategorias/" + idSubcategoria))
-                .andExpect(status().isNotFound());
+            .andExpect(status().isNotFound());
     }
 }

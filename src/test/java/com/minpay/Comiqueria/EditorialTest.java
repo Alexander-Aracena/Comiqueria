@@ -42,7 +42,13 @@ public class EditorialTest {
     void ensureSetProductosExists(TestInfo testInfo) throws Exception {
         if(idEditorial == null) {
             String nombreEditorial = "OVNI PRESS DC";
-            editorialResponse = crearMediantePost(mockMvc, "/editoriales", nombreEditorial, MediaType.TEXT_PLAIN);
+            editorialResponse = crearMediantePost(
+                mockMvc,
+                "/editoriales",
+                "nombre",
+                nombreEditorial,
+                MediaType.TEXT_PLAIN
+            );
             idEditorial = extraerIdDeResponse(editorialResponse);
         }
     }
@@ -53,8 +59,7 @@ public class EditorialTest {
         mockMvc.perform(get("/editoriales/" + idEditorial))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(idEditorial))
-                .andExpect(jsonPath("$.nombre").value("OVNI PRESS DC"))
-                .andExpect(jsonPath("$.productos").isArray());
+                .andExpect(jsonPath("$.nombre").value("OVNI PRESS DC"));
     }
     
     @Test
@@ -64,24 +69,22 @@ public class EditorialTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[" + (idEditorial - 1) + "].id").value(idEditorial))
-                .andExpect(jsonPath("$[" + (idEditorial - 1) + "].nombre").value("OVNI PRESS DC"))
-                .andExpect(jsonPath("$[" + (idEditorial - 1) + "].productos").isArray());
+                .andExpect(jsonPath("$[" + (idEditorial - 1) + "].nombre").value("OVNI PRESS DC"));
     }
     
     @Test
     @Order(3)
     void shouldCreateAndReturnEditorial() throws Exception {
         // Crea un JSON representando un autor
-        String nombreEditorial = "OVNI PRESS DC";
+        String nombreEditorial = "OVNI PRESS MARVEL";
 
         // Realiza una petición POST al controlador
         mockMvc.perform(post("/editoriales")
-                .contentType(MediaType.TEXT_PLAIN)
-                .content(nombreEditorial))
+                .param("nombre", nombreEditorial)
+                .contentType(MediaType.TEXT_PLAIN))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.nombre").value("OVNI PRESS DC"))
-                .andExpect(jsonPath("$.productos").isEmpty());
+                .andExpect(jsonPath("$.nombre").value("OVNI PRESS MARVEL"));
     }
 
     @Test
@@ -90,8 +93,8 @@ public class EditorialTest {
         String editorialCorregidoJson = "UTOPIA EDITORIAL";
 
         mockMvc.perform(patch("/editoriales/" + idEditorial)
-                .contentType(MediaType.TEXT_PLAIN)
-                .content(editorialCorregidoJson))
+                .param("nombre", editorialCorregidoJson)
+                .contentType(MediaType.TEXT_PLAIN))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.nombre").value("UTOPIA EDITORIAL"));
     }

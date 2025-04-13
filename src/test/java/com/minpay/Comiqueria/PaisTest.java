@@ -27,13 +27,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource("classpath:application-test.properties")
 @TestMethodOrder(OrderAnnotation.class)
 public class PaisTest {
+
     @Autowired
     private MockMvc mockMvc;
-    
-    private static Long idPais;
-    private static Long idProvincia;
-    private static String paisResponse;
-    private static String provinciaResponse;
+
+    private static Long idPais, idProvincia;
+    private static String paisResponse, provinciaResponse;
 
     @BeforeAll
     static void setup() {
@@ -54,7 +53,7 @@ public class PaisTest {
             idPais = extraerIdDeResponse(paisResponse);
         }
     }
-    
+
     private void ensureProvinciaExists() throws Exception {
         if (idProvincia == null) {
             String nombreProvincia = "DURAZNO";
@@ -71,26 +70,26 @@ public class PaisTest {
             idProvincia = extraerIdDeResponse(provinciaResponse);
         }
     }
-    
+
     @Test
     @Order(1)
     void shouldReturnAPais() throws Exception {
         mockMvc.perform(get("/paises/" + idPais))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(idPais))
-                .andExpect(jsonPath("$.nombre").value("ARGENTINA"));
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(idPais))
+            .andExpect(jsonPath("$.nombre").value("ARGENTINA"));
     }
-    
+
     @Test
     @Order(2)
     void shouldReturnAllPaises() throws Exception {
         mockMvc.perform(get("/paises"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[" + (idPais - 1) + "].id").value(idPais))
-                .andExpect(jsonPath("$[" + (idPais - 1) + "].nombre").value("ARGENTINA"));
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$[" + (idPais - 1) + "].id").value(idPais))
+            .andExpect(jsonPath("$[" + (idPais - 1) + "].nombre").value("ARGENTINA"));
     }
-    
+
     @Test
     @Order(3)
     void shouldCreateAndReturnPais() throws Exception {
@@ -99,45 +98,45 @@ public class PaisTest {
 
         // Realiza una petición POST al controlador
         mockMvc.perform(post("/paises")
-                .param("nombre", nombrePais)
-                .contentType(MediaType.TEXT_PLAIN))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.nombre").value("BRASIL"));
+            .param("nombre", nombrePais)
+            .contentType(MediaType.TEXT_PLAIN))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.id").exists())
+            .andExpect(jsonPath("$.nombre").value("BRASIL"));
     }
 
     @Test
     @Order(4)
     void shouldEditAndReturnPais() throws Exception {
         this.ensureProvinciaExists();
-        
+
         String paisCorregidoJson = """
-                                   {
-                                        "nombre": "URUGUAY",
-                                        "provincias": [
-                                            {
-                                                "id": 1,
-                                                "nombre": "DURAZNO"
-                                            }
-                                        ]
-                                    }
-                                   """;
+        {
+             "nombre": "URUGUAY",
+             "provincias": [
+                 {
+                     "id": 1,
+                     "nombre": "DURAZNO"
+                 }
+             ]
+         }
+        """;
 
         mockMvc.perform(patch("/paises/" + idPais)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(paisCorregidoJson))
-                .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$.nombre").value("URUGUAY"));
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(paisCorregidoJson))
+            .andExpect(status().isAccepted())
+            .andExpect(jsonPath("$.nombre").value("URUGUAY"));
     }
 
     @Test
     @Order(5)
     void shouldDeleteAPais() throws Exception {
         mockMvc.perform(delete("/paises/" + idPais))
-                .andExpect(status().isAccepted());
+            .andExpect(status().isAccepted());
 
         // Intenta obtener la pais eliminada y verifica el 404
         mockMvc.perform(get("/paises/" + idPais))
-                .andExpect(status().isNotFound());
+            .andExpect(status().isNotFound());
     }
 }
