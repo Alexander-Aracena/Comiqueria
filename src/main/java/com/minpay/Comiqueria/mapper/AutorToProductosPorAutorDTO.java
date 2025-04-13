@@ -16,7 +16,8 @@ public class AutorToProductosPorAutorDTO implements IMapper<Autor, ProductosPorA
             return new ProductoDTO(
                     producto.getId(), producto.getTitulo(), producto.getPrecio(), producto.getDescripcion(),
                     producto.getTapa(), producto.getIsbn(), producto.getPeso(), producto.getDimensiones(),
-                    producto.getPaginas(), producto.getSubcategoria(), producto.getEditorial(),
+                    producto.getPaginas(),
+                    producto.getSubcategoria().getId(), producto.getEditorial().getId(),
                     producto.getEsNovedad(), producto.getEsOferta(), producto.getEsMasVendido(),
                     producto.getIndex()
             );

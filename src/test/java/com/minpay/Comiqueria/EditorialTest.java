@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.http.MediaType;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -39,7 +38,7 @@ public class EditorialTest {
     }
     
     @BeforeEach
-    void ensureSetProductosExists(TestInfo testInfo) throws Exception {
+    void ensureEditorialExists() throws Exception {
         if(idEditorial == null) {
             String nombreEditorial = "OVNI PRESS DC";
             editorialResponse = crearMediantePost(

@@ -1,12 +1,14 @@
 package com.minpay.Comiqueria.dto;
 
-import com.minpay.Comiqueria.model.Editorial;
-import com.minpay.Comiqueria.model.Subcategoria;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class ProductoDTO {
-    private Long idProducto;
+    private Long id;
     private String titulo;
     private Double precio;
     private String descripcion;
@@ -15,20 +17,17 @@ public class ProductoDTO {
     private int peso;
     private String dimensiones;
     private int paginas;
-    private Subcategoria subcategoria;
-    private Editorial editorial;
+    private Long idSubcategoria;
+    private Long idEditorial;
     private Boolean esNovedad;
     private Boolean esOferta;
     private Boolean esMasVendido;
     private Boolean index;
 
-    public ProductoDTO() {
-    }
-
     public ProductoDTO(Long idProducto, String titulo, Double precio, String descripcion, String tapa,
-            String isbn, int peso, String dimensiones, int paginas, Subcategoria subcategoria,
-            Editorial editorial, Boolean esNovedad, Boolean esOferta, Boolean esMasVendido, Boolean index) {
-        this.idProducto = idProducto;
+        String isbn, int peso, String dimensiones, int paginas, Long idSubcategoria,
+        Long idEditorial, Boolean esNovedad, Boolean esOferta, Boolean esMasVendido, Boolean index) {
+        this.id = idProducto;
         this.titulo = titulo;
         this.precio = precio;
         this.descripcion = descripcion;
@@ -37,15 +36,17 @@ public class ProductoDTO {
         this.peso = peso;
         this.dimensiones = dimensiones;
         this.paginas = paginas;
-        this.subcategoria = subcategoria;
-        this.editorial = editorial;
+        this.idSubcategoria = idSubcategoria;
+        this.idEditorial = idEditorial;
         this.esNovedad = esNovedad;
         this.esOferta = esOferta;
         this.esMasVendido = esMasVendido;
         this.index = index;
     }
-    
-    public ProductoDTO(String titulo, Double precio, String descripcion, String tapa, String isbn, int peso, String dimensiones, int paginas, Subcategoria subcategoria, Editorial editorial, Boolean esNovedad, Boolean esOferta, Boolean esMasVendido, Boolean index) {
+
+    public ProductoDTO(String titulo, Double precio, String descripcion, String tapa, String isbn,
+        int peso, String dimensiones, int paginas, Long idSubcategoria,
+        Long idEditorial, Boolean esNovedad, Boolean esOferta, Boolean esMasVendido, Boolean index) {
         this.titulo = titulo;
         this.precio = precio;
         this.descripcion = descripcion;
@@ -54,8 +55,8 @@ public class ProductoDTO {
         this.peso = peso;
         this.dimensiones = dimensiones;
         this.paginas = paginas;
-        this.subcategoria = subcategoria;
-        this.editorial = editorial;
+        this.idSubcategoria = idSubcategoria;
+        this.idEditorial = idEditorial;
         this.esNovedad = esNovedad;
         this.esOferta = esOferta;
         this.esMasVendido = esMasVendido;

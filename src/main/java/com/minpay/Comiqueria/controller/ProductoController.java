@@ -15,24 +15,25 @@ public class ProductoController {
     private IProductoService productoService;
     
     @GetMapping("/{id}")
-    public Producto traerProducto(@PathVariable Long id){
-        return this.productoService.getProducto(id);
+    public ProductoDTO traerProducto(@PathVariable Long id){
+        Producto producto = this.productoService.getProducto(id);
+        return this.productoService.getProductoDTO(producto);
     }
     
     @GetMapping
-    public List<Producto> traerProductos(){
-        return this.productoService.getProductos();
+    public List<ProductoDTO> traerProductos(){
+        return this.productoService.getProductosDTO();
     }
     
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Producto guardarProducto(@RequestBody ProductoDTO productoDTO){
+    public ProductoDTO guardarProducto(@RequestBody ProductoDTO productoDTO){
         return this.productoService.createProducto(productoDTO);
     }
     
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Producto editarProducto(@PathVariable Long id, @RequestBody ProductoDTO productoDTO){
+    public ProductoDTO editarProducto(@PathVariable Long id, @RequestBody ProductoDTO productoDTO){
         return this.productoService.editProductoById(id, productoDTO);
     }
     
