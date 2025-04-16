@@ -61,6 +61,11 @@ public class EditorialService implements IEditorialService {
         editorial.setNombre(nombre);
         return this.editorialRepository.save(editorial);
     }
+    
+    @Override
+    public void saveEditorial(Editorial editorial){
+        this.editorialRepository.save(editorial);
+    }
 
     @Override
     public void deleteEditorialById(Long id) {

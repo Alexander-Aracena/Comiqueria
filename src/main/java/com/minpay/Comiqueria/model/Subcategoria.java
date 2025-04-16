@@ -4,25 +4,34 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @RequiredArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Subcategoria {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "subcat_id")
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private Long id;
     
     @NonNull
     @Size(max = 30)
     @Column(name = "subcat_nombre", length = 30)
+    @ToString.Include
     private String nombre;
     
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -30,7 +39,6 @@ public class Subcategoria {
     private Categoria categoria;
     
     @OneToMany(mappedBy = "subcategoria", cascade = CascadeType.ALL)
-    @EqualsAndHashCode.Exclude
     private Set<Producto> productos = new HashSet<>();
 
     public Subcategoria(String nombre, Categoria categoria) {

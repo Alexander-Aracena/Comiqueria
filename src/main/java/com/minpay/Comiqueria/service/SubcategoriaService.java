@@ -56,6 +56,11 @@ public class SubcategoriaService implements ISubcategoriaService {
         this.subcategoriaRepository.save(subcategoria);
         return new SubcategoriaDTO(idSubcategoria, nombreSubcategoria);
     }
+    
+    @Override
+    public void saveSubcategoria(Subcategoria subcategoria){
+        this.subcategoriaRepository.save(subcategoria);
+    }
 
     @Override
     public void deleteSubcategoriaById(Long id) {

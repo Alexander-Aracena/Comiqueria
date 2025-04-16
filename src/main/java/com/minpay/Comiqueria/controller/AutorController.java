@@ -46,15 +46,14 @@ public class AutorController {
     }
     
     @GetMapping("/productos/{idAutor}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
     public ProductosPorAutorDTO traerProductos(@PathVariable Long idAutor){
         return this.autorService.getProductosSegunAutor(idAutor);
     }
     
     @PostMapping("/productos/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void agregarProductos(@PathVariable Long id, @RequestBody Set<Producto> productos){
-        this.autorService.addProductos(id, productos);
+    public void agregarProductos(@PathVariable Long id, @RequestBody Set<Long> idsProductos){
+        this.autorService.addProductos(id, idsProductos);
     }
     
     @DeleteMapping("/productos/{id}")

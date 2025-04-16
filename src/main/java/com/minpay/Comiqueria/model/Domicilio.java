@@ -2,33 +2,53 @@ package com.minpay.Comiqueria.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
 @Entity
+@NoArgsConstructor
+@RequiredArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Domicilio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "dom_id")
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private Long id;
     
     @NonNull
     @Column(columnDefinition = "TEXT", name = "dom_calle")
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private String calle;
     
     @NonNull
     @Size(max = 10)
     @Column(name = "dom_altura", length = 10)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private String altura;
     
     @Size(max = 10)
     @Column(name = "dom_depto", length = 10)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private String departamento;
     
     @NonNull
     @Size(max = 8)
     @Column(name = "dom_cp", length = 8)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private String cp;
     
     @ManyToOne

@@ -14,5 +14,6 @@ public interface IEditorialService {
     public List<EditorialDTO> getEditorialesDTO(Set<Long> idsEditoriales);
     public Editorial createEditorial(String nombre);
     public Editorial editEditorialById(Long id, String nombre);
+    public void saveEditorial(Editorial editorial);
     public void deleteEditorialById(Long id);
 }

@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 public class DomicilioDTOToDomicilio implements IMapper<DomicilioDTO, Domicilio> {
     @Override
     public Domicilio map(DomicilioDTO domicilioDTO) {
-        return new Domicilio(
-                domicilioDTO.getCalle(),
-                domicilioDTO.getAltura(),
-                domicilioDTO.getCp(),
-                domicilioDTO.getLocalidad()
-        );
+        Domicilio domicilio = new Domicilio();
+        domicilio.setCalle(domicilioDTO.getCalle());
+        domicilio.setAltura(domicilioDTO.getAltura());
+        domicilio.setDepartamento(domicilioDTO.getDepartamento());
+        domicilio.setCp(domicilioDTO.getCp());
+        return domicilio;
     }
 
     @Override
@@ -22,7 +22,6 @@ public class DomicilioDTOToDomicilio implements IMapper<DomicilioDTO, Domicilio>
         domicilio.setAltura(domicilioDTO.getAltura());
         domicilio.setDepartamento(domicilioDTO.getDepartamento());
         domicilio.setCp(domicilioDTO.getCp());
-        domicilio.setLocalidad(domicilioDTO.getLocalidad());
         return domicilio;
     }
 }

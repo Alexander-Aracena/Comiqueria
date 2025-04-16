@@ -12,27 +12,40 @@ import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @RequiredArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Venta {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "vta_id")
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private Long id;
     
     @NonNull
     @Column(name = "vta_fecha_vta", nullable = false)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private LocalDate fecha_venta;
     
     @NonNull
     @Column(name = "vta_total", nullable = false)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private Double total;
     
     @NonNull

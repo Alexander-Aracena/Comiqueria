@@ -76,11 +76,12 @@ public class AutorService implements IAutorService {
     }
     
     @Override
-    public void addProductos(Long idAutor, Set<Producto> productos) {
+    public void addProductos(Long idAutor, Set<Long> idsProductos) {
         Autor autor = this.getAutor(idAutor);
+        List<Producto> productos = this.productoRepository.findAllById(idsProductos);
         autor.getProductos().addAll(productos);
-        productos.forEach(producto -> producto.getAutores().add(autor));
-        this.productoRepository.saveAll(productos);
+        //productos.forEach(producto -> producto.getAutores().add(autor));
+        //this.productoRepository.saveAll(productos);
         this.autorRepository.save(autor);
     }
     

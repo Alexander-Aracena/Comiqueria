@@ -14,7 +14,7 @@ public interface IAutorService {
     public Autor createAutor(AutorDTO autorDTO);
     public Autor editAutorById(Long id, AutorDTO autorDTO);
     public void deleteAutorById(Long id);
-    public void addProductos(Long idAutor, Set<Producto> productos);
+    public void addProductos(Long idAutor, Set<Long> idsProductos);
     public void deleteProductos(Long idAutor, Set<Long> idsProductos);
     public ProductosPorAutorDTO getProductosSegunAutor(Long idAutor);
 }

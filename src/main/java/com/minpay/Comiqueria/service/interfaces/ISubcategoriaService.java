@@ -9,6 +9,7 @@ public interface ISubcategoriaService {
     public List<SubcategoriaDTO> getSubcategoriasDTO();
     public SubcategoriaDTO createSubcategoria(String nombreSubcategoria, Long idCategoria);
     public SubcategoriaDTO editSubcategoriaById(Long idSubcategoria, String nombreSubcategoria, Long idCategoria);
+    public void saveSubcategoria(Subcategoria subcategoria);
     public void deleteSubcategoriaById(Long id);
     public Subcategoria getSubcategoria(Long id);
 }

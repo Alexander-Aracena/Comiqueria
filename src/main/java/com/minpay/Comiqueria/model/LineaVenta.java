@@ -8,19 +8,27 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
 @Entity
-@RequiredArgsConstructor
 @NoArgsConstructor
+@RequiredArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class LineaVenta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "linea_id")
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,10 +41,14 @@ public class LineaVenta {
     private Producto producto;
 
     @Column(name = "linea_cantidad")
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private int cantidad;
     
     @NonNull
     @Column(name = "linea_precio")
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private Double precio;
 
     public LineaVenta(Producto producto, int cantidad, Double precio) {

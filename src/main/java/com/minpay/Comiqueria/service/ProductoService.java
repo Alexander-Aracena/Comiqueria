@@ -3,16 +3,15 @@ package com.minpay.Comiqueria.service;
 import com.minpay.Comiqueria.dto.ProductoDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
 import com.minpay.Comiqueria.mapper.ProductoDTOToProducto;
+import com.minpay.Comiqueria.model.Editorial;
 import com.minpay.Comiqueria.service.interfaces.IProductoService;
 import com.minpay.Comiqueria.model.Producto;
-import com.minpay.Comiqueria.repository.IAutorRepository;
+import com.minpay.Comiqueria.model.Subcategoria;
 import com.minpay.Comiqueria.repository.IProductoRepository;
 import com.minpay.Comiqueria.service.interfaces.IEditorialService;
 import com.minpay.Comiqueria.service.interfaces.ISubcategoriaService;
-import com.minpay.Comiqueria.utils.Utils;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +20,6 @@ public class ProductoService implements IProductoService {
     
     @Autowired
     private IProductoRepository productoRepository;
-    
-    @Autowired
-    private IAutorRepository autorRepository;
     
     @Autowired
     private ISubcategoriaService subcategoriaService;
@@ -70,14 +66,22 @@ public class ProductoService implements IProductoService {
     @Override
     public ProductoDTO createProducto(ProductoDTO productoDTO) {
         Producto producto = this.mapper.map(productoDTO);
+        Subcategoria subcategoria = this.subcategoriaService.getSubcategoria(
+            productoDTO.getIdSubcategoria()
+        );
+        Editorial editorial = this.editorialService.getEditorial(productoDTO.getIdEditorial());
         producto.setSubcategoria(
             this.subcategoriaService.getSubcategoria(productoDTO.getIdSubcategoria())
         );
         producto.setEditorial(
             this.editorialService.getEditorial(productoDTO.getIdEditorial())
         );
+        subcategoria.getProductos().add(producto);
+        editorial.getProductos().add(producto);
         
         this.productoRepository.save(producto);
+        this.subcategoriaService.saveSubcategoria(subcategoria);
+        this.editorialService.saveEditorial(editorial);
         productoDTO.setId(producto.getId());
         
         return productoDTO;
