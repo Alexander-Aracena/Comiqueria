@@ -35,12 +35,12 @@ public class PaisTest {
     private static String paisResponse, provinciaResponse;
 
     @BeforeAll
-    static void setup() {
+    public static void setup() {
         idPais = null;
     }
 
     @BeforeEach
-    void ensurePaisExists() throws Exception {
+    public void ensurePaisExists() throws Exception {
         if (idPais == null) {
             String nombrePais = "ARGENTINA";
             paisResponse = crearMediantePost(

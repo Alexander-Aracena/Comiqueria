@@ -39,13 +39,8 @@ public class AutorTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private static Long idAutor;
-    private static Long idCategoria;
-    private static Long idSubcategoria;
-    private static Long idEditorial;
-    private static String categoriaResponse;
-    private static String subcategoriaResponse;
-    private static String editorialResponse;
+    private static Long idAutor, idCategoria, idSubcategoria, idEditorial;
+    private static String categoriaResponse, subcategoriaResponse, editorialResponse, productosJson;
 
     @BeforeAll
     public static void setup() {
@@ -82,6 +77,11 @@ public class AutorTest {
             if (idEditorial == null) {
                 editorialResponse = crearEditorial();
                 idEditorial = extraerIdDeResponse(editorialResponse);
+            }
+            
+            if (nombreTest.equals("shouldDeleteProductos()") && productosJson == null) {
+                productosJson = armarJsonProductos();
+                agregarProductoMediantePost(idAutor, productosJson);
             }
         }
     }
@@ -153,7 +153,7 @@ public class AutorTest {
     @Test
     @Order(6)
     void shouldAddProductos() throws Exception {
-        String productosJson = armarJsonProductos();
+        productosJson = armarJsonProductos();
         agregarProductoMediantePost(idAutor, productosJson)
             .andExpect(status().isAccepted());
     }
@@ -161,10 +161,7 @@ public class AutorTest {
     @Test
     @Order(7)
     void shouldDeleteProductos() throws Exception {
-        String productosJson = armarJsonProductos();
-        agregarProductoMediantePost(idAutor, productosJson);
-
-        mockMvc.perform(delete("/autores/productos/" + idAutor)
+        mockMvc.perform(delete("/autores/productos/{idAutor}", idAutor)
             .contentType(MediaType.APPLICATION_JSON)
             .content(productosJson))
             .andExpect(status().isAccepted());

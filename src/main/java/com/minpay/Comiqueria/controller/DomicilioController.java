@@ -16,30 +16,31 @@ public class DomicilioController {
     private IDomicilioService domicilioService;
 
     @GetMapping("/{id}")
-    public Domicilio traerDomicilio(@PathVariable Long id) {
-        return this.domicilioService.getDomicilio(id);
+    public DomicilioDTO traerDomicilio(@PathVariable Long id) {
+        Domicilio domicilio = this.domicilioService.getDomicilio(id);
+        return this.domicilioService.getDomicilioDTO(domicilio);
     }
 
     @GetMapping
-    public List<Domicilio> traerDomicilios() {
-        return this.domicilioService.getDomicilios();
+    public List<DomicilioDTO> traerDomicilios() {
+        return this.domicilioService.getDomiciliosDTO();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Domicilio guardarDomicilio(@RequestBody DomicilioDTO domicilioDTO) {
+    public DomicilioDTO guardarDomicilio(@RequestBody DomicilioDTO domicilioDTO) {
         return this.domicilioService.createDomicilio(domicilioDTO);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Domicilio editarDomicilio(@PathVariable Long id, @RequestBody DomicilioDTO domicilioDTO) {
-        return this.domicilioService.editDomicilioById(id, domicilioDTO);
+    public DomicilioDTO editarDomicilio(@PathVariable Long id, @RequestBody DomicilioDTO domicilioDTO) {
+        return this.domicilioService.editDomicilio(id, domicilioDTO);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void eliminarDomicilio(@PathVariable Long id) {
-        this.domicilioService.deleteDomicilioById(id);
+        this.domicilioService.deleteDomicilio(id);
     }
 }

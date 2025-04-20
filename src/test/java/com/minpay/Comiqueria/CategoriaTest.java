@@ -31,7 +31,7 @@ public class CategoriaTest {
     private static Long idCategoria;
     
     @BeforeEach
-    void ensureCategoriaExists() throws Exception {
+    public void ensureCategoriaExists() throws Exception {
         if (idCategoria == null) {
             String nombreCategoria = "COMICS";
             String response = crearMediantePost(mockMvc, "/categorias", nombreCategoria,

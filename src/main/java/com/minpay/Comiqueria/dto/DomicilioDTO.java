@@ -12,24 +12,21 @@ public class DomicilioDTO {
     private String departamento;
     private String cp;
     private Long idLocalidad;
-    private Long idCliente;
 
-    public DomicilioDTO(Long id, String calle, String altura, String departamento, String cp, Long idLocalidad, Long idCliente) {
+    public DomicilioDTO(Long id, String calle, String altura, String departamento, String cp, Long idLocalidad) {
         this.id = id;
         this.calle = calle;
         this.altura = altura;
         this.departamento = departamento;
         this.cp = cp;
         this.idLocalidad = idLocalidad;
-        this.idCliente = idCliente;
     }
 
-    public DomicilioDTO(String calle, String altura, String departamento, String cp, Long idLocalidad, Long idCliente) {
+    public DomicilioDTO(String calle, String altura, String departamento, String cp, Long idLocalidad) {
         this.calle = calle;
         this.altura = altura;
         this.departamento = departamento;
         this.cp = cp;
         this.idLocalidad = idLocalidad;
-        this.idCliente = idCliente;
     }
 }

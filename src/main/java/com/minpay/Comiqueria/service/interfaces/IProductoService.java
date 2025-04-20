@@ -14,5 +14,8 @@ public interface IProductoService {
     public List<ProductoDTO> getProductosDTO(Set<Long> idsProductos);
     public ProductoDTO createProducto(ProductoDTO productoDTO);
     public ProductoDTO editProductoById(Long id, ProductoDTO productoDTO);
-    public void deleteProductoById(Long id);
+    public void saveProducto(Producto producto);
+    public void deleteProducto(Long id);
+    public void saveProductos(Set<Producto> productos);
+    public void deleteProductos(Set<Long> idsProductos);
 }
