@@ -3,7 +3,7 @@ package com.minpay.Comiqueria.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -70,7 +70,7 @@ public class Cliente {
     
     @NonNull
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
-    private Set<Domicilio> domicilios = new HashSet<>();
+    private Set<Domicilio> domicilios = new LinkedHashSet<>();
     
     @NonNull
     @Column(name = "cte_telefono")
@@ -84,8 +84,8 @@ public class Cliente {
         joinColumns = @JoinColumn(name = "cte_id"), 
         inverseJoinColumns = @JoinColumn(name = "prod_id")
     )
-    private Set<Producto> favoritos = new HashSet<>();
+    private Set<Producto> favoritos = new LinkedHashSet<>();
     
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
-    private Set<Venta> ventas = new HashSet<>();
+    private Set<Venta> ventas = new LinkedHashSet<>();
 }

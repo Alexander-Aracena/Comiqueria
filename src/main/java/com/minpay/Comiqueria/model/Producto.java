@@ -2,7 +2,6 @@ package com.minpay.Comiqueria.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.EqualsAndHashCode;
@@ -78,7 +77,7 @@ public class Producto {
     private int paginas;
     
     @ManyToMany(mappedBy = "productos")
-    private Set<Autor> autores = new HashSet<>();
+    private Set<Autor> autores = new LinkedHashSet<>();
     
     @ManyToOne
     @JoinColumn(name = "prod_subcat_id")
@@ -113,7 +112,7 @@ public class Producto {
     
     @Column(name = "prod_linea_id")
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
-    private Set<LineaVenta> lineasVenta = new HashSet<>();
+    private Set<LineaVenta> lineasVenta = new LinkedHashSet<>();
 
     public Producto(String titulo, Double precio, String descripcion, String tapa, String isbn, int peso, String dimensiones, int paginas, Subcategoria subcategoria, Editorial editorial, Boolean esNovedad, Boolean esOferta, Boolean esMasVendido, Boolean index) {
         this.titulo = titulo;

@@ -37,13 +37,13 @@ public class SubcategoriaTest {
     private static String categoriaResponse;
 
     @BeforeAll
-    static void setup() {
+    public static void setup() {
         idCategoria = null;
         idSubcategoria = null;
     }
 
     @BeforeEach
-    void ensureSubcategoriaExists() throws Exception {
+    public void ensureSubcategoriaExists() throws Exception {
         if (idCategoria == null) {
             String nombreCategoria = "COMICS";
             categoriaResponse = crearMediantePost(mockMvc, "/categorias", nombreCategoria,

@@ -2,7 +2,7 @@ package com.minpay.Comiqueria.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -39,7 +39,7 @@ public class Subcategoria {
     private Categoria categoria;
     
     @OneToMany(mappedBy = "subcategoria", cascade = CascadeType.ALL)
-    private Set<Producto> productos = new HashSet<>();
+    private Set<Producto> productos = new LinkedHashSet<>();
 
     public Subcategoria(String nombre, Categoria categoria) {
         this.nombre = nombre;

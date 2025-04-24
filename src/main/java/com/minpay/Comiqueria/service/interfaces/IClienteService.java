@@ -12,9 +12,9 @@ public interface IClienteService {
     public List<Cliente> getClientes(Set<Long> idsClientes);
     public List<ClienteDTO> getClientesDTO();
     public List<ClienteDTO> getClientesDTO(Set<Long> idsClientes);
-    public Cliente createCliente(ClienteDTO clienteDTO);
-    public Cliente editClienteById(Long id, ClienteDTO clienteDTO);
-    public void deleteClienteById(Long id);
+    public ClienteDTO createCliente(ClienteDTO clienteDTO);
+    public ClienteDTO editCliente(Long id, ClienteDTO clienteDTO);
+    public void deleteCliente(Long id);
     public void addFavoritos(Long idCliente, Set<Long> idsProductos);
     public void deleteFavoritos(Long idCliente, Set<Long> idsProductos);
     public void addDomicilio(Long idCliente, Long idDomicilio);

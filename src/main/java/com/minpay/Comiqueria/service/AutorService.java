@@ -10,6 +10,7 @@ import com.minpay.Comiqueria.model.Autor;
 import com.minpay.Comiqueria.model.Producto;
 import com.minpay.Comiqueria.repository.IAutorRepository;
 import com.minpay.Comiqueria.repository.IProductoRepository;
+import com.minpay.Comiqueria.utils.Utils;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -79,9 +80,10 @@ public class AutorService implements IAutorService {
     public void addProductos(Long idAutor, Set<Long> idsProductos) {
         Autor autor = this.getAutor(idAutor);
         List<Producto> productos = this.productoRepository.findAllById(idsProductos);
-        autor.getProductos().addAll(productos);
-        //productos.forEach(producto -> producto.getAutores().add(autor));
-        //this.productoRepository.saveAll(productos);
+        Set<Producto> productosOrdenados = Utils.ordenarPorIds(idsProductos, productos, Producto::getId);
+        autor.getProductos().addAll(productosOrdenados);
+        productos.forEach(producto -> producto.getAutores().add(autor));
+        this.productoRepository.saveAll(productos);
         this.autorRepository.save(autor);
     }
     

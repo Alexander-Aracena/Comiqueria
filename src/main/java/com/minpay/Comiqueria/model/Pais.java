@@ -2,7 +2,7 @@ package com.minpay.Comiqueria.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -35,5 +35,5 @@ public class Pais {
     private String nombre;
     
     @OneToMany(mappedBy = "pais", cascade = CascadeType.ALL)
-    private Set<Provincia> provincias = new HashSet<>();
+    private Set<Provincia> provincias = new LinkedHashSet<>();
 }

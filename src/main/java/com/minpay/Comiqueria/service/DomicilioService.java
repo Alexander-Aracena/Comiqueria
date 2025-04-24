@@ -97,12 +97,13 @@ public class DomicilioService implements IDomicilioService {
         this.domicilioRepository.deleteAllById(idsDomicilios);
     }
     
-    private List<DomicilioDTO> traerListaDTO(List<Domicilio> domicilios) {
+    @Override
+    public List<DomicilioDTO> traerListaDTO(List<Domicilio> domicilios) {
         return domicilios.stream().map(domicilio -> domicilioADomicilioDTO(domicilio)
         ).toList();
     }
     
-    private static DomicilioDTO domicilioADomicilioDTO(Domicilio domicilio) {
+    public static DomicilioDTO domicilioADomicilioDTO(Domicilio domicilio) {
         return new DomicilioDTO(
             domicilio.getId(),
             domicilio.getCalle(),

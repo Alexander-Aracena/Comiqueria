@@ -18,26 +18,27 @@ import java.util.stream.Collectors;
 
 @Service
 public class ClienteService implements IClienteService {
+
     @Autowired
     private IClienteRepository clienteRepository;
-    
+
     @Autowired
     private IDomicilioService domicilioService;
-    
+
     @Autowired
     private IProductoService productoService;
-    
+
     @Autowired
     private ClienteDTOToCliente mapper;
-    
+
     @Override
     public Cliente getCliente(Long id) {
         return this.clienteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cliente id: " + id + " no encontrado."));
+            .orElseThrow(() -> new ResourceNotFoundException("Cliente id: " + id + " no encontrado."));
     }
-    
+
     @Override
-    public ClienteDTO getClienteDTO(Cliente cliente){
+    public ClienteDTO getClienteDTO(Cliente cliente) {
         return clienteAClienteDTO(cliente);
     }
 
@@ -45,39 +46,40 @@ public class ClienteService implements IClienteService {
     public List<Cliente> getClientes() {
         return this.clienteRepository.findAll();
     }
-    
+
     @Override
-    public List<Cliente> getClientes(Set<Long> idsClientes){
+    public List<Cliente> getClientes(Set<Long> idsClientes) {
         return this.clienteRepository.findAllById(idsClientes);
     }
-    
+
     @Override
-    public List<ClienteDTO> getClientesDTO(){
+    public List<ClienteDTO> getClientesDTO() {
         List<Cliente> clientes = this.getClientes();
         return this.traerListaDTO(clientes);
     }
-    
+
     @Override
-    public List<ClienteDTO> getClientesDTO(Set<Long> idsClientes){
+    public List<ClienteDTO> getClientesDTO(Set<Long> idsClientes) {
         List<Cliente> clientes = this.getClientes(idsClientes);
         return this.traerListaDTO(clientes);
     }
 
-
     @Override
-    public Cliente createCliente(ClienteDTO clienteDTO) {
+    public ClienteDTO createCliente(ClienteDTO clienteDTO) {
         Cliente cliente = this.mapper.map(clienteDTO);
-        return this.clienteRepository.save(cliente);
+        this.clienteRepository.save(cliente);
+        return this.getClienteDTO(cliente);
     }
 
     @Override
-    public Cliente editClienteById(Long id, ClienteDTO clienteDTO){
+    public ClienteDTO editCliente(Long id, ClienteDTO clienteDTO) {
         Cliente cliente = this.mapper.map(clienteDTO, this.getCliente(id));
-        return this.clienteRepository.save(cliente);
+        this.clienteRepository.save(cliente);
+        return this.getClienteDTO(cliente);
     }
 
     @Override
-    public void deleteClienteById(Long id) {
+    public void deleteCliente(Long id) {
         this.clienteRepository.deleteById(id);
     }
 
@@ -85,18 +87,18 @@ public class ClienteService implements IClienteService {
     public void addFavoritos(Long idCliente, Set<Long> idsProductos) {
         Cliente cliente = this.getCliente(idCliente);
         Set<Producto> productos = this.productoService.getProductos(idsProductos)
-                .stream().collect(Collectors.toSet());
+            .stream().collect(Collectors.toSet());
         cliente.getFavoritos().addAll(productos);
         productos.forEach(producto -> producto.getClientes().add(cliente));
         this.productoService.saveProductos(productos);
         this.clienteRepository.save(cliente);
     }
-    
+
     @Override
     public void deleteFavoritos(Long idCliente, Set<Long> idsProductos) {
         Cliente cliente = this.getCliente(idCliente);
         Set<Producto> productos = this.productoService.getProductos(idsProductos)
-                .stream().collect(Collectors.toSet());
+            .stream().collect(Collectors.toSet());
         cliente.getFavoritos().removeAll(productos);
         productos.forEach(producto -> producto.getClientes().remove(cliente));
         this.productoService.saveProductos(productos);
@@ -121,14 +123,14 @@ public class ClienteService implements IClienteService {
         this.clienteRepository.save(cliente);
         this.domicilioService.deleteDomicilio(idDomicilio);
     }
-    
+
     private List<ClienteDTO> traerListaDTO(List<Cliente> clientes) {
         return clientes.stream().map(cliente -> clienteAClienteDTO(cliente)
         ).toList();
     }
 
     private ClienteDTO clienteAClienteDTO(Cliente cliente) {
-        ClienteDTO clienteDTO =  new ClienteDTO();
+        ClienteDTO clienteDTO = new ClienteDTO();
         clienteDTO.setId(cliente.getId());
         clienteDTO.setNombre(cliente.getNombre());
         clienteDTO.setApellido(cliente.getApellido());
@@ -136,8 +138,18 @@ public class ClienteService implements IClienteService {
         clienteDTO.setSexo(cliente.getSexo());
         clienteDTO.setTipoDoc(cliente.getTipoDoc());
         clienteDTO.setNroDoc(cliente.getNroDocumento());
+        clienteDTO.getFavoritos().addAll(
+            productoService.traerListaDTO(
+                cliente.getFavoritos().stream().collect(Collectors.toList())
+            )
+        );
+        clienteDTO.getDomicilios().addAll(
+            domicilioService.traerListaDTO(
+                cliente.getDomicilios().stream().collect(Collectors.toList())
+            )
+        );
         clienteDTO.setTelefono(cliente.getTelefono());
-        
+
         return clienteDTO;
     }
 }

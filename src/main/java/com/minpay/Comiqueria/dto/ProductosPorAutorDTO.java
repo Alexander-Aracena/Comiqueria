@@ -1,5 +1,6 @@
 package com.minpay.Comiqueria.dto;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.Data;
 
@@ -7,7 +8,7 @@ import lombok.Data;
 public class ProductosPorAutorDTO {
     private Long idAutor;
     private AutorDTO autor;
-    private Set<ProductoDTO> productos;
+    private Set<ProductoDTO> productos = new LinkedHashSet();
 
     public ProductosPorAutorDTO() {
     }

@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.dto;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class PaisDTO {
     private Long id;
     private String nombre;
-    private Set<ProvinciaDTO> provincias = new HashSet<>();
+    private Set<ProvinciaDTO> provincias = new LinkedHashSet<>();
 
     public PaisDTO(Long id, String nombre) {
         this.id = id;

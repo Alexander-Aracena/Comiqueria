@@ -12,6 +12,7 @@ public interface IProductoService {
     public List<Producto> getProductos(Set<Long> idsProductos);
     public List<ProductoDTO> getProductosDTO();
     public List<ProductoDTO> getProductosDTO(Set<Long> idsProductos);
+    public List<ProductoDTO> traerListaDTO(List<Producto> domicilios);
     public ProductoDTO createProducto(ProductoDTO productoDTO);
     public ProductoDTO editProductoById(Long id, ProductoDTO productoDTO);
     public void saveProducto(Producto producto);

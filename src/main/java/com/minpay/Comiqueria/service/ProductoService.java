@@ -122,7 +122,8 @@ public class ProductoService implements IProductoService {
         this.productoRepository.deleteAllById(idsProductos);
     }
 
-    private List<ProductoDTO> traerListaDTO(List<Producto> productos) {
+    @Override
+    public List<ProductoDTO> traerListaDTO(List<Producto> productos) {
         return productos.stream().map(producto -> productoAProductoDTO(producto)
         ).toList();
     }

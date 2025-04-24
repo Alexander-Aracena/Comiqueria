@@ -10,7 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -51,7 +51,7 @@ public class Venta {
     @NonNull
     @Column(name = "vta_linea_id", nullable = false)
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
-    private Set<LineaVenta> lineas = new HashSet<>();
+    private Set<LineaVenta> lineas = new LinkedHashSet<>();
     
     @NonNull
     @ManyToOne

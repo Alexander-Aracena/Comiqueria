@@ -12,6 +12,7 @@ public interface IDomicilioService {
     public List<Domicilio> getDomicilios(Set<Long> idsDomicilios);
     public List<DomicilioDTO> getDomiciliosDTO();
     public List<DomicilioDTO> getDomiciliosDTO(Set<Long> idsDomicilios);
+    public List<DomicilioDTO> traerListaDTO(List<Domicilio> domicilios);
     public DomicilioDTO createDomicilio(DomicilioDTO domicilioDTO);
     public DomicilioDTO editDomicilio(Long id, DomicilioDTO domicilioDTO);
     public void saveDomicilio(Domicilio domicilio);

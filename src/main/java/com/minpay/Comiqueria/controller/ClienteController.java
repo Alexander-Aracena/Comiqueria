@@ -15,55 +15,56 @@ public class ClienteController {
     @Autowired
     private IClienteService clienteService;
     
-    @GetMapping("/{id}")
-    public Cliente traerCliente(@PathVariable Long id){
-        return this.clienteService.getCliente(id);
+    @GetMapping("/{idCliente}")
+    public ClienteDTO traerCliente(@PathVariable Long idCliente){
+        Cliente cliente = this.clienteService.getCliente(idCliente);
+        return this.clienteService.getClienteDTO(cliente);
     }
     
     @GetMapping
-    public List<Cliente> traerClientes(){
-        return this.clienteService.getClientes();
+    public List<ClienteDTO> traerClientes(){
+        return this.clienteService.getClientesDTO();
     }
     
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cliente guardarCliente(@RequestBody ClienteDTO clienteDTO){
+    public ClienteDTO guardarCliente(@RequestBody ClienteDTO clienteDTO){
         return this.clienteService.createCliente(clienteDTO);
     }
     
-    @PutMapping("/{id}")
+    @PatchMapping("/{idCliente}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Cliente editarCliente(@PathVariable Long idCliente, @RequestBody ClienteDTO clienteDTO){
-        return this.clienteService.editClienteById(idCliente, clienteDTO);
+    public ClienteDTO editarCliente(@PathVariable Long idCliente, @RequestBody ClienteDTO clienteDTO){
+        return this.clienteService.editCliente(idCliente, clienteDTO);
     }
     
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{idCliente}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarCliente(@PathVariable Long id){
-        this.clienteService.deleteClienteById(id);
+    public void eliminarCliente(@PathVariable Long idCliente){
+        this.clienteService.deleteCliente(idCliente);
     }
     
-    @PostMapping("/favoritos/{id}")
+    @PostMapping("/favoritos/{idCliente}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void agregarFavoritos(@PathVariable Long id, @RequestBody Set<Long> idsProductos){
-        this.clienteService.addFavoritos(id, idsProductos);
+    public void agregarFavoritos(@PathVariable Long idCliente, @RequestBody Set<Long> idsProductos){
+        this.clienteService.addFavoritos(idCliente, idsProductos);
     }
     
-    @DeleteMapping("/favoritos/{id}")
+    @DeleteMapping("/favoritos/{idCliente}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarFavoritos(@PathVariable Long id, @RequestBody Set<Long> idsProductos){
-        this.clienteService.deleteFavoritos(id, idsProductos);
+    public void eliminarFavoritos(@PathVariable Long idCliente, @RequestBody Set<Long> idsProductos){
+        this.clienteService.deleteFavoritos(idCliente, idsProductos);
     }
     
-    @PostMapping("/domicilio/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void agregarDomicilio(@PathVariable Long id, @RequestBody Long idDomicilio){
-        this.clienteService.addDomicilio(id, idDomicilio);
+    @PostMapping("/domicilio/{idCliente}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void agregarDomicilio(@PathVariable Long idCliente, @RequestParam Long idDomicilio){
+        this.clienteService.addDomicilio(idCliente, idDomicilio);
     }
     
-    @DeleteMapping("/domicilio/{id}")
+    @DeleteMapping("/domicilio/{idCliente}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarDomicilio(@PathVariable Long id, @RequestBody Long idDomicilio){
-        this.clienteService.deleteDomicilio(id, idDomicilio);
+    public void eliminarDomicilio(@PathVariable Long idCliente, @RequestParam Long idDomicilio){
+        this.clienteService.deleteDomicilio(idCliente, idDomicilio);
     }
 }

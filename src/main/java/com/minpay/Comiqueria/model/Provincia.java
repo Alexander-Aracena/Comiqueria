@@ -2,7 +2,7 @@ package com.minpay.Comiqueria.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,7 +36,7 @@ public class Provincia {
     private String nombre;
     
     @OneToMany(mappedBy = "provincia", cascade = CascadeType.ALL)
-    private Set<Localidad> localidades = new HashSet<>();
+    private Set<Localidad> localidades = new LinkedHashSet<>();
     
     @ManyToOne
     @JoinColumn(name = "prov_pais_id")
