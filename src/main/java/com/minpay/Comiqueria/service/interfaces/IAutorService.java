@@ -3,7 +3,6 @@ package com.minpay.Comiqueria.service.interfaces;
 import com.minpay.Comiqueria.dto.AutorDTO;
 import com.minpay.Comiqueria.dto.ProductosPorAutorDTO;
 import com.minpay.Comiqueria.model.Autor;
-import com.minpay.Comiqueria.model.Producto;
 import java.util.List;
 import java.util.Set;
 
