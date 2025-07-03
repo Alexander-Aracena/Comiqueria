@@ -6,16 +6,13 @@ import com.minpay.Comiqueria.mapper.ClienteDTOToCliente;
 import com.minpay.Comiqueria.model.Cliente;
 import com.minpay.Comiqueria.model.Domicilio;
 import com.minpay.Comiqueria.model.Producto;
-import com.minpay.Comiqueria.model.Sexo;
-import com.minpay.Comiqueria.model.TipoDoc;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.minpay.Comiqueria.repository.IClienteRepository;
-import com.minpay.Comiqueria.repository.IDomicilioRepository;
-import com.minpay.Comiqueria.repository.IProductoRepository;
 import com.minpay.Comiqueria.service.interfaces.IClienteService;
-import java.time.LocalDate;
+import com.minpay.Comiqueria.service.interfaces.IDomicilioService;
+import com.minpay.Comiqueria.service.interfaces.IProductoService;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,10 +22,10 @@ public class ClienteService implements IClienteService {
     private IClienteRepository clienteRepository;
     
     @Autowired
-    private IDomicilioRepository domicilioRepository;
+    private IDomicilioService domicilioService;
     
     @Autowired
-    private IProductoRepository productoRepository;
+    private IProductoService productoService;
     
     @Autowired
     private ClienteDTOToCliente mapper;
@@ -38,11 +35,34 @@ public class ClienteService implements IClienteService {
         return this.clienteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente id: " + id + " no encontrado."));
     }
+    
+    @Override
+    public ClienteDTO getClienteDTO(Cliente cliente){
+        return clienteAClienteDTO(cliente);
+    }
 
     @Override
     public List<Cliente> getClientes() {
         return this.clienteRepository.findAll();
     }
+    
+    @Override
+    public List<Cliente> getClientes(Set<Long> idsClientes){
+        return this.clienteRepository.findAllById(idsClientes);
+    }
+    
+    @Override
+    public List<ClienteDTO> getClientesDTO(){
+        List<Cliente> clientes = this.getClientes();
+        return this.traerListaDTO(clientes);
+    }
+    
+    @Override
+    public List<ClienteDTO> getClientesDTO(Set<Long> idsClientes){
+        List<Cliente> clientes = this.getClientes(idsClientes);
+        return this.traerListaDTO(clientes);
+    }
+
 
     @Override
     public Cliente createCliente(ClienteDTO clienteDTO) {
@@ -64,48 +84,60 @@ public class ClienteService implements IClienteService {
     @Override
     public void addFavoritos(Long idCliente, Set<Long> idsProductos) {
         Cliente cliente = this.getCliente(idCliente);
-        Set<Producto> productos = this.productoRepository.findAllById(idsProductos)
+        Set<Producto> productos = this.productoService.getProductos(idsProductos)
                 .stream().collect(Collectors.toSet());
         cliente.getFavoritos().addAll(productos);
         productos.forEach(producto -> producto.getClientes().add(cliente));
-        this.productoRepository.saveAll(productos);
+        this.productoService.saveProductos(productos);
         this.clienteRepository.save(cliente);
     }
     
     @Override
     public void deleteFavoritos(Long idCliente, Set<Long> idsProductos) {
         Cliente cliente = this.getCliente(idCliente);
-        Set<Producto> productos = this.productoRepository.findAllById(idsProductos)
+        Set<Producto> productos = this.productoService.getProductos(idsProductos)
                 .stream().collect(Collectors.toSet());
         cliente.getFavoritos().removeAll(productos);
         productos.forEach(producto -> producto.getClientes().remove(cliente));
-        this.productoRepository.saveAll(productos);
+        this.productoService.saveProductos(productos);
         this.clienteRepository.save(cliente);
     }
 
     @Override
     public void addDomicilio(Long idCliente, Long idDomicilio) {
         Cliente cliente = this.getCliente(idCliente);
-        Domicilio domicilio = this.domicilioRepository.findById(idDomicilio)
-                .orElseThrow(() -> new ResourceNotFoundException("Domicilio id: " + idDomicilio + " no encontrado."));
+        Domicilio domicilio = this.domicilioService.getDomicilio(idDomicilio);
         cliente.getDomicilios().add(domicilio);
         domicilio.setCliente(cliente);
         this.clienteRepository.save(cliente);
+        this.domicilioService.saveDomicilio(domicilio);
     }
 
     @Override
     public void deleteDomicilio(Long idCliente, Long idDomicilio) {
         Cliente cliente = this.getCliente(idCliente);
-        Domicilio domicilio = this.domicilioRepository.findById(idDomicilio)
-                .orElseThrow(() -> new ResourceNotFoundException("Domicilio id: " + idDomicilio + " no encontrado."));
+        Domicilio domicilio = this.domicilioService.getDomicilio(idDomicilio);
         cliente.getDomicilios().remove(domicilio);
         this.clienteRepository.save(cliente);
-        this.domicilioRepository.deleteById(idDomicilio);
+        this.domicilioService.deleteDomicilio(idDomicilio);
+    }
+    
+    private List<ClienteDTO> traerListaDTO(List<Cliente> clientes) {
+        return clientes.stream().map(cliente -> clienteAClienteDTO(cliente)
+        ).toList();
     }
 
-    @Override
-    public Set<Domicilio> findAllDomiciliosById(Set<Long> idsDomicilios) {
-        return this.domicilioRepository.findAllById(idsDomicilios)
-                .stream().collect(Collectors.toSet());
+    private ClienteDTO clienteAClienteDTO(Cliente cliente) {
+        ClienteDTO clienteDTO =  new ClienteDTO();
+        clienteDTO.setId(cliente.getId());
+        clienteDTO.setNombre(cliente.getNombre());
+        clienteDTO.setApellido(cliente.getApellido());
+        clienteDTO.setFechaNac(cliente.getFecha_nac());
+        clienteDTO.setSexo(cliente.getSexo());
+        clienteDTO.setTipoDoc(cliente.getTipoDoc());
+        clienteDTO.setNroDoc(cliente.getNroDocumento());
+        clienteDTO.setTelefono(cliente.getTelefono());
+        
+        return clienteDTO;
     }
 }

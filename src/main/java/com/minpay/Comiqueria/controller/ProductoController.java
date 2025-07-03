@@ -40,6 +40,6 @@ public class ProductoController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void eliminarProducto(@PathVariable Long id){
-        this.productoService.deleteProductoById(id);
+        this.productoService.deleteProducto(id);
     }
 }

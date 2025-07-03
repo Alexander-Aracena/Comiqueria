@@ -35,12 +35,12 @@ public class ProvinciaTest {
     private static String paisResponse, provinciaResponse, localidadResponse;
 
     @BeforeAll
-    static void setup() {
+    public static void setup() {
         idProvincia = null;
     }
 
     @BeforeEach
-    void ensurePaisExists() throws Exception {
+    public void ensurePaisExists() throws Exception {
         if (idPais == null) {
             String nombrePais = "ARGENTINA";
             paisResponse = crearMediantePost(
@@ -55,7 +55,7 @@ public class ProvinciaTest {
     }
 
     @BeforeEach
-    void ensureProvinciaExists() throws Exception {
+    public void ensureProvinciaExists() throws Exception {
         if (idProvincia == null) {
             String nombreProvincia = "BUENOS AIRES";
             Map<String, Object> parametrosOpcionales = new HashMap<>();

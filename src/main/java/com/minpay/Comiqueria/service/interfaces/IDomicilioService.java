@@ -3,11 +3,19 @@ package com.minpay.Comiqueria.service.interfaces;
 import com.minpay.Comiqueria.dto.DomicilioDTO;
 import com.minpay.Comiqueria.model.Domicilio;
 import java.util.List;
+import java.util.Set;
 
 public interface IDomicilioService {
     public Domicilio getDomicilio(Long id);
+    public DomicilioDTO getDomicilioDTO(Domicilio domicilio);
     public List<Domicilio> getDomicilios();
-    public Domicilio createDomicilio(DomicilioDTO domicilioDTO);
-    public Domicilio editDomicilioById(Long id, DomicilioDTO domicilioDTO);
-    public void deleteDomicilioById(Long id);
+    public List<Domicilio> getDomicilios(Set<Long> idsDomicilios);
+    public List<DomicilioDTO> getDomiciliosDTO();
+    public List<DomicilioDTO> getDomiciliosDTO(Set<Long> idsDomicilios);
+    public DomicilioDTO createDomicilio(DomicilioDTO domicilioDTO);
+    public DomicilioDTO editDomicilio(Long id, DomicilioDTO domicilioDTO);
+    public void saveDomicilio(Domicilio domicilio);
+    public void deleteDomicilio(Long id);
+    public void saveDomicilios(Set<Domicilio> domicilios);
+    public void deleteDomicilios(Set<Long> idsDomicilios);
 }

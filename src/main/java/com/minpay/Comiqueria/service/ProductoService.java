@@ -101,10 +101,25 @@ public class ProductoService implements IProductoService {
         
         return productoDTO;
     }
+    
+    @Override
+    public void saveProducto(Producto producto){
+        this.productoRepository.save(producto);
+    }
 
     @Override
-    public void deleteProductoById(Long id) {
+    public void deleteProducto(Long id) {
         this.productoRepository.deleteById(id);
+    }
+    
+    @Override
+    public void saveProductos(Set<Producto> productos){
+        this.productoRepository.saveAll(productos);
+    }
+    
+    @Override
+    public void deleteProductos(Set<Long> idsProductos) {
+        this.productoRepository.deleteAllById(idsProductos);
     }
 
     private List<ProductoDTO> traerListaDTO(List<Producto> productos) {

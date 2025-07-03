@@ -15,7 +15,6 @@ public class ClienteDTOToCliente implements IMapper<ClienteDTO, Cliente> {
         cliente.setSexo(clienteDTO.getSexo());
         cliente.setNroDocumento(clienteDTO.getNroDoc());
         cliente.setTipoDoc(clienteDTO.getTipoDoc());
-        cliente.setDomicilios(clienteDTO.getDomicilios());
         cliente.setTelefono(clienteDTO.getTelefono());
         
         return cliente;
@@ -29,7 +28,6 @@ public class ClienteDTOToCliente implements IMapper<ClienteDTO, Cliente> {
         cliente.setSexo(clienteDTO.getSexo());
         cliente.setNroDocumento(clienteDTO.getNroDoc());
         cliente.setTipoDoc(clienteDTO.getTipoDoc());
-        cliente.setDomicilios(clienteDTO.getDomicilios());
         cliente.setTelefono(clienteDTO.getTelefono());
         return cliente;
     }
