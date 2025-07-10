@@ -1,18 +1,18 @@
 package com.minpay.Comiqueria.mapper;
 
-import com.minpay.Comiqueria.dto.AutorDTO;
+import com.minpay.Comiqueria.dto.AutorResponseDTO;
 import com.minpay.Comiqueria.model.Autor;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AutorDTOToAutor implements IMapper<AutorDTO, Autor> {
+public class AutorDTOToAutor implements IMapper<AutorResponseDTO, Autor> {
     @Override
-    public Autor map(AutorDTO autorDTO) {
+    public Autor map(AutorResponseDTO autorDTO) {
         return new Autor(autorDTO.getNombre(), autorDTO.getApellido());
     }
     
     @Override
-    public Autor map(AutorDTO autorDTO, Autor autor) {
+    public Autor map(AutorResponseDTO autorDTO, Autor autor) {
         autor.setNombre(autorDTO.getNombre());
         autor.setApellido(autorDTO.getApellido());
         return autor;

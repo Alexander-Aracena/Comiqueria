@@ -2,13 +2,15 @@ package com.minpay.Comiqueria.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -16,9 +18,10 @@ import lombok.ToString;
 @Setter
 @Entity
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Table(name = "productos")
 public class Producto {
     
     @Id
@@ -38,7 +41,7 @@ public class Producto {
     @Column(name = "prod_precio")
     @EqualsAndHashCode.Include
     @ToString.Include
-    private Double precio;
+    private BigDecimal precio;
     
     @NonNull
     @Column(columnDefinition = "TEXT", name = "prod_descripcion")
@@ -54,7 +57,7 @@ public class Producto {
     
     @NonNull
     @Size(max = 30)
-    @Column(name = "prod_isbn", length = 30)
+    @Column(name = "prod_isbn", length = 30, unique = true)
     @EqualsAndHashCode.Include
     @ToString.Include
     private String isbn;
@@ -105,30 +108,23 @@ public class Producto {
     @Column(name = "prod_index")
     @EqualsAndHashCode.Include
     @ToString.Include
-    private Boolean index;
+    private Boolean esVisibleEnHome;
+    
+    @Column(name = "prod_fecha_alta")
+    @ToString.Include
+    private LocalDateTime fechaAlta = LocalDateTime.now();
+    
+    @Column(name = "prod_fecha_baja")
+    @ToString.Include
+    private LocalDateTime fechaBaja;
+    
+    @Column(name = "prod_esta_vigente")
+    @ToString.Include
+    private Boolean estaVigente = true;
     
     @ManyToMany(mappedBy = "favoritos")
-    private Set<Cliente> clientes;
+    private Set<Cliente> clientes = new LinkedHashSet<>();
     
-    @Column(name = "prod_linea_id")
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "producto")
     private Set<LineaVenta> lineasVenta = new LinkedHashSet<>();
-
-    public Producto(String titulo, Double precio, String descripcion, String tapa, String isbn, int peso, String dimensiones, int paginas, Subcategoria subcategoria, Editorial editorial, Boolean esNovedad, Boolean esOferta, Boolean esMasVendido, Boolean index) {
-        this.titulo = titulo;
-        this.precio = precio;
-        this.descripcion = descripcion;
-        this.tapa = tapa;
-        this.isbn = isbn;
-        this.peso = peso;
-        this.dimensiones = dimensiones;
-        this.paginas = paginas;
-        this.autores = new LinkedHashSet<>();
-        this.subcategoria = subcategoria;
-        this.editorial = editorial;
-        this.esNovedad = esNovedad;
-        this.esOferta = esOferta;
-        this.esMasVendido = esMasVendido;
-        this.index = index;
-    }
 }

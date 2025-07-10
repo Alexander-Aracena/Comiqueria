@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.CarouselDTO;
-import com.minpay.Comiqueria.model.Carousel;
+import com.minpay.Comiqueria.dto.CarouselRequestDTO;
+import com.minpay.Comiqueria.model.Carrusel;
 import com.minpay.Comiqueria.service.interfaces.ICarouselService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,24 +15,24 @@ public class CarouselController {
     private ICarouselService carouselService;
     
     @GetMapping("/{id}")
-    public Carousel traerCarousel(@PathVariable Long id){
+    public Carrusel traerCarousel(@PathVariable Long id){
         return this.carouselService.getCarousel(id);
     }
     
     @GetMapping
-    public List<Carousel> traerCarouseles(){
+    public List<Carrusel> traerCarouseles(){
         return this.carouselService.getCarouseles();
     }
     
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Carousel guardarCarousel(@RequestBody CarouselDTO carouselDTO){
+    public Carrusel guardarCarousel(@RequestBody CarouselRequestDTO carouselDTO){
         return this.carouselService.createCarousel(carouselDTO);
     }
     
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Carousel editarCarousel(@PathVariable Long id, @RequestBody CarouselDTO carouselDTO){
+    public Carrusel editarCarousel(@PathVariable Long id, @RequestBody CarouselRequestDTO carouselDTO){
         return this.carouselService.editCarouselById(id, carouselDTO);
     }
     

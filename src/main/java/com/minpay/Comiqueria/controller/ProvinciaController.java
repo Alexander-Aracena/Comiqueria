@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.ProvinciaDTO;
+import com.minpay.Comiqueria.dto.ProvinciaRequestDTO;
 import com.minpay.Comiqueria.model.Provincia;
 import com.minpay.Comiqueria.service.interfaces.IProvinciaLocalidadSyncService;
 import com.minpay.Comiqueria.service.interfaces.IProvinciaService;
@@ -22,25 +22,25 @@ public class ProvinciaController {
     private IProvinciaLocalidadSyncService provinciaLocalidadSyncService;
     
     @GetMapping("/{id}")
-    public ProvinciaDTO traerProvincia(@PathVariable Long id){
+    public ProvinciaRequestDTO traerProvincia(@PathVariable Long id){
         Provincia provincia = this.provinciaService.getProvincia(id);
         return this.provinciaService.getProvinciaDTO(provincia);
     }
     
     @GetMapping
-    public List<ProvinciaDTO> traerProvincias(){
+    public List<ProvinciaRequestDTO> traerProvincias(){
         return this.provinciaService.getProvinciasDTO();
     }
     
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProvinciaDTO guardarProvincia(@RequestParam String nombre, @RequestParam Long idPais){
+    public ProvinciaRequestDTO guardarProvincia(@RequestParam String nombre, @RequestParam Long idPais){
         return this.provinciaService.createProvincia(nombre, idPais);
     }
     
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ProvinciaDTO editarProvincia(
+    public ProvinciaRequestDTO editarProvincia(
         @PathVariable Long id,
         @RequestParam String nombre,
         @RequestParam Long idPais,

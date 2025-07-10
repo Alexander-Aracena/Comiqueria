@@ -5,13 +5,12 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 @Data
 @Entity
 @NoArgsConstructor
-@RequiredArgsConstructor
-public class Carousel {
+@Table(name = "carruseles")
+public class Carrusel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "car_id")
@@ -28,7 +27,16 @@ public class Carousel {
     private String texto;
     
     @NonNull
-    @Size(max = 50)
-    @Column(name = "car_imagen", length = 50)
+    @Column(name = "car_imagen", columnDefinition = "TEXT")
     private String imagen;
+    
+    @NonNull
+    @Column(name = "car_destino", columnDefinition = "TEXT")
+    private String urlDestino;
+    
+    @Column(name = "car_orden")
+    private Integer orden;
+    
+    @Column(name = "car_esta_activo")
+    private Boolean estaActivo = true;
 }

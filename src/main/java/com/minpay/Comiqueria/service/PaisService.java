@@ -1,8 +1,8 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.LocalidadDTO;
+import com.minpay.Comiqueria.dto.LocalidadRequestDTO;
 import com.minpay.Comiqueria.dto.PaisDTO;
-import com.minpay.Comiqueria.dto.ProvinciaDTO;
+import com.minpay.Comiqueria.dto.ProvinciaRequestDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
 import com.minpay.Comiqueria.service.interfaces.IPaisService;
 import com.minpay.Comiqueria.model.Pais;
@@ -34,20 +34,18 @@ public class PaisService implements IPaisService {
 
     @Override
     public PaisDTO getPaisDTO(Pais pais) {
-        Set<ProvinciaDTO> provincias = !pais.getProvincias().isEmpty()?
-            Utils.convertirASetDTO(
-            pais.getProvincias(),
+        Set<ProvinciaRequestDTO> provincias = !pais.getProvincias().isEmpty()?
+            Utils.convertirASetDTO(pais.getProvincias(),
             prov -> {
-                Set<LocalidadDTO> localidades = !prov.getLocalidades().isEmpty()?
-                    Utils.convertirASetDTO(
-                    prov.getLocalidades(),
-                    loc -> new LocalidadDTO(
+                Set<LocalidadRequestDTO> localidades = !prov.getLocalidades().isEmpty()?
+                    Utils.convertirASetDTO(prov.getLocalidades(),
+                    loc -> new LocalidadRequestDTO(
                         loc.getId(),
                         loc.getNombre()
                     )
                 ) : new HashSet<>();
 
-                return new ProvinciaDTO(
+                return new ProvinciaRequestDTO(
                     prov.getId(),
                     prov.getNombre(),
                      localidades
@@ -100,23 +98,20 @@ public class PaisService implements IPaisService {
 
     private List<PaisDTO> traerListaDTO(List<Pais> paises) {
 
-        return Utils.convertirAListaDTO(
-            paises,
+        return Utils.convertirAListaDTO(paises,
             pais -> {
-                Set<ProvinciaDTO> provincias = pais.getProvincias().isEmpty()?
-                    Utils.convertirASetDTO(
-                    pais.getProvincias(),
+                Set<ProvinciaRequestDTO> provincias = pais.getProvincias().isEmpty()?
+                    Utils.convertirASetDTO(pais.getProvincias(),
                     prov -> {
-                        Set<LocalidadDTO> localidades = !prov.getLocalidades().isEmpty()?
-                            Utils.convertirASetDTO(
-                            prov.getLocalidades(),
-                            loc -> new LocalidadDTO(
+                        Set<LocalidadRequestDTO> localidades = !prov.getLocalidades().isEmpty()?
+                            Utils.convertirASetDTO(prov.getLocalidades(),
+                            loc -> new LocalidadRequestDTO(
                                 loc.getId(),
                                 loc.getNombre()
                             )
                         ) : new HashSet<>();
 
-                        return new ProvinciaDTO(
+                        return new ProvinciaRequestDTO(
                             prov.getId(),
                             prov.getNombre(),
                             localidades

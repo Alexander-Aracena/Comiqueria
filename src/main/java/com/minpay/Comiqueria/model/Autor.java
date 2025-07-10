@@ -20,6 +20,9 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Table(name = "autores", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"aut_nombre", "aut_apellido"})
+})
 public class Autor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,4 +57,8 @@ public class Autor {
     @Column(name = "aut_fecha_baja")
     @ToString.Include
     private LocalDate fechaBaja;
+    
+    @Column(name = "aut_esta_vigente")
+    @ToString.Include
+    private Boolean estaVigente = true;
 }

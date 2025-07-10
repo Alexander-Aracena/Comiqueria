@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.AutorDTO;
+import com.minpay.Comiqueria.dto.AutorResponseDTO;
 import com.minpay.Comiqueria.dto.ProductosPorAutorDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
 import com.minpay.Comiqueria.mapper.AutorDTOToAutor;
@@ -39,11 +39,11 @@ public class AutorService implements IAutorService {
     }
     
     @Override
-    public AutorDTO getAutorDTO(Long id){
+    public AutorResponseDTO getAutorDTO(Long id){
         Autor autor = this.autorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Autor id: " + id + " no encontrado."));
         
-        return new AutorDTO(
+        return new AutorResponseDTO(
                 autor.getNombre(), autor.getApellido(),
                 autor.getFechaAlta(), autor.getFechaBaja()
         );
@@ -55,13 +55,13 @@ public class AutorService implements IAutorService {
     }
 
     @Override
-    public Autor createAutor(AutorDTO autorDTO) {
+    public Autor createAutor(AutorResponseDTO autorDTO) {
         Autor autor = this.mapper.map(autorDTO);
         return this.autorRepository.save(autor);
     }
 
     @Override
-    public Autor editAutorById(Long id, AutorDTO autorDTO) {
+    public Autor editAutorById(Long id, AutorResponseDTO autorDTO) {
         Autor autor = this.mapper.map(autorDTO, this.getAutor(id));
         return this.autorRepository.save(autor);
     }

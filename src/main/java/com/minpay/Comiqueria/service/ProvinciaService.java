@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.LocalidadDTO;
-import com.minpay.Comiqueria.dto.ProvinciaDTO;
+import com.minpay.Comiqueria.dto.LocalidadRequestDTO;
+import com.minpay.Comiqueria.dto.ProvinciaRequestDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
 import com.minpay.Comiqueria.service.interfaces.IProvinciaService;
 import com.minpay.Comiqueria.model.Localidad;
@@ -37,13 +37,12 @@ public class ProvinciaService implements IProvinciaService {
     }
 
     @Override
-    public ProvinciaDTO getProvinciaDTO(Provincia provincia) {
-        return new ProvinciaDTO(
+    public ProvinciaRequestDTO getProvinciaDTO(Provincia provincia) {
+        return new ProvinciaRequestDTO(
             provincia.getId(),
             provincia.getNombre(),
-            Utils.convertirASetDTO(
-                provincia.getLocalidades(),
-                localidad -> new LocalidadDTO(
+            Utils.convertirASetDTO(provincia.getLocalidades(),
+                localidad -> new LocalidadRequestDTO(
                     localidad.getId(),
                     localidad.getNombre()
                 )
@@ -62,19 +61,19 @@ public class ProvinciaService implements IProvinciaService {
     }
 
     @Override
-    public List<ProvinciaDTO> getProvinciasDTO() {
+    public List<ProvinciaRequestDTO> getProvinciasDTO() {
         List<Provincia> provincias = this.getProvincias();
         return traerListaDTO(provincias);
     }
 
     @Override
-    public List<ProvinciaDTO> getProvinciasDTO(Set<Long> idsProvincias) {
+    public List<ProvinciaRequestDTO> getProvinciasDTO(Set<Long> idsProvincias) {
         List<Provincia> provincias = this.getProvincias(idsProvincias);
         return traerListaDTO(provincias);
     }
 
     @Override
-    public ProvinciaDTO createProvincia(String nombre, Long idPais) {
+    public ProvinciaRequestDTO createProvincia(String nombre, Long idPais) {
         Pais pais = this.paisRepository.findById(idPais)
             .orElseThrow(
                 () -> new ResourceNotFoundException("País id: " + idPais + " no encontrado.")
@@ -85,7 +84,7 @@ public class ProvinciaService implements IProvinciaService {
     }
 
     @Override
-    public ProvinciaDTO editProvinciaById(
+    public ProvinciaRequestDTO editProvinciaById(
         Long id,
         String nombre,
         Long idPais,
@@ -121,15 +120,13 @@ public class ProvinciaService implements IProvinciaService {
         this.provinciaRepository.deleteById(id);
     }
 
-    private List<ProvinciaDTO> traerListaDTO(List<Provincia> provincias) {
-        return Utils.convertirAListaDTO(
-            provincias,
-            provincia -> new ProvinciaDTO(
+    private List<ProvinciaRequestDTO> traerListaDTO(List<Provincia> provincias) {
+        return Utils.convertirAListaDTO(provincias,
+            provincia -> new ProvinciaRequestDTO(
                 provincia.getId(),
                 provincia.getNombre(),
-                Utils.convertirASetDTO(
-                    provincia.getLocalidades(),
-                    localidad -> new LocalidadDTO(localidad.getId(), localidad.getNombre())
+                Utils.convertirASetDTO(provincia.getLocalidades(),
+                    localidad -> new LocalidadRequestDTO(localidad.getId(), localidad.getNombre())
                 )
             )
         );

@@ -3,8 +3,7 @@ package com.minpay.Comiqueria.model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -12,7 +11,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
+import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -31,40 +31,38 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table(name = "ventas")
-public class Venta {
-
+@Table(name = "departamentos", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"dep_nombre", "prov_id"}) // Nombre de depto. + ID de Provincia debe ser único
+})
+public class Departamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "vta_id")
+    @Column(name = "dep_id")
     @EqualsAndHashCode.Include
     @ToString.Include
     private Long id;
 
     @NonNull
-    @Column(name = "vta_fecha_vta", nullable = false)
+    @Size(max = 50)
+    @Column(name = "dep_nombre", length = 50)
     @EqualsAndHashCode.Include
     @ToString.Include
-    private LocalDateTime fecha_venta = LocalDateTime.now();
+    private String nombre;
 
+    @ManyToOne(fetch = FetchType.LAZY) // Un depto. pertenece a una provincia
     @NonNull
-    @Column(name = "vta_total", nullable = false, precision = 10, scale = 2)
-    @EqualsAndHashCode.Include
-    @ToString.Include
-    private BigDecimal total;
+    @JoinColumn(name = "dep_prov_id", nullable = false) // FK a Provincia
+    private Provincia provincia;
 
-    @NonNull
-    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
-    private Set<LineaVenta> lineas = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "departamento")
+    private Set<Localidad> localidades = new LinkedHashSet<>();
 
-    @NonNull
-    @ManyToOne
-    @JoinColumn(name = "vta_cte_id", nullable = false)
-    private Cliente cliente;
-
-    @Enumerated(EnumType.STRING)
-    @NonNull
-    @Column(name = "vta_estado", length = 30, nullable = false)
-    @ToString.Include
-    private EstadoVenta estado;
+    @Column(name = "dep_fecha_alta")
+    private LocalDateTime fechaAlta = LocalDateTime.now();
+    
+    @Column(name = "dep_fecha_baja")
+    private LocalDateTime fechaBaja;
+    
+    @Column(name = "dep_esta_vigente")
+    private Boolean estaVigente = true;
 }

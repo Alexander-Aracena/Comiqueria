@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.EditorialDTO;
+import com.minpay.Comiqueria.dto.EditorialRequestDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
 import com.minpay.Comiqueria.service.interfaces.IEditorialService;
 import com.minpay.Comiqueria.model.Editorial;
@@ -23,8 +23,8 @@ public class EditorialService implements IEditorialService {
     }
 
     @Override
-    public EditorialDTO getEditorialDTO(Editorial editorial) {
-        return new EditorialDTO(editorial.getId(), editorial.getNombre());
+    public EditorialRequestDTO getEditorialDTO(Editorial editorial) {
+        return new EditorialRequestDTO(editorial.getId(), editorial.getNombre());
     }
     
     @Override
@@ -38,13 +38,13 @@ public class EditorialService implements IEditorialService {
     }
     
     @Override
-    public List<EditorialDTO> getEditorialesDTO() {
+    public List<EditorialRequestDTO> getEditorialesDTO() {
         List<Editorial> editoriales = this.getEditoriales();
         return this.traerListaDTO(editoriales);
     }
 
     @Override
-    public List<EditorialDTO> getEditorialesDTO(Set<Long> idsEditoriales) {
+    public List<EditorialRequestDTO> getEditorialesDTO(Set<Long> idsEditoriales) {
         List<Editorial> editoriales = this.getEditoriales(idsEditoriales);
         return this.traerListaDTO(editoriales);
     }
@@ -72,9 +72,8 @@ public class EditorialService implements IEditorialService {
         this.editorialRepository.deleteById(id);
     }
     
-    private List<EditorialDTO> traerListaDTO(List<Editorial> editoriales) {
-        return editoriales.stream().map(
-            editorial -> new EditorialDTO(
+    private List<EditorialRequestDTO> traerListaDTO(List<Editorial> editoriales) {
+        return editoriales.stream().map(editorial -> new EditorialRequestDTO(
                 editorial.getId(),
                 editorial.getNombre()
             )

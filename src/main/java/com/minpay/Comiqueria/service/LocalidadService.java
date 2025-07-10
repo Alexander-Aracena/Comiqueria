@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.LocalidadDTO;
+import com.minpay.Comiqueria.dto.LocalidadRequestDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
 import com.minpay.Comiqueria.service.interfaces.ILocalidadService;
 import com.minpay.Comiqueria.model.Localidad;
@@ -28,8 +28,8 @@ public class LocalidadService implements ILocalidadService {
     }
     
     @Override
-    public LocalidadDTO getLocalidadDTO(Localidad localidad) {
-        return new LocalidadDTO(localidad.getId(), localidad.getNombre());
+    public LocalidadRequestDTO getLocalidadDTO(Localidad localidad) {
+        return new LocalidadRequestDTO(localidad.getId(), localidad.getNombre());
     }
     
     @Override
@@ -43,19 +43,19 @@ public class LocalidadService implements ILocalidadService {
     }
 
     @Override
-    public List<LocalidadDTO> getLocalidadesDTO() {
+    public List<LocalidadRequestDTO> getLocalidadesDTO() {
         List<Localidad> localidades = this.getLocalidades();
         return this.traerListaDTO(localidades);
     }
 
     @Override
-    public List<LocalidadDTO> getLocalidadesDTO(Set<Long> idsLocalidades) {
+    public List<LocalidadRequestDTO> getLocalidadesDTO(Set<Long> idsLocalidades) {
         List<Localidad> localidades = this.getLocalidades(idsLocalidades);
         return this.traerListaDTO(localidades);
     }
 
     @Override
-    public LocalidadDTO createLocalidad(String nombre, Long idProvincia) {
+    public LocalidadRequestDTO createLocalidad(String nombre, Long idProvincia) {
         Provincia provincia = this.provinciaRepository.findById(idProvincia)
             .orElseThrow(
                 () -> new ResourceNotFoundException("Provincia id: " + idProvincia + " no encontrado.")
@@ -66,7 +66,7 @@ public class LocalidadService implements ILocalidadService {
     }
 
     @Override
-    public LocalidadDTO editLocalidadById(Long id, String nombre, Long idProvincia) {
+    public LocalidadRequestDTO editLocalidadById(Long id, String nombre, Long idProvincia) {
         Provincia provincia = this.provinciaRepository.findById(idProvincia)
             .orElseThrow(
                 () -> new ResourceNotFoundException("Provincia id: " + idProvincia + " no encontrado.")
@@ -93,9 +93,8 @@ public class LocalidadService implements ILocalidadService {
         this.localidadRepository.deleteById(id);
     }
     
-    private List<LocalidadDTO> traerListaDTO(List<Localidad> localidades) {
-        return localidades.stream().map(
-            localidad -> new LocalidadDTO(
+    private List<LocalidadRequestDTO> traerListaDTO(List<Localidad> localidades) {
+        return localidades.stream().map(localidad -> new LocalidadRequestDTO(
                 localidad.getId(),
                 localidad.getNombre()
             )

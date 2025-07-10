@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.LocalidadDTO;
+import com.minpay.Comiqueria.dto.LocalidadRequestDTO;
 import com.minpay.Comiqueria.model.Localidad;
 import com.minpay.Comiqueria.service.interfaces.ILocalidadService;
 import java.util.List;
@@ -16,25 +16,25 @@ public class LocalidadController {
     private ILocalidadService localidadService;
     
     @GetMapping("/{id}")
-    public LocalidadDTO traerLocalidad(@PathVariable Long id){
+    public LocalidadRequestDTO traerLocalidad(@PathVariable Long id){
         Localidad localidad = this.localidadService.getLocalidad(id);
         return this.localidadService.getLocalidadDTO(localidad);
     }
     
     @GetMapping
-    public List<LocalidadDTO> traerLocalidades(){
+    public List<LocalidadRequestDTO> traerLocalidades(){
         return this.localidadService.getLocalidadesDTO();
     }
     
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public LocalidadDTO guardarLocalidad(@RequestParam String nombre, @RequestParam Long idProvincia){
+    public LocalidadRequestDTO guardarLocalidad(@RequestParam String nombre, @RequestParam Long idProvincia){
         return this.localidadService.createLocalidad(nombre, idProvincia);
     }
     
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public LocalidadDTO editarLocalidad(
+    public LocalidadRequestDTO editarLocalidad(
         @PathVariable Long id,
         @RequestParam String nombre,
         @RequestParam Long idProvincia

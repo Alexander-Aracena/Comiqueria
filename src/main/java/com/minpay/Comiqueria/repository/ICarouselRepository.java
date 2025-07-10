@@ -1,10 +1,10 @@
 package com.minpay.Comiqueria.repository;
 
-import com.minpay.Comiqueria.model.Carousel;
+import com.minpay.Comiqueria.model.Carrusel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ICarouselRepository extends JpaRepository<Carousel, Long> {
+public interface ICarouselRepository extends JpaRepository<Carrusel, Long> {
     
 }

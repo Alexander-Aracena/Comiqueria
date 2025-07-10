@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.EditorialDTO;
+import com.minpay.Comiqueria.dto.EditorialRequestDTO;
 import com.minpay.Comiqueria.model.Editorial;
 import com.minpay.Comiqueria.service.interfaces.IEditorialService;
 import java.util.List;
@@ -15,7 +15,7 @@ public class EditorialController {
     private IEditorialService editorialService;
     
     @GetMapping("/{id}")
-    public EditorialDTO traerEditorial(@PathVariable Long id){
+    public EditorialRequestDTO traerEditorial(@PathVariable Long id){
         Editorial editorial = this.editorialService.getEditorial(id);
         return this.editorialService.getEditorialDTO(editorial);
     }

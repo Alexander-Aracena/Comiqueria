@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.SubcategoriaDTO;
+import com.minpay.Comiqueria.dto.SubcategoriaRequestDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
 import com.minpay.Comiqueria.model.Categoria;
 import com.minpay.Comiqueria.service.interfaces.ISubcategoriaService;
@@ -22,15 +22,15 @@ public class SubcategoriaService implements ISubcategoriaService {
     private ICategoriaService categoriaService;
 
     @Override
-    public SubcategoriaDTO getSubcategoriaDTO(Long id) {
+    public SubcategoriaRequestDTO getSubcategoriaDTO(Long id) {
         Subcategoria subcategoria = this.getSubcategoria(id);
-        return new SubcategoriaDTO(id, subcategoria.getNombre());
+        return new SubcategoriaRequestDTO(id, subcategoria.getNombre());
     }
 
     @Override
-    public List<SubcategoriaDTO> getSubcategoriasDTO() {
+    public List<SubcategoriaRequestDTO> getSubcategoriasDTO() {
         List<Subcategoria> subcategorias = this.subcategoriaRepository.findAll();
-        return subcategorias.stream().map(subcategoria -> new SubcategoriaDTO(
+        return subcategorias.stream().map(subcategoria -> new SubcategoriaRequestDTO(
                     subcategoria.getId(),
                     subcategoria.getNombre()
             )
@@ -39,22 +39,22 @@ public class SubcategoriaService implements ISubcategoriaService {
     
     @Override
     @Transactional
-    public SubcategoriaDTO createSubcategoria(String nombreSubcategoria, Long idCategoria){
+    public SubcategoriaRequestDTO createSubcategoria(String nombreSubcategoria, Long idCategoria){
         Categoria categoria = this.categoriaService.getCategoria(idCategoria);
         Subcategoria subcategoria = new Subcategoria(nombreSubcategoria, categoria);
         this.subcategoriaRepository.save(subcategoria);
-        return new SubcategoriaDTO(subcategoria.getId(), nombreSubcategoria);
+        return new SubcategoriaRequestDTO(subcategoria.getId(), nombreSubcategoria);
     }
 
     @Override
     @Transactional
-    public SubcategoriaDTO editSubcategoriaById(Long idSubcategoria, String nombreSubcategoria, Long idCategoria) {
+    public SubcategoriaRequestDTO editSubcategoriaById(Long idSubcategoria, String nombreSubcategoria, Long idCategoria) {
         Categoria nuevaCategoria = this.categoriaService.getCategoria(idCategoria);
         Subcategoria subcategoria = this.getSubcategoria(idSubcategoria);
         subcategoria.setNombre(nombreSubcategoria);
         subcategoria.setCategoria(nuevaCategoria);
         this.subcategoriaRepository.save(subcategoria);
-        return new SubcategoriaDTO(idSubcategoria, nombreSubcategoria);
+        return new SubcategoriaRequestDTO(idSubcategoria, nombreSubcategoria);
     }
     
     @Override

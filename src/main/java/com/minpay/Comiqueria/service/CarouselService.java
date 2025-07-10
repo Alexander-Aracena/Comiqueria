@@ -1,10 +1,10 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.CarouselDTO;
+import com.minpay.Comiqueria.dto.CarouselRequestDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
 import com.minpay.Comiqueria.mapper.CarouselDTOToCarousel;
 import com.minpay.Comiqueria.service.interfaces.ICarouselService;
-import com.minpay.Comiqueria.model.Carousel;
+import com.minpay.Comiqueria.model.Carrusel;
 import com.minpay.Comiqueria.repository.ICarouselRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,25 +20,25 @@ public class CarouselService implements ICarouselService {
     private CarouselDTOToCarousel mapper;
     
     @Override
-    public Carousel getCarousel(Long id) {
+    public Carrusel getCarousel(Long id) {
         return this.carouselRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Carousel id: " + id + " no encontrado."));
     }
 
     @Override
-    public List<Carousel> getCarouseles() {
+    public List<Carrusel> getCarouseles() {
         return this.carouselRepository.findAll();
     }
 
     @Override
-    public Carousel createCarousel(CarouselDTO carouselDTO) {
-        Carousel carousel = this.mapper.map(carouselDTO);
+    public Carrusel createCarousel(CarouselRequestDTO carouselDTO) {
+        Carrusel carousel = this.mapper.map(carouselDTO);
         return this.carouselRepository.save(carousel);
     }
 
     @Override
-    public Carousel editCarouselById(Long id, CarouselDTO carouselDTO) {
-        Carousel carousel = this.mapper.map(carouselDTO, this.getCarousel(id));
+    public Carrusel editCarouselById(Long id, CarouselRequestDTO carouselDTO) {
+        Carrusel carousel = this.mapper.map(carouselDTO, this.getCarousel(id));
         return this.carouselRepository.save(carousel);
     }
 

@@ -2,6 +2,7 @@ package com.minpay.Comiqueria.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.EqualsAndHashCode;
@@ -19,6 +20,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Table(name = "categorias")
 public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,10 +31,21 @@ public class Categoria {
     
     @NonNull
     @Size(max = 30)
-    @Column(name = "cat_nombre", length = 30)
+    @Column(name = "cat_nombre", length = 30, unique = true)
     @EqualsAndHashCode.Include
     @ToString.Include
     private String nombre;
+    
+    @Column(name = "cat_fecha_alta")
+    @ToString.Include
+    private LocalDateTime fechaAlta = LocalDateTime.now();
+    
+    @Column(name = "cat_fecha_baja")
+    @ToString.Include
+    private LocalDateTime fechaBaja;
+    
+    @Column(name = "cat_esta_vigente")
+    private Boolean estaVigente = true;
     
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     private Set<Subcategoria> subcategorias = new LinkedHashSet<>();

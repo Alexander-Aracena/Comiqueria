@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.AutorDTO;
+import com.minpay.Comiqueria.dto.AutorResponseDTO;
 import com.minpay.Comiqueria.dto.ProductosPorAutorDTO;
 import com.minpay.Comiqueria.model.Autor;
 import com.minpay.Comiqueria.service.interfaces.IAutorService;
@@ -28,13 +28,13 @@ public class AutorController {
     
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Autor guardarAutor(@RequestBody AutorDTO autorDTO){
+    public Autor guardarAutor(@RequestBody AutorResponseDTO autorDTO){
         return this.autorService.createAutor(autorDTO);
     }
     
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Autor editarAutor(@PathVariable Long id, @RequestBody AutorDTO autorDTO){
+    public Autor editarAutor(@PathVariable Long id, @RequestBody AutorResponseDTO autorDTO){
         return this.autorService.editAutorById(id, autorDTO);
     }
     

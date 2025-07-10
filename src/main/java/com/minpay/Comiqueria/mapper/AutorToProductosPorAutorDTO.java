@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.mapper;
 
-import com.minpay.Comiqueria.dto.AutorDTO;
+import com.minpay.Comiqueria.dto.AutorResponseDTO;
 import com.minpay.Comiqueria.dto.ProductoDTO;
 import com.minpay.Comiqueria.dto.ProductosPorAutorDTO;
 import com.minpay.Comiqueria.model.Autor;
@@ -25,7 +25,7 @@ public class AutorToProductosPorAutorDTO implements IMapper<Autor, ProductosPorA
         
         return new ProductosPorAutorDTO(
                 autor.getId(),
-                new AutorDTO(autor.getNombre(), autor.getApellido(),
+                new AutorResponseDTO(autor.getNombre(), autor.getApellido(),
                         autor.getFechaAlta(), autor.getFechaBaja()),
                 productos
         );
