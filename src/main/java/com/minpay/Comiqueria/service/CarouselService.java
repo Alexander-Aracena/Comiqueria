@@ -5,16 +5,16 @@ import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
 import com.minpay.Comiqueria.mapper.CarouselDTOToCarousel;
 import com.minpay.Comiqueria.service.interfaces.ICarouselService;
 import com.minpay.Comiqueria.model.Carrusel;
-import com.minpay.Comiqueria.repository.ICarouselRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.minpay.Comiqueria.repository.ICarruselRepository;
 
 @Service
 public class CarouselService implements ICarouselService {
     
     @Autowired
-    private ICarouselRepository carouselRepository;
+    private ICarruselRepository carouselRepository;
     
     @Autowired
     private CarouselDTOToCarousel mapper;
