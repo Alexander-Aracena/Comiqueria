@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.ClienteDTO;
+import com.minpay.Comiqueria.dto.ClienteRequestDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
 import com.minpay.Comiqueria.mapper.ClienteDTOToCliente;
 import com.minpay.Comiqueria.model.Cliente;
@@ -38,7 +38,7 @@ public class ClienteService implements IClienteService {
     }
 
     @Override
-    public ClienteDTO getClienteDTO(Cliente cliente) {
+    public ClienteRequestDTO getClienteDTO(Cliente cliente) {
         return clienteAClienteDTO(cliente);
     }
 
@@ -53,26 +53,26 @@ public class ClienteService implements IClienteService {
     }
 
     @Override
-    public List<ClienteDTO> getClientesDTO() {
+    public List<ClienteRequestDTO> getClientesDTO() {
         List<Cliente> clientes = this.getClientes();
         return this.traerListaDTO(clientes);
     }
 
     @Override
-    public List<ClienteDTO> getClientesDTO(Set<Long> idsClientes) {
+    public List<ClienteRequestDTO> getClientesDTO(Set<Long> idsClientes) {
         List<Cliente> clientes = this.getClientes(idsClientes);
         return this.traerListaDTO(clientes);
     }
 
     @Override
-    public ClienteDTO createCliente(ClienteDTO clienteDTO) {
+    public ClienteRequestDTO createCliente(ClienteRequestDTO clienteDTO) {
         Cliente cliente = this.mapper.map(clienteDTO);
         this.clienteRepository.save(cliente);
         return this.getClienteDTO(cliente);
     }
 
     @Override
-    public ClienteDTO editCliente(Long id, ClienteDTO clienteDTO) {
+    public ClienteRequestDTO editCliente(Long id, ClienteRequestDTO clienteDTO) {
         Cliente cliente = this.mapper.map(clienteDTO, this.getCliente(id));
         this.clienteRepository.save(cliente);
         return this.getClienteDTO(cliente);
@@ -124,13 +124,13 @@ public class ClienteService implements IClienteService {
         this.domicilioService.deleteDomicilio(idDomicilio);
     }
 
-    private List<ClienteDTO> traerListaDTO(List<Cliente> clientes) {
+    private List<ClienteRequestDTO> traerListaDTO(List<Cliente> clientes) {
         return clientes.stream().map(cliente -> clienteAClienteDTO(cliente)
         ).toList();
     }
 
-    private ClienteDTO clienteAClienteDTO(Cliente cliente) {
-        ClienteDTO clienteDTO = new ClienteDTO();
+    private ClienteRequestDTO clienteAClienteDTO(Cliente cliente) {
+        ClienteRequestDTO clienteDTO = new ClienteRequestDTO();
         clienteDTO.setId(cliente.getId());
         clienteDTO.setNombre(cliente.getNombre());
         clienteDTO.setApellido(cliente.getApellido());

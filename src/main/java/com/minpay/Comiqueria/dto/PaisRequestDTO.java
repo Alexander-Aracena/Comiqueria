@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaisDTO {
+public class PaisRequestDTO {
     @NotBlank(message = "El nombre del país no puede estar vacío")
     @Size(max = 30, message = "El nombre del país no puede exceder los 30 caracteres")
     private String nombre;

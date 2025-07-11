@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.PaisDTO;
+import com.minpay.Comiqueria.dto.PaisRequestDTO;
 import com.minpay.Comiqueria.model.Pais;
 import com.minpay.Comiqueria.service.interfaces.IPaisProvinciaSyncService;
 import com.minpay.Comiqueria.service.interfaces.IPaisService;
@@ -22,27 +22,27 @@ public class PaisController {
     private IPaisProvinciaSyncService paisProvinciaSyncService;
     
     @GetMapping("/{id}")
-    public PaisDTO traerPais(@PathVariable Long id){
+    public PaisRequestDTO traerPais(@PathVariable Long id){
         Pais pais = this.paisService.getPais(id);
         return this.paisService.getPaisDTO(pais);
     }
     
     @GetMapping
-    public List<PaisDTO> traerPaises(){
+    public List<PaisRequestDTO> traerPaises(){
         return this.paisService.getPaisesDTO();
     }
     
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PaisDTO guardarPais(@RequestParam String nombre){
+    public PaisRequestDTO guardarPais(@RequestParam String nombre){
         return this.paisService.createPais(nombre);
     }
     
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public PaisDTO editarPais(
+    public PaisRequestDTO editarPais(
         @PathVariable Long id,
-        @RequestBody PaisDTO paisDTO
+        @RequestBody PaisRequestDTO paisDTO
     ){
         return this.paisService.editPaisById(id, paisDTO);
     }

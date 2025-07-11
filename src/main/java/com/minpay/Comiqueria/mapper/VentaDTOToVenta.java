@@ -1,14 +1,14 @@
 package com.minpay.Comiqueria.mapper;
 
-import com.minpay.Comiqueria.dto.VentaDTO;
+import com.minpay.Comiqueria.dto.VentaRequestDTO;
 import com.minpay.Comiqueria.model.Venta;
 import java.time.LocalDate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class VentaDTOToVenta implements IMapper<VentaDTO, Venta> {    
+public class VentaDTOToVenta implements IMapper<VentaRequestDTO, Venta> {    
     @Override
-    public Venta map(VentaDTO ventaDTO) {
+    public Venta map(VentaRequestDTO ventaDTO) {
         Venta venta = new Venta();
         venta.setFecha_venta(LocalDate.now());
         venta.setTotal(ventaDTO.getTotal());
@@ -19,7 +19,7 @@ public class VentaDTOToVenta implements IMapper<VentaDTO, Venta> {
     }
 
     @Override
-    public Venta map(VentaDTO ventaDTO, Venta venta) {
+    public Venta map(VentaRequestDTO ventaDTO, Venta venta) {
         venta.setFecha_venta(ventaDTO.getFecha_venta());
         venta.setLineas(ventaDTO.getLineas());
         venta.setCliente(ventaDTO.getCliente());

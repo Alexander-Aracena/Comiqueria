@@ -1,5 +1,6 @@
 package com.minpay.Comiqueria.dto;
 
+import com.minpay.Comiqueria.model.TipoDoc;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,11 +14,37 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class LocalidadResponseDTO {
+public class DomicilioResponseDTO {
     private Long id;
-    private String nombre;
+    private String calle;
+    private String altura;
+    private String departamento;
+    private String cp;
     private Boolean estaVigente;
-    private DepartamentoBasicoDTO departamento;
+    private LocalidadBasicoDTO localidad;
+    private ClienteBasicoDTO cliente;
+    
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class LocalidadBasicoDTO {
+        private Long id;
+        private String nombre;
+        private DepartamentoBasicoDTO departamento;
+    }
+    
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ClienteBasicoDTO {
+        private Long id;
+        private String nombre;
+        private String apellido;
+        private TipoDoc tipoDoc;
+        private String nroDoc;
+    }
     
     @Getter
     @Setter
@@ -26,14 +53,14 @@ public class LocalidadResponseDTO {
     public static class DepartamentoBasicoDTO {
         private Long id;
         private String nombre;
-        private ProvinciaBasicaDTO provincia;
+        private ProvinciaBasicoDTO provincia;
     }
     
     @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ProvinciaBasicaDTO {
+    public static class ProvinciaBasicoDTO {
         private Long id;
         private String nombre;
         private PaisBasicoDTO pais;

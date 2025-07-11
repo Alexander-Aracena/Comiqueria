@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.VentaDTO;
+import com.minpay.Comiqueria.dto.VentaRequestDTO;
 import com.minpay.Comiqueria.model.Venta;
 import com.minpay.Comiqueria.service.interfaces.IVentaService;
 import java.util.List;
@@ -26,13 +26,13 @@ public class VentaController {
     
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Venta guardarVenta(@RequestBody VentaDTO ventaDTO){
+    public Venta guardarVenta(@RequestBody VentaRequestDTO ventaDTO){
         return this.ventaService.createVenta(ventaDTO);
     }
     
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Venta editarVenta(@PathVariable Long id, @RequestBody VentaDTO ventaDTO){
+    public Venta editarVenta(@PathVariable Long id, @RequestBody VentaRequestDTO ventaDTO){
         return this.ventaService.editVentaById(id, ventaDTO);
     }
     

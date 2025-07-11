@@ -8,12 +8,12 @@ import lombok.Data;
 public class ProductosPorAutorDTO {
     private Long idAutor;
     private AutorResponseDTO autor;
-    private Set<ProductoDTO> productos = new LinkedHashSet();
+    private Set<ProductoRequestDTO> productos = new LinkedHashSet();
 
     public ProductosPorAutorDTO() {
     }
 
-    public ProductosPorAutorDTO(Long idAutor, AutorResponseDTO autor, Set<ProductoDTO> productos) {
+    public ProductosPorAutorDTO(Long idAutor, AutorResponseDTO autor, Set<ProductoRequestDTO> productos) {
         this.idAutor = idAutor;
         this.autor = autor;
         this.productos = productos;

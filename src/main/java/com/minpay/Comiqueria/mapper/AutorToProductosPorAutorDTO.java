@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.mapper;
 
 import com.minpay.Comiqueria.dto.AutorResponseDTO;
-import com.minpay.Comiqueria.dto.ProductoDTO;
+import com.minpay.Comiqueria.dto.ProductoRequestDTO;
 import com.minpay.Comiqueria.dto.ProductosPorAutorDTO;
 import com.minpay.Comiqueria.model.Autor;
 import java.util.Set;
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 public class AutorToProductosPorAutorDTO implements IMapper<Autor, ProductosPorAutorDTO> {
     @Override
     public ProductosPorAutorDTO map(Autor autor) {
-        Set<ProductoDTO> productos = autor.getProductos().stream().map(producto -> {
-            return new ProductoDTO(
+        Set<ProductoRequestDTO> productos = autor.getProductos().stream().map(producto -> {
+            return new ProductoRequestDTO(
                     producto.getId(), producto.getTitulo(), producto.getPrecio(), producto.getDescripcion(),
                     producto.getTapa(), producto.getIsbn(), producto.getPeso(), producto.getDimensiones(),
                     producto.getPaginas(),

@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.LineaVentaDTO;
+import com.minpay.Comiqueria.dto.LineaVentaRequestDTO;
 import com.minpay.Comiqueria.model.LineaVenta;
 import com.minpay.Comiqueria.service.interfaces.ILineaVentaService;
 import java.util.List;
@@ -26,13 +26,13 @@ public class LineaVentaController {
     
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public LineaVenta guardarLineaVenta(@RequestBody LineaVentaDTO lineaVentaDTO){
+    public LineaVenta guardarLineaVenta(@RequestBody LineaVentaRequestDTO lineaVentaDTO){
         return this.lineaVentaService.createLineaVenta(lineaVentaDTO);
     }
     
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public LineaVenta editarLineaVenta(@PathVariable Long id, @RequestBody LineaVentaDTO lineaVentaDTO){
+    public LineaVenta editarLineaVenta(@PathVariable Long id, @RequestBody LineaVentaRequestDTO lineaVentaDTO){
         return this.lineaVentaService.editLineaVentaById(id, lineaVentaDTO);
     }
     

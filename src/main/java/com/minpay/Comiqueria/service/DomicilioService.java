@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.DomicilioDTO;
+import com.minpay.Comiqueria.dto.DomicilioRequestDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
 import com.minpay.Comiqueria.mapper.DomicilioDTOToDomicilio;
 import com.minpay.Comiqueria.service.interfaces.IDomicilioService;
@@ -31,7 +31,7 @@ public class DomicilioService implements IDomicilioService {
     }
     
     @Override
-    public DomicilioDTO getDomicilioDTO(Domicilio domicilio) {
+    public DomicilioRequestDTO getDomicilioDTO(Domicilio domicilio) {
         return domicilioADomicilioDTO(domicilio);
     }
 
@@ -46,19 +46,19 @@ public class DomicilioService implements IDomicilioService {
     }
     
     @Override
-    public List<DomicilioDTO> getDomiciliosDTO() {
+    public List<DomicilioRequestDTO> getDomiciliosDTO() {
         List<Domicilio> domicilios = this.getDomicilios();
         return this.traerListaDTO(domicilios);
     }
     
     @Override
-    public List<DomicilioDTO> getDomiciliosDTO(Set<Long> idsDomicilios) {
+    public List<DomicilioRequestDTO> getDomiciliosDTO(Set<Long> idsDomicilios) {
         List<Domicilio> domicilios = this.getDomicilios(idsDomicilios);
         return this.traerListaDTO(domicilios);
     }
 
     @Override
-    public DomicilioDTO createDomicilio(DomicilioDTO domicilioDTO) {
+    public DomicilioRequestDTO createDomicilio(DomicilioRequestDTO domicilioDTO) {
         Domicilio domicilio = this.mapper.map(domicilioDTO);
         domicilio.setLocalidad(
             this.localidadService.getLocalidad(domicilioDTO.getIdLocalidad())
@@ -68,7 +68,7 @@ public class DomicilioService implements IDomicilioService {
     }
 
     @Override
-    public DomicilioDTO editDomicilio(Long id, DomicilioDTO domicilioDTO) {
+    public DomicilioRequestDTO editDomicilio(Long id, DomicilioRequestDTO domicilioDTO) {
         Domicilio domicilio = this.mapper.map(domicilioDTO, this.getDomicilio(id));
         domicilio.setLocalidad(
             this.localidadService.getLocalidad(domicilioDTO.getIdLocalidad())
@@ -98,13 +98,13 @@ public class DomicilioService implements IDomicilioService {
     }
     
     @Override
-    public List<DomicilioDTO> traerListaDTO(List<Domicilio> domicilios) {
+    public List<DomicilioRequestDTO> traerListaDTO(List<Domicilio> domicilios) {
         return domicilios.stream().map(domicilio -> domicilioADomicilioDTO(domicilio)
         ).toList();
     }
     
-    public static DomicilioDTO domicilioADomicilioDTO(Domicilio domicilio) {
-        return new DomicilioDTO(
+    public static DomicilioRequestDTO domicilioADomicilioDTO(Domicilio domicilio) {
+        return new DomicilioRequestDTO(
             domicilio.getId(),
             domicilio.getCalle(),
             domicilio.getAltura(),

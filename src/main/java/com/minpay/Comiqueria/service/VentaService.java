@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.VentaDTO;
+import com.minpay.Comiqueria.dto.VentaRequestDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
 import com.minpay.Comiqueria.mapper.VentaDTOToVenta;
 import com.minpay.Comiqueria.model.Producto;
@@ -32,13 +32,13 @@ public class VentaService implements IVentaService {
     }
 
     @Override
-    public Venta createVenta(VentaDTO ventaDTO) {
+    public Venta createVenta(VentaRequestDTO ventaDTO) {
         Venta venta = this.mapper.map(ventaDTO);
         return this.ventaRepository.save(venta);
     }
 
     @Override
-    public Venta editVentaById(Long id, VentaDTO ventaDTO) {
+    public Venta editVentaById(Long id, VentaRequestDTO ventaDTO) {
         Venta venta = this.mapper.map(ventaDTO, this.getVenta(id));
         return this.ventaRepository.save(venta);
     }

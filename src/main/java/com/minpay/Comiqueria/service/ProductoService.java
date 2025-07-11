@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.ProductoDTO;
+import com.minpay.Comiqueria.dto.ProductoRequestDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
 import com.minpay.Comiqueria.mapper.ProductoDTOToProducto;
 import com.minpay.Comiqueria.model.Editorial;
@@ -37,7 +37,7 @@ public class ProductoService implements IProductoService {
     }
     
     @Override
-    public ProductoDTO getProductoDTO(Producto producto){
+    public ProductoRequestDTO getProductoDTO(Producto producto){
         return productoAProductoDTO(producto);
     }
 
@@ -52,19 +52,19 @@ public class ProductoService implements IProductoService {
     }
     
     @Override
-    public List<ProductoDTO> getProductosDTO(){
+    public List<ProductoRequestDTO> getProductosDTO(){
         List<Producto> productos = this.getProductos();
         return this.traerListaDTO(productos);
     }
     
     @Override
-    public List<ProductoDTO> getProductosDTO(Set<Long> idsProductos){
+    public List<ProductoRequestDTO> getProductosDTO(Set<Long> idsProductos){
         List<Producto> productos = this.getProductos(idsProductos);
         return this.traerListaDTO(productos);
     }
 
     @Override
-    public ProductoDTO createProducto(ProductoDTO productoDTO) {
+    public ProductoRequestDTO createProducto(ProductoRequestDTO productoDTO) {
         Producto producto = this.mapper.map(productoDTO);
         Subcategoria subcategoria = this.subcategoriaService.getSubcategoria(
             productoDTO.getIdSubcategoria()
@@ -88,7 +88,7 @@ public class ProductoService implements IProductoService {
     }
 
     @Override
-    public ProductoDTO editProductoById(Long id, ProductoDTO productoDTO) {
+    public ProductoRequestDTO editProductoById(Long id, ProductoRequestDTO productoDTO) {
         Producto producto = this.mapper.map(productoDTO, this.getProducto(id));
         producto.setSubcategoria(
             this.subcategoriaService.getSubcategoria(productoDTO.getIdSubcategoria())
@@ -123,13 +123,13 @@ public class ProductoService implements IProductoService {
     }
 
     @Override
-    public List<ProductoDTO> traerListaDTO(List<Producto> productos) {
+    public List<ProductoRequestDTO> traerListaDTO(List<Producto> productos) {
         return productos.stream().map(producto -> productoAProductoDTO(producto)
         ).toList();
     }
 
-    private static ProductoDTO productoAProductoDTO(Producto producto) {
-        return new ProductoDTO(
+    private static ProductoRequestDTO productoAProductoDTO(Producto producto) {
+        return new ProductoRequestDTO(
             producto.getId(),
             producto.getTitulo(),
             producto.getPrecio(),

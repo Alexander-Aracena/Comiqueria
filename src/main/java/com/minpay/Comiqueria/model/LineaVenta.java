@@ -43,10 +43,11 @@ public class LineaVenta {
     @JoinColumn(name = "linea_prod_id")
     private Producto producto;
 
+    @NonNull
     @Column(name = "linea_cantidad")
     @EqualsAndHashCode.Include
     @ToString.Include
-    private int cantidad;
+    private Integer cantidad;
     
     @NonNull
     @Column(name = "linea_precio", nullable = false, precision = 10, scale = 2)

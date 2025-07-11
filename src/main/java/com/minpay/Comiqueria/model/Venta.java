@@ -45,7 +45,7 @@ public class Venta {
     @Column(name = "vta_fecha_vta", nullable = false)
     @EqualsAndHashCode.Include
     @ToString.Include
-    private LocalDateTime fecha_venta = LocalDateTime.now();
+    private LocalDateTime fechaVenta = LocalDateTime.now();
 
     @NonNull
     @Column(name = "vta_total", nullable = false, precision = 10, scale = 2)

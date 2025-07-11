@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.DomicilioDTO;
+import com.minpay.Comiqueria.dto.DomicilioRequestDTO;
 import com.minpay.Comiqueria.model.Domicilio;
 import com.minpay.Comiqueria.service.interfaces.IDomicilioService;
 import java.util.List;
@@ -16,25 +16,25 @@ public class DomicilioController {
     private IDomicilioService domicilioService;
 
     @GetMapping("/{id}")
-    public DomicilioDTO traerDomicilio(@PathVariable Long id) {
+    public DomicilioRequestDTO traerDomicilio(@PathVariable Long id) {
         Domicilio domicilio = this.domicilioService.getDomicilio(id);
         return this.domicilioService.getDomicilioDTO(domicilio);
     }
 
     @GetMapping
-    public List<DomicilioDTO> traerDomicilios() {
+    public List<DomicilioRequestDTO> traerDomicilios() {
         return this.domicilioService.getDomiciliosDTO();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public DomicilioDTO guardarDomicilio(@RequestBody DomicilioDTO domicilioDTO) {
+    public DomicilioRequestDTO guardarDomicilio(@RequestBody DomicilioRequestDTO domicilioDTO) {
         return this.domicilioService.createDomicilio(domicilioDTO);
     }
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public DomicilioDTO editarDomicilio(@PathVariable Long id, @RequestBody DomicilioDTO domicilioDTO) {
+    public DomicilioRequestDTO editarDomicilio(@PathVariable Long id, @RequestBody DomicilioRequestDTO domicilioDTO) {
         return this.domicilioService.editDomicilio(id, domicilioDTO);
     }
 

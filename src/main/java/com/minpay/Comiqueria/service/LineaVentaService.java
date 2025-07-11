@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.LineaVentaDTO;
+import com.minpay.Comiqueria.dto.LineaVentaRequestDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
 import com.minpay.Comiqueria.mapper.LineaVentaDTOToLineaVenta;
 import com.minpay.Comiqueria.model.LineaVenta;
@@ -31,13 +31,13 @@ public class LineaVentaService implements ILineaVentaService {
     }
 
     @Override
-    public LineaVenta createLineaVenta(LineaVentaDTO lineaVentaDTO) {
+    public LineaVenta createLineaVenta(LineaVentaRequestDTO lineaVentaDTO) {
         LineaVenta lineaVenta = this.mapper.map(lineaVentaDTO);
         return this.lineaVentaRepository.save(lineaVenta);
     }
 
     @Override
-    public LineaVenta editLineaVentaById(Long idLinea, LineaVentaDTO lineaVentaDTO) {
+    public LineaVenta editLineaVentaById(Long idLinea, LineaVentaRequestDTO lineaVentaDTO) {
         LineaVenta lineaVenta = this.mapper.map(lineaVentaDTO, this.getLineaVenta(idLinea));
         return this.lineaVentaRepository.save(lineaVenta);
     }

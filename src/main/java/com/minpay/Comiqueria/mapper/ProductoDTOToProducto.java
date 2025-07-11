@@ -1,13 +1,13 @@
 package com.minpay.Comiqueria.mapper;
 
-import com.minpay.Comiqueria.dto.ProductoDTO;
+import com.minpay.Comiqueria.dto.ProductoRequestDTO;
 import com.minpay.Comiqueria.model.Producto;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductoDTOToProducto implements IMapper<ProductoDTO, Producto> {
+public class ProductoDTOToProducto implements IMapper<ProductoRequestDTO, Producto> {
     @Override
-    public Producto map(ProductoDTO productoDTO) {
+    public Producto map(ProductoRequestDTO productoDTO) {
         Producto producto = new Producto();
         producto.setTitulo(productoDTO.getTitulo());
         producto.setPrecio(productoDTO.getPrecio());
@@ -26,7 +26,7 @@ public class ProductoDTOToProducto implements IMapper<ProductoDTO, Producto> {
     }
 
     @Override
-    public Producto map(ProductoDTO productoDTO, Producto producto) {
+    public Producto map(ProductoRequestDTO productoDTO, Producto producto) {
         producto.setTitulo(productoDTO.getTitulo());
         producto.setPrecio(productoDTO.getPrecio());
         producto.setDescripcion(productoDTO.getDescripcion());

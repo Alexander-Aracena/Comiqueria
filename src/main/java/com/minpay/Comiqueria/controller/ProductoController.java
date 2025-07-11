@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.ProductoDTO;
+import com.minpay.Comiqueria.dto.ProductoRequestDTO;
 import com.minpay.Comiqueria.model.Producto;
 import com.minpay.Comiqueria.service.interfaces.IProductoService;
 import java.util.List;
@@ -15,25 +15,25 @@ public class ProductoController {
     private IProductoService productoService;
     
     @GetMapping("/{id}")
-    public ProductoDTO traerProducto(@PathVariable Long id){
+    public ProductoRequestDTO traerProducto(@PathVariable Long id){
         Producto producto = this.productoService.getProducto(id);
         return this.productoService.getProductoDTO(producto);
     }
     
     @GetMapping
-    public List<ProductoDTO> traerProductos(){
+    public List<ProductoRequestDTO> traerProductos(){
         return this.productoService.getProductosDTO();
     }
     
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductoDTO guardarProducto(@RequestBody ProductoDTO productoDTO){
+    public ProductoRequestDTO guardarProducto(@RequestBody ProductoRequestDTO productoDTO){
         return this.productoService.createProducto(productoDTO);
     }
     
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ProductoDTO editarProducto(@PathVariable Long id, @RequestBody ProductoDTO productoDTO){
+    public ProductoRequestDTO editarProducto(@PathVariable Long id, @RequestBody ProductoRequestDTO productoDTO){
         return this.productoService.editProductoById(id, productoDTO);
     }
     

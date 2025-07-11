@@ -26,5 +26,15 @@ public class DepartamentoResponseDTO {
     public static class ProvinciaBasicaDTO {
         private Long id;
         private String nombre;
+        private PaisBasicoDTO pais;
+    }
+    
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PaisBasicoDTO {
+        private Long id;
+        private String nombre;
     }
 }

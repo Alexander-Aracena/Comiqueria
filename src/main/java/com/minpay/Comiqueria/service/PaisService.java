@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service;
 
 import com.minpay.Comiqueria.dto.LocalidadRequestDTO;
-import com.minpay.Comiqueria.dto.PaisDTO;
+import com.minpay.Comiqueria.dto.PaisRequestDTO;
 import com.minpay.Comiqueria.dto.ProvinciaRequestDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
 import com.minpay.Comiqueria.service.interfaces.IPaisService;
@@ -33,7 +33,7 @@ public class PaisService implements IPaisService {
     }
 
     @Override
-    public PaisDTO getPaisDTO(Pais pais) {
+    public PaisRequestDTO getPaisDTO(Pais pais) {
         Set<ProvinciaRequestDTO> provincias = !pais.getProvincias().isEmpty()?
             Utils.convertirASetDTO(pais.getProvincias(),
             prov -> {
@@ -53,7 +53,7 @@ public class PaisService implements IPaisService {
             }
         ) : new HashSet<>();
 
-        return new PaisDTO(
+        return new PaisRequestDTO(
             pais.getId(),
             pais.getNombre(),
             provincias
@@ -61,14 +61,14 @@ public class PaisService implements IPaisService {
     }
 
     @Override
-    public List<PaisDTO> getPaisesDTO() {
+    public List<PaisRequestDTO> getPaisesDTO() {
         List<Pais> paises = this.paisRepository.findAll();
         return this.traerListaDTO(paises);
     }
 
     @Override
     @Transactional
-    public PaisDTO createPais(String nombre) {
+    public PaisRequestDTO createPais(String nombre) {
         Pais pais = new Pais(nombre);
         this.paisRepository.save(pais);
         return this.getPaisDTO(pais);
@@ -76,7 +76,7 @@ public class PaisService implements IPaisService {
 
     @Override
     @Transactional
-    public PaisDTO editPaisById(Long id, PaisDTO paisDTO) {
+    public PaisRequestDTO editPaisById(Long id, PaisRequestDTO paisDTO) {
         Pais pais = this.getPais(id);
         Set<Provincia> provincias = Utils.convertirASetDTO(
             paisDTO.getProvincias(),
@@ -96,7 +96,7 @@ public class PaisService implements IPaisService {
         this.paisRepository.deleteById(id);
     }
 
-    private List<PaisDTO> traerListaDTO(List<Pais> paises) {
+    private List<PaisRequestDTO> traerListaDTO(List<Pais> paises) {
 
         return Utils.convertirAListaDTO(paises,
             pais -> {
@@ -119,7 +119,7 @@ public class PaisService implements IPaisService {
                     }
                 ) : new HashSet<>();
 
-                return new PaisDTO(pais.getId(), pais.getNombre(), provincias);
+                return new PaisRequestDTO(pais.getId(), pais.getNombre(), provincias);
             }
         );
     }

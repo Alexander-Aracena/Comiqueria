@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.ClienteDTO;
+import com.minpay.Comiqueria.dto.ClienteRequestDTO;
 import com.minpay.Comiqueria.model.Cliente;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,25 +16,25 @@ public class ClienteController {
     private IClienteService clienteService;
     
     @GetMapping("/{idCliente}")
-    public ClienteDTO traerCliente(@PathVariable Long idCliente){
+    public ClienteRequestDTO traerCliente(@PathVariable Long idCliente){
         Cliente cliente = this.clienteService.getCliente(idCliente);
         return this.clienteService.getClienteDTO(cliente);
     }
     
     @GetMapping
-    public List<ClienteDTO> traerClientes(){
+    public List<ClienteRequestDTO> traerClientes(){
         return this.clienteService.getClientesDTO();
     }
     
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ClienteDTO guardarCliente(@RequestBody ClienteDTO clienteDTO){
+    public ClienteRequestDTO guardarCliente(@RequestBody ClienteRequestDTO clienteDTO){
         return this.clienteService.createCliente(clienteDTO);
     }
     
     @PatchMapping("/{idCliente}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ClienteDTO editarCliente(@PathVariable Long idCliente, @RequestBody ClienteDTO clienteDTO){
+    public ClienteRequestDTO editarCliente(@PathVariable Long idCliente, @RequestBody ClienteRequestDTO clienteDTO){
         return this.clienteService.editCliente(idCliente, clienteDTO);
     }
     

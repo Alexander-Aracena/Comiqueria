@@ -49,7 +49,7 @@ public class Cliente {
     @Column(name = "cte_fecha_nac")
     @EqualsAndHashCode.Include
     @ToString.Include
-    private LocalDate fecha_nac;
+    private LocalDate fechaNac;
 
     @Enumerated(EnumType.STRING)
     @NonNull
