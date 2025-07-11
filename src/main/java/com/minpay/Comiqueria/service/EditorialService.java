@@ -1,10 +1,12 @@
 package com.minpay.Comiqueria.service;
 
 import com.minpay.Comiqueria.dto.EditorialRequestDTO;
+import com.minpay.Comiqueria.dto.EditorialResponseDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
 import com.minpay.Comiqueria.service.interfaces.IEditorialService;
 import com.minpay.Comiqueria.model.Editorial;
 import com.minpay.Comiqueria.repository.IEditorialRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +25,8 @@ public class EditorialService implements IEditorialService {
     }
 
     @Override
-    public EditorialRequestDTO getEditorialDTO(Editorial editorial) {
-        return new EditorialRequestDTO(editorial.getId(), editorial.getNombre());
+    public EditorialResponseDTO getEditorialDTO(Editorial editorial) {
+        return new EditorialResponseDTO();
     }
     
     @Override
@@ -38,15 +40,17 @@ public class EditorialService implements IEditorialService {
     }
     
     @Override
-    public List<EditorialRequestDTO> getEditorialesDTO() {
-        List<Editorial> editoriales = this.getEditoriales();
-        return this.traerListaDTO(editoriales);
+    public List<EditorialResponseDTO> getEditorialesDTO() {
+        List<EditorialResponseDTO> editoriales = new ArrayList<>();
+        editoriales.add(new EditorialResponseDTO());
+        return editoriales;
     }
 
     @Override
-    public List<EditorialRequestDTO> getEditorialesDTO(Set<Long> idsEditoriales) {
-        List<Editorial> editoriales = this.getEditoriales(idsEditoriales);
-        return this.traerListaDTO(editoriales);
+    public List<EditorialResponseDTO> getEditorialesDTO(Set<Long> idsEditoriales) {
+        List<EditorialResponseDTO> editoriales = new ArrayList<>();
+        editoriales.add(new EditorialResponseDTO());
+        return editoriales;
     }
 
     @Override
@@ -70,13 +74,5 @@ public class EditorialService implements IEditorialService {
     @Override
     public void deleteEditorialById(Long id) {
         this.editorialRepository.deleteById(id);
-    }
-    
-    private List<EditorialRequestDTO> traerListaDTO(List<Editorial> editoriales) {
-        return editoriales.stream().map(editorial -> new EditorialRequestDTO(
-                editorial.getId(),
-                editorial.getNombre()
-            )
-        ).toList();
     }
 }

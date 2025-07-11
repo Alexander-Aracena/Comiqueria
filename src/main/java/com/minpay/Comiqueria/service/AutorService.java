@@ -1,20 +1,21 @@
 package com.minpay.Comiqueria.service;
 
+import com.minpay.Comiqueria.dto.AutorRequestDTO;
 import com.minpay.Comiqueria.dto.AutorResponseDTO;
-import com.minpay.Comiqueria.dto.ProductosPorAutorDTO;
-import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
-import com.minpay.Comiqueria.mapper.AutorDTOToAutor;
-import com.minpay.Comiqueria.mapper.AutorToProductosPorAutorDTO;
+import com.minpay.Comiqueria.exceptions.InvalidOperationException;
+import com.minpay.Comiqueria.mapper.IAutorMapper;
 import com.minpay.Comiqueria.service.interfaces.IAutorService;
 import com.minpay.Comiqueria.model.Autor;
 import com.minpay.Comiqueria.model.Producto;
 import com.minpay.Comiqueria.repository.IAutorRepository;
 import com.minpay.Comiqueria.repository.IProductoRepository;
+import com.minpay.Comiqueria.repository.specification.AutorSpecifications;
 import com.minpay.Comiqueria.utils.Utils;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,59 +28,54 @@ public class AutorService implements IAutorService {
     private IProductoRepository productoRepository;
     
     @Autowired
-    private AutorDTOToAutor mapper;
-    
-    @Autowired
-    private AutorToProductosPorAutorDTO prodAutorMapper;
+    private IAutorMapper autorMapper;
     
     @Override
-    public Autor getAutor(Long id){
-        return this.autorRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Autor id: " + id + " no encontrado."));
-    }
-    
-    @Override
-    public AutorResponseDTO getAutorDTO(Long id){
-        Autor autor = this.autorRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Autor id: " + id + " no encontrado."));
-        
-        return new AutorResponseDTO(
-                autor.getNombre(), autor.getApellido(),
-                autor.getFechaAlta(), autor.getFechaBaja()
-        );
+    public AutorResponseDTO getAutorDTO(Long id) {
+        Autor autor = Utils.findByIdOrThrow(autorRepository, id, Autor.class);
+        return this.autorMapper.toAutorResponseDTO(autor);
     }
 
     @Override
-    public List<Autor> getAutores() {
-        return this.autorRepository.findAll();
+    public List<AutorResponseDTO> getAutores(List<Long> ids, String nombre, String apellido, Boolean estaVigente) {
+        Specification<Autor> spec = AutorSpecifications.byCriterios(ids, nombre, apellido, estaVigente);
+        List<Autor> autores = this.autorRepository.findAll(spec);
+        return Utils.mapearListaA(autores, autorMapper::toAutorResponseDTO);
     }
 
     @Override
-    public Autor createAutor(AutorResponseDTO autorDTO) {
-        Autor autor = this.mapper.map(autorDTO);
-        return this.autorRepository.save(autor);
+    public AutorResponseDTO createAutor(AutorRequestDTO autorDTO) {
+        Autor autor = this.autorMapper.toAutor(autorDTO);
+        autor = this.autorRepository.save(autor);
+        return this.autorMapper.toAutorResponseDTO(autor);
     }
 
     @Override
-    public Autor editAutorById(Long id, AutorResponseDTO autorDTO) {
-        Autor autor = this.mapper.map(autorDTO, this.getAutor(id));
-        return this.autorRepository.save(autor);
+    public AutorResponseDTO editAutorById(Long id, AutorRequestDTO autorDTO) {
+        Autor autorModificado = Utils.findByIdOrThrow(autorRepository, id, Autor.class);
+        this.autorMapper.updateAutorFromDTO(autorDTO, autorModificado);
+        autorModificado = this.autorRepository.save(autorModificado);
+        return this.autorMapper.toAutorResponseDTO(autorModificado);
     }
 
     @Override
     public void deleteAutorById(Long id) {
-        Autor autor = this.getAutor(id);
+        Autor autor = Utils.findByIdOrThrow(autorRepository, id, Autor.class);
         if (autor.getFechaBaja() != null) {
-            throw new IllegalStateException("El autor ya está dado de baja.");
+            throw new InvalidOperationException("El autor ya está dado de baja.");
         }
         autor.setFechaBaja(LocalDate.now());
+        autor.setEstaVigente(Boolean.FALSE);
         this.autorRepository.save(autor);
     }
     
     @Override
     public void addProductos(Long idAutor, Set<Long> idsProductos) {
-        Autor autor = this.getAutor(idAutor);
+        Autor autor = Utils.findByIdOrThrow(autorRepository, idAutor, Autor.class);
         List<Producto> productos = this.productoRepository.findAllById(idsProductos);
+        if (!autor.getEstaVigente()) {
+            throw new InvalidOperationException("El autor ya está dado de baja.");
+        }
         Set<Producto> productosOrdenados = Utils.ordenarPorIds(idsProductos, productos, Producto::getId);
         autor.getProductos().addAll(productosOrdenados);
         productos.forEach(producto -> producto.getAutores().add(autor));
@@ -89,20 +85,14 @@ public class AutorService implements IAutorService {
     
     @Override
     public void deleteProductos(Long idAutor, Set<Long> idsProductos) {
-        Autor autor = this.getAutor(idAutor);
+        Autor autor = Utils.findByIdOrThrow(autorRepository, idAutor, Autor.class);
         List<Producto> productos = this.productoRepository.findAllById(idsProductos);
-        if (autor.getFechaBaja() != null) {
-            throw new IllegalStateException("El autor ya está dado de baja.");
+        if (!autor.getEstaVigente()) {
+            throw new InvalidOperationException("El autor ya está dado de baja.");
         }
         autor.getProductos().removeAll(productos);
         productos.forEach(producto -> producto.getAutores().remove(autor));
         this.productoRepository.saveAll(productos);
         this.autorRepository.save(autor);
-    }
-
-    @Override
-    public ProductosPorAutorDTO getProductosSegunAutor(Long idAutor) {
-        Autor autor = this.getAutor(idAutor);
-        return this.prodAutorMapper.map(autor);
     }
 }

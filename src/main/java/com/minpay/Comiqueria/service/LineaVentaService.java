@@ -2,7 +2,6 @@ package com.minpay.Comiqueria.service;
 
 import com.minpay.Comiqueria.dto.LineaVentaRequestDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
-import com.minpay.Comiqueria.mapper.LineaVentaDTOToLineaVenta;
 import com.minpay.Comiqueria.model.LineaVenta;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -15,9 +14,6 @@ public class LineaVentaService implements ILineaVentaService {
     
     @Autowired
     private ILineaVentaRepository lineaVentaRepository;
-    
-    @Autowired
-    private LineaVentaDTOToLineaVenta mapper;
 
     @Override
     public LineaVenta getLineaVenta(Long id) {
@@ -32,18 +28,16 @@ public class LineaVentaService implements ILineaVentaService {
 
     @Override
     public LineaVenta createLineaVenta(LineaVentaRequestDTO lineaVentaDTO) {
-        LineaVenta lineaVenta = this.mapper.map(lineaVentaDTO);
-        return this.lineaVentaRepository.save(lineaVenta);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public LineaVenta editLineaVentaById(Long idLinea, LineaVentaRequestDTO lineaVentaDTO) {
-        LineaVenta lineaVenta = this.mapper.map(lineaVentaDTO, this.getLineaVenta(idLinea));
-        return this.lineaVentaRepository.save(lineaVenta);
+    public LineaVenta editLineaVentaById(Long id, LineaVentaRequestDTO lineaVentaDTO) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void deleteLineaVentaById(Long id) {
-        this.lineaVentaRepository.deleteById(id);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

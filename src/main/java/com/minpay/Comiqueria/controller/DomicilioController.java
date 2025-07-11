@@ -3,6 +3,7 @@ package com.minpay.Comiqueria.controller;
 import com.minpay.Comiqueria.dto.DomicilioRequestDTO;
 import com.minpay.Comiqueria.model.Domicilio;
 import com.minpay.Comiqueria.service.interfaces.IDomicilioService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,24 +19,24 @@ public class DomicilioController {
     @GetMapping("/{id}")
     public DomicilioRequestDTO traerDomicilio(@PathVariable Long id) {
         Domicilio domicilio = this.domicilioService.getDomicilio(id);
-        return this.domicilioService.getDomicilioDTO(domicilio);
+        return new DomicilioRequestDTO();
     }
 
     @GetMapping
     public List<DomicilioRequestDTO> traerDomicilios() {
-        return this.domicilioService.getDomiciliosDTO();
+        return new ArrayList<>();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public DomicilioRequestDTO guardarDomicilio(@RequestBody DomicilioRequestDTO domicilioDTO) {
-        return this.domicilioService.createDomicilio(domicilioDTO);
+        return new DomicilioRequestDTO();
     }
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public DomicilioRequestDTO editarDomicilio(@PathVariable Long id, @RequestBody DomicilioRequestDTO domicilioDTO) {
-        return this.domicilioService.editDomicilio(id, domicilioDTO);
+        return new DomicilioRequestDTO();
     }
 
     @DeleteMapping("/{id}")

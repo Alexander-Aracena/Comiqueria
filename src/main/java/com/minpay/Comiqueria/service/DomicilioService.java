@@ -1,8 +1,8 @@
 package com.minpay.Comiqueria.service;
 
 import com.minpay.Comiqueria.dto.DomicilioRequestDTO;
+import com.minpay.Comiqueria.dto.DomicilioResponseDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
-import com.minpay.Comiqueria.mapper.DomicilioDTOToDomicilio;
 import com.minpay.Comiqueria.service.interfaces.IDomicilioService;
 import com.minpay.Comiqueria.model.Domicilio;
 import com.minpay.Comiqueria.repository.IDomicilioRepository;
@@ -19,98 +19,71 @@ public class DomicilioService implements IDomicilioService {
     private IDomicilioRepository domicilioRepository;
     
     @Autowired
-    private DomicilioDTOToDomicilio mapper;
-    
-    @Autowired
     private ILocalidadService localidadService;
 
     @Override
     public Domicilio getDomicilio(Long id) {
-        return this.domicilioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Domicilio id: " + id + " no encontrado."));
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
-    public DomicilioRequestDTO getDomicilioDTO(Domicilio domicilio) {
-        return domicilioADomicilioDTO(domicilio);
+    public DomicilioResponseDTO getDomicilioDTO(Domicilio domicilio) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public List<Domicilio> getDomicilios() {
-        return this.domicilioRepository.findAll();
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
     public List<Domicilio> getDomicilios(Set<Long> idsDomicilios) {
-        return this.domicilioRepository.findAllById(idsDomicilios);
-    }
-    
-    @Override
-    public List<DomicilioRequestDTO> getDomiciliosDTO() {
-        List<Domicilio> domicilios = this.getDomicilios();
-        return this.traerListaDTO(domicilios);
-    }
-    
-    @Override
-    public List<DomicilioRequestDTO> getDomiciliosDTO(Set<Long> idsDomicilios) {
-        List<Domicilio> domicilios = this.getDomicilios(idsDomicilios);
-        return this.traerListaDTO(domicilios);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public DomicilioRequestDTO createDomicilio(DomicilioRequestDTO domicilioDTO) {
-        Domicilio domicilio = this.mapper.map(domicilioDTO);
-        domicilio.setLocalidad(
-            this.localidadService.getLocalidad(domicilioDTO.getIdLocalidad())
-        );
-        this.domicilioRepository.save(domicilio);
-        return this.getDomicilioDTO(domicilio);
+    public List<DomicilioResponseDTO> getDomiciliosDTO() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public DomicilioRequestDTO editDomicilio(Long id, DomicilioRequestDTO domicilioDTO) {
-        Domicilio domicilio = this.mapper.map(domicilioDTO, this.getDomicilio(id));
-        domicilio.setLocalidad(
-            this.localidadService.getLocalidad(domicilioDTO.getIdLocalidad())
-        );
-        this.domicilioRepository.save(domicilio);
-        return this.getDomicilioDTO(domicilio);
+    public List<DomicilioResponseDTO> getDomiciliosDTO(Set<Long> idsDomicilios) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
+    @Override
+    public List<DomicilioResponseDTO> traerListaDTO(List<Domicilio> domicilios) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public DomicilioResponseDTO createDomicilio(DomicilioRequestDTO domicilioDTO) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public DomicilioResponseDTO editDomicilio(Long id, DomicilioRequestDTO domicilioDTO) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     @Override
     public void saveDomicilio(Domicilio domicilio) {
-        this.domicilioRepository.save(domicilio);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void deleteDomicilio(Long id) {
-        this.domicilioRepository.deleteById(id);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
     public void saveDomicilios(Set<Domicilio> domicilios) {
-        this.domicilioRepository.saveAll(domicilios);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void deleteDomicilios(Set<Long> idsDomicilios) {
-        this.domicilioRepository.deleteAllById(idsDomicilios);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
-    @Override
-    public List<DomicilioRequestDTO> traerListaDTO(List<Domicilio> domicilios) {
-        return domicilios.stream().map(domicilio -> domicilioADomicilioDTO(domicilio)
-        ).toList();
-    }
-    
-    public static DomicilioRequestDTO domicilioADomicilioDTO(Domicilio domicilio) {
-        return new DomicilioRequestDTO(
-            domicilio.getId(),
-            domicilio.getCalle(),
-            domicilio.getAltura(),
-            domicilio.getDepartamento(),
-            domicilio.getCp(),
-            domicilio.getLocalidad().getId()
-        );
-    }
+
 }

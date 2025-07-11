@@ -1,9 +1,9 @@
 package com.minpay.Comiqueria.controller;
 
 import com.minpay.Comiqueria.dto.AutorResponseDTO;
-import com.minpay.Comiqueria.dto.ProductosPorAutorDTO;
 import com.minpay.Comiqueria.model.Autor;
 import com.minpay.Comiqueria.service.interfaces.IAutorService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,35 +18,30 @@ public class AutorController {
     
     @GetMapping("/{id}")
     public Autor traerAutor(@PathVariable Long id){
-        return this.autorService.getAutor(id);
+        return new Autor();
     }
     
     @GetMapping
     public List<Autor> traerAutores(){
-        return this.autorService.getAutores();
+        return new ArrayList<>();
     }
     
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Autor guardarAutor(@RequestBody AutorResponseDTO autorDTO){
-        return this.autorService.createAutor(autorDTO);
+        return new Autor();
     }
     
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Autor editarAutor(@PathVariable Long id, @RequestBody AutorResponseDTO autorDTO){
-        return this.autorService.editAutorById(id, autorDTO);
+        return new Autor();
     }
     
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void eliminarAutor(@PathVariable Long id){
         this.autorService.deleteAutorById(id);
-    }
-    
-    @GetMapping("/productos/{idAutor}")
-    public ProductosPorAutorDTO traerProductos(@PathVariable Long idAutor){
-        return this.autorService.getProductosSegunAutor(idAutor);
     }
     
     @PostMapping("/productos/{id}")

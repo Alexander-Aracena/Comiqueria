@@ -2,7 +2,6 @@ package com.minpay.Comiqueria.service;
 
 import com.minpay.Comiqueria.dto.VentaRequestDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
-import com.minpay.Comiqueria.mapper.VentaDTOToVenta;
 import com.minpay.Comiqueria.model.Producto;
 import com.minpay.Comiqueria.model.Venta;
 import com.minpay.Comiqueria.repository.IVentaRepository;
@@ -17,9 +16,6 @@ public class VentaService implements IVentaService {
     @Autowired
     private IVentaRepository ventaRepository;
     
-    @Autowired
-    private VentaDTOToVenta mapper;
-    
     @Override
     public Venta getVenta(Long id){
         return this.ventaRepository.findById(id)
@@ -33,25 +29,21 @@ public class VentaService implements IVentaService {
 
     @Override
     public Venta createVenta(VentaRequestDTO ventaDTO) {
-        Venta venta = this.mapper.map(ventaDTO);
-        return this.ventaRepository.save(venta);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public Venta editVentaById(Long id, VentaRequestDTO ventaDTO) {
-        Venta venta = this.mapper.map(ventaDTO, this.getVenta(id));
-        return this.ventaRepository.save(venta);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void deleteVentaById(Long id) {
-        this.ventaRepository.deleteById(id);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
-    public List<Producto> getProductosVenta(Long id){
-        List<Producto> listaProductos = new ArrayList<>();
-        this.getVenta(id).getLineas().forEach(linea -> listaProductos.add(linea.getProducto()));
-        return listaProductos;
+    public List<Producto> getProductosVenta(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

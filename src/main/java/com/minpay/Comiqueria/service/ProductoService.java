@@ -2,7 +2,6 @@ package com.minpay.Comiqueria.service;
 
 import com.minpay.Comiqueria.dto.ProductoRequestDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
-import com.minpay.Comiqueria.mapper.ProductoDTOToProducto;
 import com.minpay.Comiqueria.model.Editorial;
 import com.minpay.Comiqueria.service.interfaces.IProductoService;
 import com.minpay.Comiqueria.model.Producto;
@@ -26,125 +25,71 @@ public class ProductoService implements IProductoService {
     
     @Autowired
     private IEditorialService editorialService;
-    
-    @Autowired
-    private ProductoDTOToProducto mapper;
 
     @Override
     public Producto getProducto(Long id) {
-        return this.productoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Producto id: " + id + " no encontrado."));
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
-    public ProductoRequestDTO getProductoDTO(Producto producto){
-        return productoAProductoDTO(producto);
+    public ProductoRequestDTO getProductoDTO(Producto producto) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public List<Producto> getProductos() {
-        return this.productoRepository.findAll();
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
-    public List<Producto> getProductos(Set<Long> idsProductos){
-        return this.productoRepository.findAllById(idsProductos);
+    public List<Producto> getProductos(Set<Long> idsProductos) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
-    public List<ProductoRequestDTO> getProductosDTO(){
-        List<Producto> productos = this.getProductos();
-        return this.traerListaDTO(productos);
+    public List<ProductoRequestDTO> getProductosDTO() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
-    public List<ProductoRequestDTO> getProductosDTO(Set<Long> idsProductos){
-        List<Producto> productos = this.getProductos(idsProductos);
-        return this.traerListaDTO(productos);
+    public List<ProductoRequestDTO> getProductosDTO(Set<Long> idsProductos) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List<ProductoRequestDTO> traerListaDTO(List<Producto> domicilios) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public ProductoRequestDTO createProducto(ProductoRequestDTO productoDTO) {
-        Producto producto = this.mapper.map(productoDTO);
-        Subcategoria subcategoria = this.subcategoriaService.getSubcategoria(
-            productoDTO.getIdSubcategoria()
-        );
-        Editorial editorial = this.editorialService.getEditorial(productoDTO.getIdEditorial());
-        producto.setSubcategoria(
-            this.subcategoriaService.getSubcategoria(productoDTO.getIdSubcategoria())
-        );
-        producto.setEditorial(
-            this.editorialService.getEditorial(productoDTO.getIdEditorial())
-        );
-        subcategoria.getProductos().add(producto);
-        editorial.getProductos().add(producto);
-        
-        this.productoRepository.save(producto);
-        this.subcategoriaService.saveSubcategoria(subcategoria);
-        this.editorialService.saveEditorial(editorial);
-        productoDTO.setId(producto.getId());
-        
-        return productoDTO;
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public ProductoRequestDTO editProductoById(Long id, ProductoRequestDTO productoDTO) {
-        Producto producto = this.mapper.map(productoDTO, this.getProducto(id));
-        producto.setSubcategoria(
-            this.subcategoriaService.getSubcategoria(productoDTO.getIdSubcategoria())
-        );
-        producto.setEditorial(
-            this.editorialService.getEditorial(productoDTO.getIdEditorial())
-        );
-        this.productoRepository.save(producto);
-        productoDTO.setId(id);
-        
-        return productoDTO;
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
-    public void saveProducto(Producto producto){
-        this.productoRepository.save(producto);
+    public void saveProducto(Producto producto) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void deleteProducto(Long id) {
-        this.productoRepository.deleteById(id);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
-    public void saveProductos(Set<Producto> productos){
-        this.productoRepository.saveAll(productos);
+    public void saveProductos(Set<Producto> productos) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
     public void deleteProductos(Set<Long> idsProductos) {
-        this.productoRepository.deleteAllById(idsProductos);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    @Override
-    public List<ProductoRequestDTO> traerListaDTO(List<Producto> productos) {
-        return productos.stream().map(producto -> productoAProductoDTO(producto)
-        ).toList();
-    }
 
-    private static ProductoRequestDTO productoAProductoDTO(Producto producto) {
-        return new ProductoRequestDTO(
-            producto.getId(),
-            producto.getTitulo(),
-            producto.getPrecio(),
-            producto.getDescripcion(),
-            producto.getTapa(),
-            producto.getIsbn(),
-            producto.getPeso(),
-            producto.getDimensiones(),
-            producto.getPaginas(),
-            producto.getSubcategoria().getId(),
-            producto.getEditorial().getId(),
-            producto.getEsNovedad(),
-            producto.getEsOferta(),
-            producto.getEsMasVendido(),
-            producto.getIndex()
-        );
-    }
 }

@@ -30,105 +30,57 @@ public class ProvinciaService implements IProvinciaService {
 
     @Override
     public Provincia getProvincia(Long id) {
-        return this.provinciaRepository.findById(id)
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Provincia id: " + id + " no encontrado.")
-            );
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public ProvinciaRequestDTO getProvinciaDTO(Provincia provincia) {
-        return new ProvinciaRequestDTO(
-            provincia.getId(),
-            provincia.getNombre(),
-            Utils.convertirASetDTO(provincia.getLocalidades(),
-                localidad -> new LocalidadRequestDTO(
-                    localidad.getId(),
-                    localidad.getNombre()
-                )
-            )
-        );
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public List<Provincia> getProvincias() {
-        return this.provinciaRepository.findAll();
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public List<Provincia> getProvincias(Set<Long> idsProvincias) {
-        return this.provinciaRepository.findAllById(idsProvincias);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public List<ProvinciaRequestDTO> getProvinciasDTO() {
-        List<Provincia> provincias = this.getProvincias();
-        return traerListaDTO(provincias);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public List<ProvinciaRequestDTO> getProvinciasDTO(Set<Long> idsProvincias) {
-        List<Provincia> provincias = this.getProvincias(idsProvincias);
-        return traerListaDTO(provincias);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public ProvinciaRequestDTO createProvincia(String nombre, Long idPais) {
-        Pais pais = this.paisRepository.findById(idPais)
-            .orElseThrow(
-                () -> new ResourceNotFoundException("País id: " + idPais + " no encontrado.")
-            );
-        Provincia provincia = new Provincia(nombre, pais);
-        this.provinciaRepository.save(provincia);
-        return this.getProvinciaDTO(provincia);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public ProvinciaRequestDTO editProvinciaById(
-        Long id,
-        String nombre,
-        Long idPais,
-        Set<Long> idLocalidades
-    ) {
-        Pais pais = this.paisRepository.findById(idPais)
-            .orElseThrow(
-                () -> new ResourceNotFoundException("País id: " + idPais + " no encontrado.")
-            );
-        Provincia provincia = this.getProvincia(id);
-        Set<Localidad> localidades = Utils.convertirListaASet(
-            this.localidadRepository.findAllById(idLocalidades)
-        );
-        provincia.setNombre(nombre);
-        provincia.setPais(pais);
-        provincia.setLocalidades(localidades);
-        this.provinciaRepository.save(provincia);
-        return this.getProvinciaDTO(provincia);
+    public ProvinciaRequestDTO editProvinciaById(Long id, String nombre, Long idPais, Set<Long> idLocalidades) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void saveProvincia(Provincia provincia) {
-        this.provinciaRepository.save(provincia);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void saveProvincias(Set<Provincia> provincias) {
-        this.provinciaRepository.saveAll(provincias);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void deleteProvinciaById(Long id) {
-        this.provinciaRepository.deleteById(id);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    private List<ProvinciaRequestDTO> traerListaDTO(List<Provincia> provincias) {
-        return Utils.convertirAListaDTO(provincias,
-            provincia -> new ProvinciaRequestDTO(
-                provincia.getId(),
-                provincia.getNombre(),
-                Utils.convertirASetDTO(provincia.getLocalidades(),
-                    localidad -> new LocalidadRequestDTO(localidad.getId(), localidad.getNombre())
-                )
-            )
-        );
-    }
 }

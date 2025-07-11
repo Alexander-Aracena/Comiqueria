@@ -23,81 +23,57 @@ public class LocalidadService implements ILocalidadService {
 
     @Override
     public Localidad getLocalidad(Long id) {
-        return this.localidadRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Localidad id: " + id + " no encontrado."));
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
     public LocalidadRequestDTO getLocalidadDTO(Localidad localidad) {
-        return new LocalidadRequestDTO(localidad.getId(), localidad.getNombre());
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
     public List<Localidad> getLocalidades() {
-        return this.localidadRepository.findAll();
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public List<Localidad> getLocalidades(Set<Long> idsLocalidades) {
-        return this.localidadRepository.findAllById(idsLocalidades);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public List<LocalidadRequestDTO> getLocalidadesDTO() {
-        List<Localidad> localidades = this.getLocalidades();
-        return this.traerListaDTO(localidades);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public List<LocalidadRequestDTO> getLocalidadesDTO(Set<Long> idsLocalidades) {
-        List<Localidad> localidades = this.getLocalidades(idsLocalidades);
-        return this.traerListaDTO(localidades);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public LocalidadRequestDTO createLocalidad(String nombre, Long idProvincia) {
-        Provincia provincia = this.provinciaRepository.findById(idProvincia)
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Provincia id: " + idProvincia + " no encontrado.")
-            );
-        Localidad localidad = new Localidad(nombre, provincia);
-        this.saveLocalidad(localidad);
-        return this.getLocalidadDTO(localidad);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public LocalidadRequestDTO editLocalidadById(Long id, String nombre, Long idProvincia) {
-        Provincia provincia = this.provinciaRepository.findById(idProvincia)
-            .orElseThrow(
-                () -> new ResourceNotFoundException("Provincia id: " + idProvincia + " no encontrado.")
-            );
-        Localidad localidad = this.getLocalidad(id);
-        localidad.setNombre(nombre);
-        localidad.setProvincia(provincia);
-        this.saveLocalidad(localidad);
-        return this.getLocalidadDTO(localidad);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
     @Override
     public void saveLocalidad(Localidad localidad) {
-        this.localidadRepository.save(localidad);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void saveLocalidades(Set<Localidad> localidades) {
-        this.localidadRepository.saveAll(localidades);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void deleteLocalidadById(Long id) {
-        this.localidadRepository.deleteById(id);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
-    private List<LocalidadRequestDTO> traerListaDTO(List<Localidad> localidades) {
-        return localidades.stream().map(localidad -> new LocalidadRequestDTO(
-                localidad.getId(),
-                localidad.getNombre()
-            )
-        ).toList();
-    }
+
 }

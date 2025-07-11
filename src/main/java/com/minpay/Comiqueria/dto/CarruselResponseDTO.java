@@ -13,10 +13,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class CarouselResponseDTO {
+public class CarruselResponseDTO {
     private Long id;
     private String subtitulo;
     private String texto;
     private String imagen;
-    private Boolean estaVigente;
+    private String urlDestino;
+    private Integer orden;
+    private Boolean estaActivo;
 }

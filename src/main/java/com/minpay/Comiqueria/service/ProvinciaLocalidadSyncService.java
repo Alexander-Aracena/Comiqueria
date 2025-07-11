@@ -22,21 +22,8 @@ public class ProvinciaLocalidadSyncService implements IProvinciaLocalidadSyncSer
 
     @Override
     public void modificarLocalidades(Long idProvincia, Set<Long> idsLocalidades, Accion accion) {
-        Provincia provincia = provinciaService.getProvincia(idProvincia);
-        Set<Localidad> localidades = new HashSet<>(localidadService.getLocalidades(idsLocalidades));
-
-        switch (accion) {
-            case AGREGAR -> {
-                provincia.getLocalidades().addAll(localidades);
-                localidades.forEach(localidad -> localidad.setProvincia(provincia));
-            }
-            case ELIMINAR -> {
-                provincia.getLocalidades().removeAll(localidades);
-                localidades.forEach(localidad -> localidad.setProvincia(null));
-            }
-        }
-
-        localidadService.saveLocalidades(localidades);
-        provinciaService.saveProvincia(provincia);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    
 }

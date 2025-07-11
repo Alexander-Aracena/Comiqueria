@@ -2,7 +2,6 @@ package com.minpay.Comiqueria.service;
 
 import com.minpay.Comiqueria.dto.ClienteRequestDTO;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
-import com.minpay.Comiqueria.mapper.ClienteDTOToCliente;
 import com.minpay.Comiqueria.model.Cliente;
 import com.minpay.Comiqueria.model.Domicilio;
 import com.minpay.Comiqueria.model.Producto;
@@ -28,128 +27,69 @@ public class ClienteService implements IClienteService {
     @Autowired
     private IProductoService productoService;
 
-    @Autowired
-    private ClienteDTOToCliente mapper;
-
     @Override
     public Cliente getCliente(Long id) {
-        return this.clienteRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Cliente id: " + id + " no encontrado."));
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public ClienteRequestDTO getClienteDTO(Cliente cliente) {
-        return clienteAClienteDTO(cliente);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public List<Cliente> getClientes() {
-        return this.clienteRepository.findAll();
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public List<Cliente> getClientes(Set<Long> idsClientes) {
-        return this.clienteRepository.findAllById(idsClientes);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public List<ClienteRequestDTO> getClientesDTO() {
-        List<Cliente> clientes = this.getClientes();
-        return this.traerListaDTO(clientes);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public List<ClienteRequestDTO> getClientesDTO(Set<Long> idsClientes) {
-        List<Cliente> clientes = this.getClientes(idsClientes);
-        return this.traerListaDTO(clientes);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public ClienteRequestDTO createCliente(ClienteRequestDTO clienteDTO) {
-        Cliente cliente = this.mapper.map(clienteDTO);
-        this.clienteRepository.save(cliente);
-        return this.getClienteDTO(cliente);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public ClienteRequestDTO editCliente(Long id, ClienteRequestDTO clienteDTO) {
-        Cliente cliente = this.mapper.map(clienteDTO, this.getCliente(id));
-        this.clienteRepository.save(cliente);
-        return this.getClienteDTO(cliente);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void deleteCliente(Long id) {
-        this.clienteRepository.deleteById(id);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void addFavoritos(Long idCliente, Set<Long> idsProductos) {
-        Cliente cliente = this.getCliente(idCliente);
-        Set<Producto> productos = this.productoService.getProductos(idsProductos)
-            .stream().collect(Collectors.toSet());
-        cliente.getFavoritos().addAll(productos);
-        productos.forEach(producto -> producto.getClientes().add(cliente));
-        this.productoService.saveProductos(productos);
-        this.clienteRepository.save(cliente);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void deleteFavoritos(Long idCliente, Set<Long> idsProductos) {
-        Cliente cliente = this.getCliente(idCliente);
-        Set<Producto> productos = this.productoService.getProductos(idsProductos)
-            .stream().collect(Collectors.toSet());
-        cliente.getFavoritos().removeAll(productos);
-        productos.forEach(producto -> producto.getClientes().remove(cliente));
-        this.productoService.saveProductos(productos);
-        this.clienteRepository.save(cliente);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void addDomicilio(Long idCliente, Long idDomicilio) {
-        Cliente cliente = this.getCliente(idCliente);
-        Domicilio domicilio = this.domicilioService.getDomicilio(idDomicilio);
-        cliente.getDomicilios().add(domicilio);
-        domicilio.setCliente(cliente);
-        this.clienteRepository.save(cliente);
-        this.domicilioService.saveDomicilio(domicilio);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void deleteDomicilio(Long idCliente, Long idDomicilio) {
-        Cliente cliente = this.getCliente(idCliente);
-        Domicilio domicilio = this.domicilioService.getDomicilio(idDomicilio);
-        cliente.getDomicilios().remove(domicilio);
-        this.clienteRepository.save(cliente);
-        this.domicilioService.deleteDomicilio(idDomicilio);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    private List<ClienteRequestDTO> traerListaDTO(List<Cliente> clientes) {
-        return clientes.stream().map(cliente -> clienteAClienteDTO(cliente)
-        ).toList();
-    }
-
-    private ClienteRequestDTO clienteAClienteDTO(Cliente cliente) {
-        ClienteRequestDTO clienteDTO = new ClienteRequestDTO();
-        clienteDTO.setId(cliente.getId());
-        clienteDTO.setNombre(cliente.getNombre());
-        clienteDTO.setApellido(cliente.getApellido());
-        clienteDTO.setFechaNac(cliente.getFecha_nac());
-        clienteDTO.setSexo(cliente.getSexo());
-        clienteDTO.setTipoDoc(cliente.getTipoDoc());
-        clienteDTO.setNroDoc(cliente.getNroDocumento());
-        clienteDTO.getFavoritos().addAll(
-            productoService.traerListaDTO(
-                cliente.getFavoritos().stream().collect(Collectors.toList())
-            )
-        );
-        clienteDTO.getDomicilios().addAll(
-            domicilioService.traerListaDTO(
-                cliente.getDomicilios().stream().collect(Collectors.toList())
-            )
-        );
-        clienteDTO.setTelefono(cliente.getTelefono());
-
-        return clienteDTO;
-    }
 }

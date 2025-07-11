@@ -28,99 +28,33 @@ public class PaisService implements IPaisService {
 
     @Override
     public Pais getPais(Long id) {
-        return this.paisRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("País id: " + id + " no encontrado."));
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public PaisRequestDTO getPaisDTO(Pais pais) {
-        Set<ProvinciaRequestDTO> provincias = !pais.getProvincias().isEmpty()?
-            Utils.convertirASetDTO(pais.getProvincias(),
-            prov -> {
-                Set<LocalidadRequestDTO> localidades = !prov.getLocalidades().isEmpty()?
-                    Utils.convertirASetDTO(prov.getLocalidades(),
-                    loc -> new LocalidadRequestDTO(
-                        loc.getId(),
-                        loc.getNombre()
-                    )
-                ) : new HashSet<>();
-
-                return new ProvinciaRequestDTO(
-                    prov.getId(),
-                    prov.getNombre(),
-                     localidades
-                );
-            }
-        ) : new HashSet<>();
-
-        return new PaisRequestDTO(
-            pais.getId(),
-            pais.getNombre(),
-            provincias
-        );
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public List<PaisRequestDTO> getPaisesDTO() {
-        List<Pais> paises = this.paisRepository.findAll();
-        return this.traerListaDTO(paises);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    @Transactional
     public PaisRequestDTO createPais(String nombre) {
-        Pais pais = new Pais(nombre);
-        this.paisRepository.save(pais);
-        return this.getPaisDTO(pais);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    @Transactional
     public PaisRequestDTO editPaisById(Long id, PaisRequestDTO paisDTO) {
-        Pais pais = this.getPais(id);
-        Set<Provincia> provincias = Utils.convertirASetDTO(
-            paisDTO.getProvincias(),
-            provinciaDTO -> this.provinciaRepository.findById(provinciaDTO.getId())
-                .orElseThrow(
-                    () -> new ResourceNotFoundException("Provincia id: " + provinciaDTO.getId() + " no encontrado.")
-                )
-        );
-        pais.setNombre(paisDTO.getNombre());
-        pais.setProvincias(provincias);
-        this.paisRepository.save(pais);
-        return this.getPaisDTO(pais);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void deletePaisById(Long id) {
-        this.paisRepository.deleteById(id);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    private List<PaisRequestDTO> traerListaDTO(List<Pais> paises) {
-
-        return Utils.convertirAListaDTO(paises,
-            pais -> {
-                Set<ProvinciaRequestDTO> provincias = pais.getProvincias().isEmpty()?
-                    Utils.convertirASetDTO(pais.getProvincias(),
-                    prov -> {
-                        Set<LocalidadRequestDTO> localidades = !prov.getLocalidades().isEmpty()?
-                            Utils.convertirASetDTO(prov.getLocalidades(),
-                            loc -> new LocalidadRequestDTO(
-                                loc.getId(),
-                                loc.getNombre()
-                            )
-                        ) : new HashSet<>();
-
-                        return new ProvinciaRequestDTO(
-                            prov.getId(),
-                            prov.getNombre(),
-                            localidades
-                        );
-                    }
-                ) : new HashSet<>();
-
-                return new PaisRequestDTO(pais.getId(), pais.getNombre(), provincias);
-            }
-        );
-    }
+    
 }

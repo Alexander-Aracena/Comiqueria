@@ -17,7 +17,7 @@ public class EditorialController {
     @GetMapping("/{id}")
     public EditorialRequestDTO traerEditorial(@PathVariable Long id){
         Editorial editorial = this.editorialService.getEditorial(id);
-        return this.editorialService.getEditorialDTO(editorial);
+        return new EditorialRequestDTO();
     }
     
     @GetMapping

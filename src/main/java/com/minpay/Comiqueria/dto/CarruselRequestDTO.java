@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CarouselRequestDTO {
+public class CarruselRequestDTO {
     @NotBlank(message = "El subtítulo no puede estar vacío")
     @Size(max = 100, message = "El subtítulo no puede exceder los 100 caracteres")
     private String subtitulo;
@@ -22,4 +22,7 @@ public class CarouselRequestDTO {
 
     @NotBlank(message = "La URL de la imagen no puede estar vacía")
     private String imagen;
+    
+    @NotBlank(message = "La URL del destino no puede estar vacío")
+    private String urlDestino;
 }
