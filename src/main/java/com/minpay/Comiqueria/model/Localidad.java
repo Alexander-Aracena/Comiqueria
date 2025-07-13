@@ -39,8 +39,8 @@ public class Localidad {
     @ToString.Include
     private String nombre;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Una localidad pertenece a un departamento
     @NonNull
+    @ManyToOne(fetch = FetchType.LAZY) // Una localidad pertenece a un departamento
     @JoinColumn(name = "loc_dep_id", nullable = false) // <-- FK a Departamento
     private Departamento departamento;
 

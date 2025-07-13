@@ -13,33 +13,4 @@ import org.springframework.web.bind.annotation.*;
 public class EditorialController {
     @Autowired
     private IEditorialService editorialService;
-    
-    @GetMapping("/{id}")
-    public EditorialRequestDTO traerEditorial(@PathVariable Long id){
-        Editorial editorial = this.editorialService.getEditorial(id);
-        return new EditorialRequestDTO();
-    }
-    
-    @GetMapping
-    public List<Editorial> traerEditoriales(){
-        return this.editorialService.getEditoriales();
-    }
-    
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Editorial guardarEditorial(@RequestParam String nombre){
-        return this.editorialService.createEditorial(nombre);
-    }
-    
-    @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Editorial editarEditorial(@PathVariable Long id, @RequestParam String nombre){
-        return this.editorialService.editEditorialById(id, nombre);
-    }
-    
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarEditorial(@PathVariable Long id){
-        this.editorialService.deleteEditorialById(id);
-    }
 }

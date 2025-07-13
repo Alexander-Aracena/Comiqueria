@@ -15,33 +15,4 @@ public class DomicilioController {
 
     @Autowired
     private IDomicilioService domicilioService;
-
-    @GetMapping("/{id}")
-    public DomicilioRequestDTO traerDomicilio(@PathVariable Long id) {
-        Domicilio domicilio = this.domicilioService.getDomicilio(id);
-        return new DomicilioRequestDTO();
-    }
-
-    @GetMapping
-    public List<DomicilioRequestDTO> traerDomicilios() {
-        return new ArrayList<>();
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public DomicilioRequestDTO guardarDomicilio(@RequestBody DomicilioRequestDTO domicilioDTO) {
-        return new DomicilioRequestDTO();
-    }
-
-    @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public DomicilioRequestDTO editarDomicilio(@PathVariable Long id, @RequestBody DomicilioRequestDTO domicilioDTO) {
-        return new DomicilioRequestDTO();
-    }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarDomicilio(@PathVariable Long id) {
-        this.domicilioService.deleteDomicilio(id);
-    }
 }

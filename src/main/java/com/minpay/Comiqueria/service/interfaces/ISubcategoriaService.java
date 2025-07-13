@@ -1,15 +1,18 @@
 package com.minpay.Comiqueria.service.interfaces;
 
 import com.minpay.Comiqueria.dto.SubcategoriaRequestDTO;
-import com.minpay.Comiqueria.model.Subcategoria;
+import com.minpay.Comiqueria.dto.SubcategoriaResponseDTO;
 import java.util.List;
 
 public interface ISubcategoriaService {
-    public SubcategoriaRequestDTO getSubcategoriaDTO(Long id);
-    public List<SubcategoriaRequestDTO> getSubcategoriasDTO();
-    public SubcategoriaRequestDTO createSubcategoria(String nombreSubcategoria, Long idCategoria);
-    public SubcategoriaRequestDTO editSubcategoriaById(Long idSubcategoria, String nombreSubcategoria, Long idCategoria);
-    public void saveSubcategoria(Subcategoria subcategoria);
-    public void deleteSubcategoriaById(Long id);
-    public Subcategoria getSubcategoria(Long id);
+    public SubcategoriaResponseDTO getSubcategoriaDTO(Long id);
+    public List<SubcategoriaResponseDTO> getSubcategoriasDTO(
+        List<Long> ids,
+        String nombre,
+        Long idCategoria,
+        Boolean estaVigente
+    );
+    public SubcategoriaResponseDTO createSubcategoria(SubcategoriaRequestDTO subcategoriaDTO);
+    public SubcategoriaResponseDTO editSubcategoria(Long id, SubcategoriaRequestDTO subcategoriaDTO);
+    public void deleteSubcategoria(Long id);
 }

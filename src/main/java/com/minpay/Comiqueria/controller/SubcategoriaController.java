@@ -12,39 +12,4 @@ import org.springframework.web.bind.annotation.*;
 public class SubcategoriaController {
     @Autowired
     private ISubcategoriaService subcategoriaService;
-    
-    @GetMapping("/{id}")
-    public SubcategoriaRequestDTO traerSubcategoria(@PathVariable Long id){
-        return this.subcategoriaService.getSubcategoriaDTO(id);
-    }
-    
-    @GetMapping
-    public List<SubcategoriaRequestDTO> traerSubcategorias(){
-        return this.subcategoriaService.getSubcategoriasDTO();
-    }
-    
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public SubcategoriaRequestDTO guardarSubcategoria(
-            @RequestParam String nombreSubcategoria,
-            @RequestParam Long idCategoria
-    ){
-        return this.subcategoriaService.createSubcategoria(nombreSubcategoria, idCategoria);
-    }
-    
-    @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public SubcategoriaRequestDTO editarSubcategoria(
-            @PathVariable Long id,
-            @RequestParam String nombreSubcategoria,
-            @RequestParam Long idCategoria
-    ){
-        return this.subcategoriaService.editSubcategoriaById(id, nombreSubcategoria, idCategoria);
-    }
-    
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarSubcategoria(@PathVariable Long id){
-        this.subcategoriaService.deleteSubcategoriaById(id);
-    }
 }

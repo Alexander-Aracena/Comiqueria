@@ -22,11 +22,10 @@ public class Utils {
      * @param entityClass La clase de la entidad (ej. Usuario, Clase) que se incluirá en el mensaje
      * de la excepción si la entidad no es encontrada, para mayor claridad.
      * @param <T> El tipo de la entidad que se está buscando (ej. {@code Usuario}, {@code Clase}).
-     * @param <ID> El tipo del identificador de la entidad (ej. {@code Long}).
      * @return La entidad encontrada, del tipo {@code T}.
      * @throws ResourceNotFoundException Si la entidad con el ID dado no se encuentra en el repositorio.
      */
-    public static <T, ID> T findByIdOrThrow(JpaRepository<T, ID> repository, ID id, Class<T> entityClass) {
+    public static <T> T findByIdOrThrow(JpaRepository<T, Long> repository, Long id, Class<T> entityClass) {
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         entityClass.getSimpleName() + " no encontrado con ID: " + id)
@@ -63,6 +62,10 @@ public class Utils {
             return null;
         }
         return entidad.stream().map(mapperFunction).collect(Collectors.toSet());
+    }
+    
+    public static <T> Set<T> findAllById(JpaRepository<T, Long> repository, Set<Long> ids) {
+        return convertirListaASet(repository.findAllById(ids));
     }
 
     public static <T> Set<T> convertirListaASet(List<T> entidad) {

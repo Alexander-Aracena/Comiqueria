@@ -45,14 +45,8 @@ public class ProductoRequestDTO {
     @Min(value = 0, message = "Las páginas deben ser un valor positivo o cero")
     private int paginas;
 
-    // Para las relaciones, solo recibimos los IDs de las entidades relacionadas
-    @NotNull(message = "Se debe especificar al menos un autor")
-    private Set<Long> idAutores = new LinkedHashSet<>(); // Lista de IDs de autores
-
-    @NotNull(message = "Se debe especificar una subcategoría")
+    private Set<Long> idAutores; // Lista de IDs de autores
     private Long idSubcategoria;
-
-    @NotNull(message = "Se debe especificar una editorial")
     private Long idEditorial;
 
     // Las banderas de visibilidad pueden ser booleanos en el request

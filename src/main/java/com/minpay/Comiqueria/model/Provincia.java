@@ -40,6 +40,7 @@ public class Provincia {
     @OneToMany(mappedBy = "provincia", cascade = CascadeType.ALL)
     private Set<Departamento> departamentos = new LinkedHashSet<>();
     
+    @NonNull
     @ManyToOne
     @JoinColumn(name = "prov_pais_id")
     private Pais pais;

@@ -1,28 +1,29 @@
 package com.minpay.Comiqueria.mapper;
 
-import com.minpay.Comiqueria.dto.CategoriaRequestDTO;
-import com.minpay.Comiqueria.dto.CategoriaResponseDTO;
-import com.minpay.Comiqueria.model.Categoria;
+import com.minpay.Comiqueria.dto.SubcategoriaRequestDTO;
+import com.minpay.Comiqueria.dto.SubcategoriaResponseDTO;
+import com.minpay.Comiqueria.model.Subcategoria;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 public interface ISubcategoriaMapper {
-    CategoriaResponseDTO toCategoriaResponseDTO(Categoria categoria);
+    SubcategoriaResponseDTO toSubcategoriaResponseDTO(Subcategoria subcategoria);
     
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "categoria", ignore = true)
     @Mapping(target = "fechaAlta", ignore = true)
     @Mapping(target = "fechaBaja", ignore = true)
     @Mapping(target = "estaVigente", ignore = true)
-    @Mapping(target = "subcategorias", ignore = true)
-    Categoria toCategoria(CategoriaRequestDTO dto);
+    @Mapping(target = "productos", ignore = true)
+    Subcategoria toSubcategoria(SubcategoriaRequestDTO dto);
     
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "fechaAlta", ignore = true)
     @Mapping(target = "fechaBaja", ignore = true)
     @Mapping(target = "estaVigente", ignore = true)
-    @Mapping(target = "subcategorias", ignore = true)
-    void updateCategoriaFromDTO(CategoriaRequestDTO dto, @MappingTarget Categoria categoria);
+    @Mapping(target = "productos", ignore = true)
+    void updateSubcategoriaFromDTO(SubcategoriaRequestDTO dto, @MappingTarget Subcategoria subcategoria);
 }

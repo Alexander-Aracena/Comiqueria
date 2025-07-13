@@ -1,14 +1,13 @@
 package com.minpay.Comiqueria.service.interfaces;
 
 import com.minpay.Comiqueria.dto.PaisRequestDTO;
-import com.minpay.Comiqueria.model.Pais;
+import com.minpay.Comiqueria.dto.PaisResponseDTO;
 import java.util.List;
 
 public interface IPaisService {
-    public Pais getPais(Long id);
-    public PaisRequestDTO getPaisDTO(Pais pais);
-    public List<PaisRequestDTO> getPaisesDTO();
-    public PaisRequestDTO createPais(String nombre);
-    public PaisRequestDTO editPaisById(Long id, PaisRequestDTO paisDTO);
-    public void deletePaisById(Long id);
+    public PaisResponseDTO getPais(Long id);
+    public List<PaisResponseDTO> getPaisesDTO(List<Long> ids, String nombre, Boolean estaVigente);
+    public PaisResponseDTO createPais(PaisRequestDTO paisDTO);
+    public PaisResponseDTO editPais(Long id, PaisRequestDTO paisDTO);
+    public void deletePais(Long id);
 }

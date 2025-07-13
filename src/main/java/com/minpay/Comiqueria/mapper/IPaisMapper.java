@@ -1,28 +1,28 @@
 package com.minpay.Comiqueria.mapper;
 
-import com.minpay.Comiqueria.dto.CategoriaRequestDTO;
-import com.minpay.Comiqueria.dto.CategoriaResponseDTO;
-import com.minpay.Comiqueria.model.Categoria;
+import com.minpay.Comiqueria.dto.PaisRequestDTO;
+import com.minpay.Comiqueria.dto.PaisResponseDTO;
+import com.minpay.Comiqueria.model.Pais;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 public interface IPaisMapper {
-    CategoriaResponseDTO toCategoriaResponseDTO(Categoria categoria);
+    PaisResponseDTO toPaisResponseDTO(Pais pais);
     
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "provincias", ignore = true)
     @Mapping(target = "fechaAlta", ignore = true)
     @Mapping(target = "fechaBaja", ignore = true)
     @Mapping(target = "estaVigente", ignore = true)
-    @Mapping(target = "subcategorias", ignore = true)
-    Categoria toCategoria(CategoriaRequestDTO dto);
+    Pais toPais(PaisRequestDTO dto);
     
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "provincias", ignore = true)
     @Mapping(target = "fechaAlta", ignore = true)
     @Mapping(target = "fechaBaja", ignore = true)
     @Mapping(target = "estaVigente", ignore = true)
-    @Mapping(target = "subcategorias", ignore = true)
-    void updateCategoriaFromDTO(CategoriaRequestDTO dto, @MappingTarget Categoria categoria);
+    void updatePaisFromDTO(PaisRequestDTO dto, @MappingTarget Pais pais);
 }

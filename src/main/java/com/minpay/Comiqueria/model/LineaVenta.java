@@ -54,10 +54,4 @@ public class LineaVenta {
     @EqualsAndHashCode.Include
     @ToString.Include
     private BigDecimal precio;
-
-    public LineaVenta(Producto producto, int cantidad, BigDecimal precio) {
-        this.producto = producto;
-        this.cantidad = cantidad;
-        this.precio = precio;
-    }
 }
