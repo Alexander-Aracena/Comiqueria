@@ -3,7 +3,6 @@ package com.minpay.Comiqueria.dto;
 import com.minpay.Comiqueria.model.Rol;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +23,5 @@ public class UsuarioRequestDTO {
     @Size(min = 8, max = 15, message = "La contraseña debe tener entre 8 y 15 caracteres")
     private String password;
 
-    @NotNull(message = "El rol no puede ser nulo")
     private Rol rol;
 }

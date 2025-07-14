@@ -2,6 +2,7 @@ package com.minpay.Comiqueria.dto;
 
 import com.minpay.Comiqueria.model.Sexo;
 import com.minpay.Comiqueria.model.TipoDoc;
+import com.minpay.Comiqueria.validation.ValidationGroups;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -43,6 +44,9 @@ public class ClienteRequestDTO {
     @Size(max = 20, message = "El teléfono no puede exceder los 20 caracteres")
     private String telefono;
 
-    @NotNull(message = "El ID de usuario asociado no puede ser nulo")
+    @NotNull(
+        message = "El ID de usuario asociado no puede ser nulo",
+        groups = {ValidationGroups.OnCreate.class}
+    )
     private Long idUsuario;
 }

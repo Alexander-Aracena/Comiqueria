@@ -2,7 +2,6 @@ package com.minpay.Comiqueria.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,5 +17,5 @@ public class VentaRequestDTO {
     private Long idCliente;
 
     @NotEmpty(message = "La venta debe tener al menos una línea de venta")
-    private Set<LineaVentaRequestDTO> lineas = new LinkedHashSet<>();
+    private Set<LineaVentaRequestDTO> lineas;
 }

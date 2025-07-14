@@ -153,7 +153,7 @@ public class Cliente {
      * Utilizado para la baja lógica. Por defecto es 'true'.
      */
     @Column(name = "cte_esta_vigente")
-    private Boolean estaVigente = true;
+    private Boolean estaVigente = Boolean.TRUE;
 
     /**
      * Conjunto de productos marcados como favoritos por el cliente.
