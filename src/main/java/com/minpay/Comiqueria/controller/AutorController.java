@@ -1,58 +1,65 @@
 package com.minpay.Comiqueria.controller;
 
+import com.minpay.Comiqueria.config.rest.ApiRestController;
+import com.minpay.Comiqueria.dto.AutorRequestDTO;
 import com.minpay.Comiqueria.dto.AutorResponseDTO;
-import com.minpay.Comiqueria.model.Autor;
 import com.minpay.Comiqueria.service.interfaces.IAutorService;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/autores")
+@ApiRestController("/autores")
 public class AutorController {
     @Autowired
     private IAutorService autorService;
     
     @GetMapping("/{id}")
-    public Autor traerAutor(@PathVariable Long id){
-        return new Autor();
+    public ResponseEntity<AutorResponseDTO> traerAutor(@PathVariable Long id){
+        AutorResponseDTO response = this.autorService.getAutor(id);
+        return ResponseEntity.ok(response);
     }
     
     @GetMapping
-    public List<Autor> traerAutores(){
-        return new ArrayList<>();
+    public ResponseEntity<List<AutorResponseDTO>> traerAutores(
+            @RequestParam(required = false) List<Long> ids,
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) String apellido,
+            @RequestParam(required = false) Boolean estaVigente
+    ){
+        List<AutorResponseDTO> response = this.autorService.getAutores(ids, nombre, apellido, estaVigente);
+        return ResponseEntity.ok(response);
     }
     
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Autor guardarAutor(@RequestBody AutorResponseDTO autorDTO){
-        return new Autor();
+    public ResponseEntity<AutorResponseDTO> guardarAutor(@RequestBody AutorRequestDTO autorDTO){
+        AutorResponseDTO response = this.autorService.createAutor(autorDTO);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
     
     @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Autor editarAutor(@PathVariable Long id, @RequestBody AutorResponseDTO autorDTO){
-        return new Autor();
+    public ResponseEntity<AutorResponseDTO> editarAutor(@PathVariable Long id, @RequestBody AutorRequestDTO autorDTO){
+        AutorResponseDTO response = this.autorService.editAutor(id, autorDTO);
+        return ResponseEntity.ok(response);
     }
     
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarAutor(@PathVariable Long id){
-        this.autorService.deleteAutorById(id);
+    public ResponseEntity<Void> eliminarAutor(@PathVariable Long id){
+        this.autorService.deleteAutor(id);
+        return ResponseEntity.noContent().build();
     }
     
     @PostMapping("/productos/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void agregarProductos(@PathVariable Long id, @RequestBody Set<Long> idsProductos){
+    public ResponseEntity<Void> agregarProductos(@PathVariable Long id, @RequestBody Set<Long> idsProductos){
         this.autorService.addProductos(id, idsProductos);
+        return ResponseEntity.noContent().build();
     }
     
     @DeleteMapping("/productos/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarProductos(@PathVariable Long id, @RequestBody Set<Long> idsProductos){
+    public ResponseEntity<Void> eliminarProductos(@PathVariable Long id, @RequestBody Set<Long> idsProductos){
         this.autorService.deleteProductos(id, idsProductos);
+        return ResponseEntity.noContent().build();
     }
 }

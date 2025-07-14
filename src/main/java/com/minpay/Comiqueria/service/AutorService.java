@@ -31,7 +31,7 @@ public class AutorService implements IAutorService {
     private IAutorMapper autorMapper;
     
     @Override
-    public AutorResponseDTO getAutorDTO(Long id) {
+    public AutorResponseDTO getAutor(Long id) {
         Autor autor = Utils.findByIdOrThrow(autorRepository, id, Autor.class);
         return this.autorMapper.toAutorResponseDTO(autor);
     }
@@ -51,7 +51,7 @@ public class AutorService implements IAutorService {
     }
 
     @Override
-    public AutorResponseDTO editAutorById(Long id, AutorRequestDTO autorDTO) {
+    public AutorResponseDTO editAutor(Long id, AutorRequestDTO autorDTO) {
         Autor autorModificado = Utils.findByIdOrThrow(autorRepository, id, Autor.class);
         this.autorMapper.updateAutorFromDTO(autorDTO, autorModificado);
         autorModificado = this.autorRepository.save(autorModificado);
@@ -59,7 +59,7 @@ public class AutorService implements IAutorService {
     }
 
     @Override
-    public void deleteAutorById(Long id) {
+    public void deleteAutor(Long id) {
         Autor autor = Utils.findByIdOrThrow(autorRepository, id, Autor.class);
         if (autor.getFechaBaja() != null) {
             throw new InvalidOperationException("El autor ya está dado de baja.");
@@ -79,7 +79,6 @@ public class AutorService implements IAutorService {
         Set<Producto> productosOrdenados = Utils.ordenarPorIds(idsProductos, productos, Producto::getId);
         autor.getProductos().addAll(productosOrdenados);
         productos.forEach(producto -> producto.getAutores().add(autor));
-        this.productoRepository.saveAll(productos);
         this.autorRepository.save(autor);
     }
     
@@ -92,7 +91,6 @@ public class AutorService implements IAutorService {
         }
         autor.getProductos().removeAll(productos);
         productos.forEach(producto -> producto.getAutores().remove(autor));
-        this.productoRepository.saveAll(productos);
         this.autorRepository.save(autor);
     }
 }

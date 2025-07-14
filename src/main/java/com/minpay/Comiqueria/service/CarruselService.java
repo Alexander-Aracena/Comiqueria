@@ -49,7 +49,7 @@ public class CarruselService implements ICarruselService {
     }
 
     @Override
-    public CarruselResponseDTO editCarruselById(Long id, CarruselRequestDTO carouselDTO) {
+    public CarruselResponseDTO editCarrusel(Long id, CarruselRequestDTO carouselDTO) {
         Carrusel carruselModificado = Utils.findByIdOrThrow(carruselRepository, id, Carrusel.class);
         this.carruselMapper.updateCarruselFromDTO(carouselDTO, carruselModificado);
         carruselModificado = this.carruselMapper.toCarrusel(carouselDTO);
@@ -57,7 +57,7 @@ public class CarruselService implements ICarruselService {
     }
 
     @Override
-    public void deleteCarruselById(Long id) {
+    public void deleteCarrusel(Long id) {
         Carrusel carrusel = Utils.findByIdOrThrow(carruselRepository, id, Carrusel.class);
         if (!carrusel.getEstaActivo()) {
             throw new InvalidOperationException("El carrusel ya está dado de baja.");

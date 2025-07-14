@@ -87,7 +87,6 @@ public class CategoriaService implements ICategoriaService {
         categoria.getSubcategorias().addAll(subcategorias);
         subcategorias.forEach(subcategoria -> subcategoria.setCategoria(categoria));
         this.subcategoriaRepository.saveAll(subcategorias);
-        this.categoriaRepository.save(categoria);
     }
 
     @Override
@@ -101,6 +100,5 @@ public class CategoriaService implements ICategoriaService {
         categoria.getSubcategorias().removeAll(subcategorias);
         subcategorias.forEach(subcategoria -> subcategoria.setCategoria(null));
         this.subcategoriaRepository.saveAll(subcategorias);
-        this.categoriaRepository.save(categoria);
     }
 }

@@ -59,6 +59,7 @@ public class SubcategoriaService implements ISubcategoriaService {
             throw new InvalidOperationException("La categoría seleccionada ya no está vigente");
         }
         subcategoria.setCategoria(categoria);
+        categoria.getSubcategorias().add(subcategoria);
         subcategoria = this.subcategoriaRepository.save(subcategoria);
         return this.subcategoriaMapper.toSubcategoriaResponseDTO(subcategoria);
     }
@@ -75,11 +76,14 @@ public class SubcategoriaService implements ISubcategoriaService {
             Categoria nuevaCategoria = Utils.findByIdOrThrow(
                 categoriaRepository, subcategoriaDTO.getIdCategoria(), Categoria.class
             );
+            Categoria categoriaAnterior = subcategoriaModificada.getCategoria();
             if (!nuevaCategoria.getEstaVigente()) {
                 throw new InvalidOperationException("La categoría seleccionada ya no está vigente");
             }
             if (!Objects.equals(subcategoriaModificada.getCategoria().getId(), nuevaCategoria.getId())) {
+                categoriaAnterior.getSubcategorias().remove(subcategoriaModificada);
                 subcategoriaModificada.setCategoria(nuevaCategoria);
+                nuevaCategoria.getSubcategorias().add(subcategoriaModificada);
             }
         }
         this.subcategoriaMapper.updateSubcategoriaFromDTO(subcategoriaDTO, subcategoriaModificada);

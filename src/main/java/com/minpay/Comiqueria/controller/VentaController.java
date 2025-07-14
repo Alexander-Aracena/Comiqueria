@@ -13,34 +13,4 @@ import org.springframework.web.bind.annotation.*;
 public class VentaController {
     @Autowired
     private IVentaService ventaService;
-    
-    @GetMapping("/{id}")
-    public Venta traerVenta(@PathVariable Long id){
-        return this.ventaService.getVenta(id);
-    }
-    
-    @GetMapping
-    public List<Venta> traerVentas(){
-        return this.ventaService.getVentas();
-    }
-    
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Venta guardarVenta(@RequestBody VentaRequestDTO ventaDTO){
-        return this.ventaService.createVenta(ventaDTO);
-    }
-    
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Venta editarVenta(@PathVariable Long id, @RequestBody VentaRequestDTO ventaDTO){
-        return this.ventaService.editVentaById(id, ventaDTO);
-    }
-    
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarVenta(@PathVariable Long id){
-        this.ventaService.deleteVentaById(id);
-    }
-    
-    
 }

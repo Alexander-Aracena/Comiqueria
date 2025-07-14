@@ -8,6 +8,6 @@ public interface ICarruselService {
     public CarruselResponseDTO getCarrusel(Long id);
     public List<CarruselResponseDTO> getCarruseles(List<Long> ids, String subtitulo, String texto, Boolean estaActivo);
     public CarruselResponseDTO createCarrusel(CarruselRequestDTO carouselDTO);
-    public CarruselResponseDTO editCarruselById(Long id, CarruselRequestDTO carouselDTO);
-    public void deleteCarruselById(Long id);
+    public CarruselResponseDTO editCarrusel(Long id, CarruselRequestDTO carouselDTO);
+    public void deleteCarrusel(Long id);
 }
