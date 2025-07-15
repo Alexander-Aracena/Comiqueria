@@ -33,7 +33,7 @@ public class PaisService implements IPaisService {
     }
 
     @Override
-    public List<PaisResponseDTO> getPaisesDTO(List<Long> ids, String nombre, Boolean estaVigente) {
+    public List<PaisResponseDTO> getPaises(List<Long> ids, String nombre, Boolean estaVigente) {
         Specification<Pais> specs = PaisSpecifications.byCriterios(ids, nombre, estaVigente);
         List<Pais> paises = this.paisRepository.findAll(specs);
         return Utils.mapearListaA(paises, this.paisMapper::toPaisResponseDTO);

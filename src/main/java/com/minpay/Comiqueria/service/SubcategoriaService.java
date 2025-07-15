@@ -34,14 +34,14 @@ public class SubcategoriaService implements ISubcategoriaService {
 
     @Override
     @Transactional(readOnly = true)
-    public SubcategoriaResponseDTO getSubcategoriaDTO(Long id) {
+    public SubcategoriaResponseDTO getSubcategoria(Long id) {
         Subcategoria subcategoria = Utils.findByIdOrThrow(subcategoriaRepository, id, Subcategoria.class);
         return this.subcategoriaMapper.toSubcategoriaResponseDTO(subcategoria);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<SubcategoriaResponseDTO> getSubcategoriasDTO(List<Long> ids, String nombre, Long idCategoria, Boolean estaVigente) {
+    public List<SubcategoriaResponseDTO> getSubcategorias(List<Long> ids, String nombre, Long idCategoria, Boolean estaVigente) {
         Specification<Subcategoria> specs = SubcategoriaSpecifications.byCriterios(
             ids, nombre, idCategoria, estaVigente
         );

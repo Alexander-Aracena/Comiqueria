@@ -24,10 +24,10 @@ public class DomicilioController {
 
     @GetMapping
     public ResponseEntity<List<DomicilioResponseDTO>> traerDomicilios(
-            @RequestParam(required = false) List<Long> ids,
-            @RequestParam(required = false) String calle,
-            @RequestParam(required = false) String cp,
-            @RequestParam(required = false) Boolean estaVigente
+        @RequestParam(required = false) List<Long> ids,
+        @RequestParam(required = false) String calle,
+        @RequestParam(required = false) String cp,
+        @RequestParam(required = false) Boolean estaVigente
     ) {
         List<DomicilioResponseDTO> response = this.domicilioService.getDomicilios(ids, calle, cp, estaVigente);
         return ResponseEntity.ok(response);
@@ -41,8 +41,8 @@ public class DomicilioController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<DomicilioResponseDTO> editarDomicilio(
-            @PathVariable Long id,
-            @RequestBody DomicilioRequestDTO dto
+        @PathVariable Long id,
+        @RequestBody DomicilioRequestDTO dto
     ) {
         DomicilioResponseDTO response = this.domicilioService.editDomicilio(id, dto);
         return ResponseEntity.ok(response);

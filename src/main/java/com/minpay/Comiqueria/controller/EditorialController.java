@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 @ApiRestController("/editoriales")
 public class EditorialController {
+
     @Autowired
     private IEditorialService editorialService;
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<EditorialResponseDTO> traerEditorial(@PathVariable Long id) {
         EditorialResponseDTO response = this.editorialService.getEditorial(id);
@@ -23,9 +24,9 @@ public class EditorialController {
 
     @GetMapping
     public ResponseEntity<List<EditorialResponseDTO>> traerEditoriales(
-            @RequestParam(required = false) List<Long> ids,
-            @RequestParam(required = false) String nombre,
-            @RequestParam(required = false) Boolean estaVigente
+        @RequestParam(required = false) List<Long> ids,
+        @RequestParam(required = false) String nombre,
+        @RequestParam(required = false) Boolean estaVigente
     ) {
         List<EditorialResponseDTO> response = this.editorialService.getEditoriales(ids, nombre, estaVigente);
         return ResponseEntity.ok(response);
@@ -39,8 +40,8 @@ public class EditorialController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<EditorialResponseDTO> editarEditorial(
-            @PathVariable Long id,
-            @RequestBody EditorialRequestDTO dto
+        @PathVariable Long id,
+        @RequestBody EditorialRequestDTO dto
     ) {
         EditorialResponseDTO response = this.editorialService.editEditorial(id, dto);
         return ResponseEntity.ok(response);

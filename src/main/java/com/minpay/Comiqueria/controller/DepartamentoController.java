@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @ApiRestController("/departamentos")
 public class DepartamentoController {
+
     @Autowired
     private IDepartamentoService departamentoService;
 
@@ -23,16 +24,16 @@ public class DepartamentoController {
 
     @GetMapping
     public ResponseEntity<List<DepartamentoResponseDTO>> traerDepartamentos(
-            @RequestParam(required = false) List<Long> idsDepartamentos,
-            @RequestParam(required = false) String nombre,
-            @RequestParam(required = false) Long idProvincia,
-            @RequestParam(required = false) String nombreProvincia,
-            @RequestParam(required = false) Long idPais,
-            @RequestParam(required = false) String nombrePais,
-            @RequestParam(required = false) Boolean estaVigente
+        @RequestParam(required = false) List<Long> idsDepartamentos,
+        @RequestParam(required = false) String nombre,
+        @RequestParam(required = false) Long idProvincia,
+        @RequestParam(required = false) String nombreProvincia,
+        @RequestParam(required = false) Long idPais,
+        @RequestParam(required = false) String nombrePais,
+        @RequestParam(required = false) Boolean estaVigente
     ) {
         List<DepartamentoResponseDTO> response = this.departamentoService.getDepartamentos(
-                idsDepartamentos, nombre, idProvincia, nombreProvincia, idPais, nombrePais, estaVigente
+            idsDepartamentos, nombre, idProvincia, nombreProvincia, idPais, nombrePais, estaVigente
         );
         return ResponseEntity.ok(response);
     }
@@ -45,8 +46,8 @@ public class DepartamentoController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<DepartamentoResponseDTO> editarDepartamento(
-            @PathVariable Long id,
-            @RequestBody DepartamentoRequestDTO dto
+        @PathVariable Long id,
+        @RequestBody DepartamentoRequestDTO dto
     ) {
         DepartamentoResponseDTO response = this.departamentoService.editDepartamento(id, dto);
         return ResponseEntity.ok(response);

@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 @ApiRestController("/lineasVentas")
 public class LineaVentaController {
+
     @Autowired
     private ILineaVentaService lineaVentaService;
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<LineaVentaResponseDTO> traerLineaVenta(@PathVariable Long id) {
         LineaVentaResponseDTO response = this.lineaVentaService.getLineaVenta(id);
@@ -22,8 +23,8 @@ public class LineaVentaController {
 
     @GetMapping
     public ResponseEntity<List<LineaVentaResponseDTO>> traerLineaVentaes(
-            @RequestParam(required = false) List<Long> ids,
-            @RequestParam(required = false) Long idVenta,
+        @RequestParam(required = false) List<Long> ids,
+        @RequestParam(required = false) Long idVenta,
         @RequestParam(required = false) Long idProducto,
         @RequestParam(required = false) Integer minCantidad,
         @RequestParam(required = false) Integer maxCantidad,
@@ -31,7 +32,7 @@ public class LineaVentaController {
         @RequestParam(required = false) BigDecimal maxPrecio
     ) {
         List<LineaVentaResponseDTO> response = this.lineaVentaService.getLineasVentas(
-                ids, idVenta, idProducto, minCantidad, maxCantidad, minPrecio, maxPrecio
+            ids, idVenta, idProducto, minCantidad, maxCantidad, minPrecio, maxPrecio
         );
         return ResponseEntity.ok(response);
     }

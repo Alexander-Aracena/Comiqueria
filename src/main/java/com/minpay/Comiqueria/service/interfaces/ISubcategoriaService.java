@@ -5,8 +5,8 @@ import com.minpay.Comiqueria.dto.SubcategoriaResponseDTO;
 import java.util.List;
 
 public interface ISubcategoriaService {
-    public SubcategoriaResponseDTO getSubcategoriaDTO(Long id);
-    public List<SubcategoriaResponseDTO> getSubcategoriasDTO(
+    public SubcategoriaResponseDTO getSubcategoria(Long id);
+    public List<SubcategoriaResponseDTO> getSubcategorias(
         List<Long> ids,
         String nombre,
         Long idCategoria,
