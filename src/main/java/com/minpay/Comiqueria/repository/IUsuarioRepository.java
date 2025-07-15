@@ -1,6 +1,7 @@
 package com.minpay.Comiqueria.repository;
 
 import com.minpay.Comiqueria.model.Usuario;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,6 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, Long>,
      * dada, {@code false} en caso contrario.
      */
     boolean existsByEmail(String email);
+    
+    Optional<Usuario> findByEmail(String email);
 }
