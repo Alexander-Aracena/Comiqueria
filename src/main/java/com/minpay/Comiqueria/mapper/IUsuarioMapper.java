@@ -1,5 +1,6 @@
 package com.minpay.Comiqueria.mapper;
 
+import com.minpay.Comiqueria.dto.RegisterRequestDTO;
 import com.minpay.Comiqueria.dto.UsuarioRequestDTO;
 import com.minpay.Comiqueria.dto.UsuarioResponseDTO;
 import com.minpay.Comiqueria.model.Usuario;
@@ -27,4 +28,16 @@ public interface IUsuarioMapper {
     @Mapping(target = "estaActivo", ignore = true)
     @Mapping(target = "cliente", ignore = true)
     void updateUsuarioFromDTO(UsuarioRequestDTO dto, @MappingTarget Usuario usuario);
+    
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "passwordHash", ignore = true) // Se hashea en el servicio
+    @Mapping(target = "fechaAlta", ignore = true)
+    @Mapping(target = "fechaBaja", ignore = true)
+    @Mapping(target = "ultimoLogin", ignore = true)
+    @Mapping(target = "cliente", ignore = true)
+    @Mapping(target = "resetPasswordToken", ignore = true)
+    @Mapping(target = "resetTokenExpirationDate", ignore = true)
+    @Mapping(target = "rol", expression = "java(com.anahataYoga.anahataYoga.model.Rol.CLIENTE)")
+    @Mapping(target = "estaActivo", expression = "java(java.​lang.​Boolean.TRUE)")
+    Usuario toUsuario(RegisterRequestDTO dto); // Esto es para el auto-registro
 }

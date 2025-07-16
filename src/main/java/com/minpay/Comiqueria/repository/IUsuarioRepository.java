@@ -1,6 +1,8 @@
 package com.minpay.Comiqueria.repository;
 
+import com.minpay.Comiqueria.model.Rol;
 import com.minpay.Comiqueria.model.Usuario;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -19,4 +21,8 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, Long>,
     boolean existsByEmail(String email);
     
     Optional<Usuario> findByEmail(String email);
+    
+    Optional<Usuario> findByRol(Rol rol);
+    
+    Optional<Usuario> findByResetPasswordToken(String resetPasswordToken);
 }

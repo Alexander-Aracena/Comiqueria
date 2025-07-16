@@ -67,7 +67,17 @@ public class Usuario {
 
     @Column(name = "usr_esta_activo")
     private Boolean estaActivo = true;
+    
+    @Column(name = "usr_ultimo_login")
+    @ToString.Include
+    private LocalDateTime ultimoLogin;
 
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Cliente cliente;
+    
+    @Column(name = "usr_rptoken")
+    private String resetPasswordToken;
+    
+    @Column(name = "usr_rtokened")
+    private LocalDateTime resetTokenExpirationDate;
 }
