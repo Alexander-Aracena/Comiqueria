@@ -41,6 +41,6 @@ public class VentaResponseDTO {
         private String nombre;
         private String apellido;
         private String tipoDoc;
-        private String nroDoc;
+        private String nroDocumento;
     }
 }

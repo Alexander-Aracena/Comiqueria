@@ -18,7 +18,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
+@Service
 public class UsuarioService implements IUsuarioService {
     @Autowired
     private IUsuarioRepository usuarioRepository;
@@ -30,12 +34,14 @@ public class UsuarioService implements IUsuarioService {
     private PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional(readOnly = true)
     public UsuarioResponseDTO getUsuario(Long id) {
         Usuario usuario = Utils.findByIdOrThrow(usuarioRepository, id, Usuario.class);
         return this.usuarioMapper.toUsuarioResponseDTO(usuario);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UsuarioResponseDTO> getUsuarios(List<Long> ids, String email, Rol rol, Long idCliente, Boolean estaActivo) {
         Specification<Usuario> specs = UsuarioSpecifications.byCriterios(
             ids, email, rol, idCliente, estaActivo

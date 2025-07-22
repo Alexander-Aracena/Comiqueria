@@ -33,7 +33,6 @@ public class ClienteResponseDTO {
 
     // Relaciones (usando DTOs anidados o IDs para evitar recursión y mostrar solo lo esencial)
     private UsuarioBasicoDTO usuario; // Información básica del usuario asociado
-    private Set<DomicilioResponseDTO> domicilios = new LinkedHashSet<>(); // DTOs completos de domicilios
     private Set<ProductoBasicoDTO> favoritos = new LinkedHashSet<>(); // Solo IDs/títulos si son muchos
     private Set<VentaBasicoDTO> ventasRecientes = new LinkedHashSet<>(); // Solo ID y fecha de ventas recientes
 

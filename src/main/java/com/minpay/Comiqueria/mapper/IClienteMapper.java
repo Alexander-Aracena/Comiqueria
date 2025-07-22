@@ -4,11 +4,14 @@ import com.minpay.Comiqueria.dto.ClienteRequestDTO;
 import com.minpay.Comiqueria.dto.ClienteResponseDTO;
 import com.minpay.Comiqueria.model.Cliente;
 import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+@Mapper(componentModel = "spring", uses = {IUsuarioMapper.class, IVentaMapper.class, IProductoMapper.class})
 public interface IClienteMapper {
+    @Mapping(target = "ventasRecientes", source = "ventas")
     ClienteResponseDTO toClienteResponseDTO(Cliente cliente);
     
     @Mapping(target = "id", ignore = true)

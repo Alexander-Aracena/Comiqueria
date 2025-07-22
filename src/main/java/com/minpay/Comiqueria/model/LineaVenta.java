@@ -53,5 +53,9 @@ public class LineaVenta {
     @Column(name = "linea_precio", nullable = false, precision = 10, scale = 2)
     @EqualsAndHashCode.Include
     @ToString.Include
-    private BigDecimal precio;
+    private BigDecimal precioUnitario;
+    
+    public BigDecimal getSubtotal() {
+        return this.precioUnitario.multiply(BigDecimal.valueOf(this.cantidad));
+    }
 }

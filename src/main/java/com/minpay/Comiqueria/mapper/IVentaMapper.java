@@ -4,10 +4,12 @@ import com.minpay.Comiqueria.dto.VentaRequestDTO;
 import com.minpay.Comiqueria.dto.VentaResponseDTO;
 import com.minpay.Comiqueria.model.Venta;
 import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+@Mapper(componentModel = "spring", uses = {ILineaVentaMapper.class})
 public interface IVentaMapper {
     VentaResponseDTO toVentaResponseDTO(Venta venta);
     
