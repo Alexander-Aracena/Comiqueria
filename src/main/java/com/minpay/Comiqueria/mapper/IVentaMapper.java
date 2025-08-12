@@ -18,6 +18,7 @@ public interface IVentaMapper {
     @Mapping(target = "total", ignore = true)
     @Mapping(target = "cliente", ignore = true)
     @Mapping(target = "estado", ignore = true)
+    @Mapping(target = "lineas", ignore = true)
     Venta toVenta(VentaRequestDTO dto);
     
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -26,5 +27,6 @@ public interface IVentaMapper {
     @Mapping(target = "total", ignore = true)
     @Mapping(target = "cliente", ignore = true)
     @Mapping(target = "estado", ignore = true)
+    @Mapping(target = "lineas", ignore = true)
     void updateVentaFromDTO(VentaRequestDTO dto, @MappingTarget Venta venta);
 }

@@ -10,7 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@ApiRestController("/paises")
+@ApiRestController
+@RequestMapping("/paises")
 public class PaisController {
     @Autowired
     private IPaisService paisService;

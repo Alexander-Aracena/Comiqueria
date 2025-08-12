@@ -51,12 +51,12 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**").permitAll()
                 
                 // Permite el acceso sólo para obtener información (GET)
-                .requestMatchers(HttpMethod.GET, "/api/autores").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/productos").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/carrusel").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/editoriales").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/categorias").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/subcategorias").permitAll()
+//                .requestMatchers(HttpMethod.GET, "/api/autores").permitAll()
+//                .requestMatchers(HttpMethod.GET, "/api/productos").permitAll()
+//                .requestMatchers(HttpMethod.GET, "/api/carrusel").permitAll()
+//                .requestMatchers(HttpMethod.GET, "/api/editoriales").permitAll()
+//                .requestMatchers(HttpMethod.GET, "/api/categorias").permitAll()
+//                .requestMatchers(HttpMethod.GET, "/api/subcategorias").permitAll()
                 
                 // Cualquier otra solicitud HTTP debe estar autenticada.
                 .anyRequest().authenticated()

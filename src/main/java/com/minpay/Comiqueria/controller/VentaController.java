@@ -13,7 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@ApiRestController("/ventas")
+@ApiRestController
+@RequestMapping("/ventas")
 public class VentaController {
 
     @Autowired

@@ -4,10 +4,12 @@ import com.minpay.Comiqueria.dto.SubcategoriaRequestDTO;
 import com.minpay.Comiqueria.dto.SubcategoriaResponseDTO;
 import com.minpay.Comiqueria.model.Subcategoria;
 import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+@Mapper(componentModel = "spring")
 public interface ISubcategoriaMapper {
     SubcategoriaResponseDTO toSubcategoriaResponseDTO(Subcategoria subcategoria);
     
@@ -25,5 +27,6 @@ public interface ISubcategoriaMapper {
     @Mapping(target = "fechaBaja", ignore = true)
     @Mapping(target = "estaVigente", ignore = true)
     @Mapping(target = "productos", ignore = true)
+    @Mapping(target = "categoria", ignore = true)
     void updateSubcategoriaFromDTO(SubcategoriaRequestDTO dto, @MappingTarget Subcategoria subcategoria);
 }

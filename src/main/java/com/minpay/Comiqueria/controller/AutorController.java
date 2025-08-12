@@ -11,7 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@ApiRestController("/autores")
+@ApiRestController
+@RequestMapping("/autores")
 public class AutorController {
 
     @Autowired

@@ -59,6 +59,7 @@ public class AuthService implements IAuthService {
         ));
         
         String jwtToken = jwtService.generateToken(userDetails);
+        usuario.setUltimoLogin(LocalDateTime.now());
 
         return new LoginResponseDTO(
             usuario.getId(),
@@ -100,6 +101,8 @@ public class AuthService implements IAuthService {
         usuario.setResetPasswordToken(resetToken);
         usuario.setResetTokenExpirationDate(expirationDate);
         this.usuarioRepository.save(usuario);
+        
+        
     }
 
     @Override
@@ -157,7 +160,7 @@ public class AuthService implements IAuthService {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 usuario.getEmail(),
-                usuario.getPasswordHash()
+                newPassword
             )
         );
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -170,5 +173,4 @@ public class AuthService implements IAuthService {
             usuario.getRol().name()
         );
     }
-    
 }

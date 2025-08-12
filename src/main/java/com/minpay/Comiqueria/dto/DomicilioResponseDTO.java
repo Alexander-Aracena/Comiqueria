@@ -43,7 +43,7 @@ public class DomicilioResponseDTO {
         private String nombre;
         private String apellido;
         private TipoDoc tipoDoc;
-        private String nroDoc;
+        private String nroDocumento;
     }
     
     @Getter

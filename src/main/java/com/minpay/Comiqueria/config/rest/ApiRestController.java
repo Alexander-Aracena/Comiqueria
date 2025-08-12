@@ -12,5 +12,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public @interface ApiRestController {
-    String value() default "";
+    //String value() default "";
 }

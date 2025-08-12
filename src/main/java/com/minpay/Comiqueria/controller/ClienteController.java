@@ -11,7 +11,8 @@ import com.minpay.Comiqueria.service.interfaces.IClienteService;
 import java.util.Set;
 import org.springframework.http.ResponseEntity;
 
-@ApiRestController("/clientes")
+@ApiRestController
+@RequestMapping("/clientes")
 public class ClienteController {
 
     @Autowired

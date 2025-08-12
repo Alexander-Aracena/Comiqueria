@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import com.minpay.Comiqueria.service.interfaces.ICarruselService;
 import org.springframework.http.ResponseEntity;
 
-@ApiRestController("/carrusel")
+@ApiRestController
+@RequestMapping("/carrusel")
 public class CarruselController {
 
     @Autowired
