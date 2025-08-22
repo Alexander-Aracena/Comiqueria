@@ -8,7 +8,7 @@ import com.minpay.Comiqueria.dto.UsuarioResponseDTO;
 public interface IAuthService {
     LoginResponseDTO login(LoginRequestDTO request);
     UsuarioResponseDTO register(RegisterRequestDTO request);
-    void forgotPassword(String email);
+    String forgotPassword(String email);
     UsuarioResponseDTO resetPassword(String token, String newPassword);
     LoginResponseDTO forceChangePassword(String nombreUsuario, String nuevaContrasenia);
 }
