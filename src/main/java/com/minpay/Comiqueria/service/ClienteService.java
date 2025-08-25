@@ -44,12 +44,14 @@ public class ClienteService implements IClienteService {
     private IProductoRepository productoRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public ClienteResponseDTO getCliente(Long id) {
         Cliente cliente = Utils.findByIdOrThrow(clienteRepository, id, Cliente.class);
         return this.clienteMapper.toClienteResponseDTO(cliente);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ClienteResponseDTO> getClientes(List<Long> ids, String nombre, String apellido, String nroDoc, Boolean estaVigente) {
         Specification<Cliente> specs = ClienteSpecifications.byCriterios(
             ids, nombre, apellido, nroDoc, estaVigente

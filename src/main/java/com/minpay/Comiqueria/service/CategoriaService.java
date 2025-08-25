@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class CategoriaService implements ICategoriaService {
 
     @Autowired
@@ -32,12 +33,14 @@ public class CategoriaService implements ICategoriaService {
     private ICategoriaMapper categoriaMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public CategoriaResponseDTO getCategoria(Long id) {
         Categoria categoria = Utils.findByIdOrThrow(categoriaRepository, id, Categoria.class);
         return this.categoriaMapper.toCategoriaResponseDTO(categoria);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CategoriaResponseDTO> getCategorias(List<Long> ids, String nombre, Boolean estaVigente) {
         Specification<Categoria> specs = CategoriaSpecifications.byCriterios(ids, nombre, estaVigente);
         List<Categoria> categorias = this.categoriaRepository.findAll(specs);
@@ -45,7 +48,6 @@ public class CategoriaService implements ICategoriaService {
     }
 
     @Override
-    @Transactional
     public CategoriaResponseDTO createCategoria(CategoriaRequestDTO dto) {
         Categoria categoria = this.categoriaMapper.toCategoria(dto);
         categoria = this.categoriaRepository.save(categoria);
@@ -53,7 +55,6 @@ public class CategoriaService implements ICategoriaService {
     }
 
     @Override
-    @Transactional
     public CategoriaResponseDTO editCategoria(Long id, CategoriaRequestDTO dto) {
         Categoria categoriaModificada = Utils.findByIdOrThrow(categoriaRepository, id, Categoria.class);
         if (!categoriaModificada.getEstaVigente()) {
@@ -65,7 +66,6 @@ public class CategoriaService implements ICategoriaService {
     }
 
     @Override
-    @Transactional
     public void deleteCategoria(Long id) {
         Categoria categoriaEliminada = Utils.findByIdOrThrow(categoriaRepository, id, Categoria.class);
         if (!categoriaEliminada.getEstaVigente()) {
@@ -77,7 +77,6 @@ public class CategoriaService implements ICategoriaService {
     }
 
     @Override
-    @Transactional
     public void addSubcategories(Long idCategoria, Set<Long> idsSubcategorias) {
         Categoria categoria = Utils.findByIdOrThrow(categoriaRepository, idCategoria, Categoria.class);
         if (!categoria.getEstaVigente()) {
@@ -90,7 +89,6 @@ public class CategoriaService implements ICategoriaService {
     }
 
     @Override
-    @Transactional
     public void deleteSubcategories(Long idCategoria, Set<Long> idsSubcategorias) {
         Categoria categoria = Utils.findByIdOrThrow(categoriaRepository, idCategoria, Categoria.class);
         if (!categoria.getEstaVigente()) {

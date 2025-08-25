@@ -27,12 +27,14 @@ public class PaisService implements IPaisService {
     private IPaisMapper paisMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public PaisResponseDTO getPais(Long id) {
         Pais pais = Utils.findByIdOrThrow(paisRepository, id, Pais.class);
         return this.paisMapper.toPaisResponseDTO(pais);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<PaisResponseDTO> getPaises(List<Long> ids, String nombre, Boolean estaVigente) {
         Specification<Pais> specs = PaisSpecifications.byCriterios(ids, nombre, estaVigente);
         List<Pais> paises = this.paisRepository.findAll(specs);

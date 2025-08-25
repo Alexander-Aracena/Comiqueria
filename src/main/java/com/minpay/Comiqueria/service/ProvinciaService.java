@@ -17,8 +17,10 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class ProvinciaService implements IProvinciaService {
 
     @Autowired
@@ -31,12 +33,14 @@ public class ProvinciaService implements IProvinciaService {
     private IProvinciaMapper provinciaMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public ProvinciaResponseDTO getProvincia(Long id) {
         Provincia provincia = Utils.findByIdOrThrow(provinciaRepository, id, Provincia.class);
         return this.provinciaMapper.toProvinciaResponseDTO(provincia);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProvinciaResponseDTO> getProvincias(
         List<Long> ids,
         String nombre,

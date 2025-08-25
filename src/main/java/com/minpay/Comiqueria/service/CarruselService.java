@@ -13,8 +13,10 @@ import com.minpay.Comiqueria.repository.specification.CarruselSpecifications;
 import com.minpay.Comiqueria.service.interfaces.ICarruselService;
 import com.minpay.Comiqueria.utils.Utils;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class CarruselService implements ICarruselService {
     
     @Autowired
@@ -24,12 +26,14 @@ public class CarruselService implements ICarruselService {
     private ICarruselMapper carruselMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public CarruselResponseDTO getCarrusel(Long id) {
         Carrusel carrusel = Utils.findByIdOrThrow(carruselRepository, id, Carrusel.class);
         return this.carruselMapper.toCarruselResponseDTO(carrusel);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CarruselResponseDTO> getCarruseles(
             List<Long> ids,
             String subtitulo,

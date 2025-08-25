@@ -17,8 +17,10 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class LocalidadService implements ILocalidadService {
     
     @Autowired
@@ -31,12 +33,14 @@ public class LocalidadService implements ILocalidadService {
     private IDepartamentoRepository departamentoRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public LocalidadResponseDTO getLocalidad(Long id) {
         Localidad localidad = Utils.findByIdOrThrow(localidadRepository, id, Localidad.class);
         return this.localidadMapper.toLocalidadResponseDTO(localidad);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<LocalidadResponseDTO> getLocalidades(
         List<Long> ids,
         String nombre,
