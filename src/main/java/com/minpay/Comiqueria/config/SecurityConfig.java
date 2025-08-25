@@ -1,6 +1,7 @@
 package com.minpay.Comiqueria.config;
 
 import com.minpay.Comiqueria.security.JwtAuthenticationFilter;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -49,14 +53,15 @@ public class SecurityConfig {
               
                 // Permite el acceso sin autenticación a los endpoints de login y registro.
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 
-                // Permite el acceso sólo para obtener información (GET)
-//                .requestMatchers(HttpMethod.GET, "/api/autores").permitAll()
-//                .requestMatchers(HttpMethod.GET, "/api/productos").permitAll()
-//                .requestMatchers(HttpMethod.GET, "/api/carrusel").permitAll()
-//                .requestMatchers(HttpMethod.GET, "/api/editoriales").permitAll()
-//                .requestMatchers(HttpMethod.GET, "/api/categorias").permitAll()
-//                .requestMatchers(HttpMethod.GET, "/api/subcategorias").permitAll()
+                 //Permite el acceso sólo para obtener información (GET)
+                .requestMatchers(HttpMethod.GET, "/api/autores").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/productos").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/carrusel").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/editoriales").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/categorias").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/subcategorias").permitAll()
                 
                 // Cualquier otra solicitud HTTP debe estar autenticada.
                 .anyRequest().authenticated()
@@ -70,5 +75,28 @@ public class SecurityConfig {
         
         // Construye y retorna la cadena de filtros de seguridad.
         return http.build();
+    }
+    
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        
+        // Permite solicitudes desde 'http://localhost:4200', 'http://127.0.0.1:5500' o cualquier otro puerto de tu frontend
+        config.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://127.0.0.1:5500")); 
+        
+        // Permite los métodos HTTP que vas a usar (GET, POST, PUT, DELETE, etc.)
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        
+        // Permite todos los headers en las solicitudes
+        config.setAllowedHeaders(Arrays.asList("*"));
+        
+        // Permite el envío de credenciales (cookies, headers de autorización)
+        config.setAllowCredentials(true);
+        
+        // Aplica esta configuración a todas las rutas de tu API
+        source.registerCorsConfiguration("/**", config); 
+        
+        return new CorsFilter(source);
     }
 }

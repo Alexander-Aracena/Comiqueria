@@ -1,6 +1,5 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.config.rest.ApiRestController;
 import com.minpay.Comiqueria.dto.DomicilioRequestDTO;
 import com.minpay.Comiqueria.dto.DomicilioResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.IDomicilioService;
@@ -10,8 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@ApiRestController
-@RequestMapping("/domicilios")
+@RestController
+@RequestMapping("/api/domicilios")
 public class DomicilioController {
 
     @Autowired

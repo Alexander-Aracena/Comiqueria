@@ -1,6 +1,5 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.config.rest.ApiRestController;
 import com.minpay.Comiqueria.dto.EditorialRequestDTO;
 import com.minpay.Comiqueria.dto.EditorialResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.IEditorialService;
@@ -10,8 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@ApiRestController
-@RequestMapping("/editoriales")
+@RestController
+@RequestMapping("/api/editoriales")
 public class EditorialController {
 
     @Autowired

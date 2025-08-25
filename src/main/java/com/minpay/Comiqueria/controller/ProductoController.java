@@ -1,6 +1,5 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.config.rest.ApiRestController;
 import com.minpay.Comiqueria.dto.ProductoRequestDTO;
 import com.minpay.Comiqueria.dto.ProductoResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.IProductoService;
@@ -11,8 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@ApiRestController
-@RequestMapping("/productos")
+@RestController
+@RequestMapping("/api/productos")
 public class ProductoController {
 
     @Autowired

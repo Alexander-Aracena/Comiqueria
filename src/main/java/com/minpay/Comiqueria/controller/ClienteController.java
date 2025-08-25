@@ -1,6 +1,5 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.config.rest.ApiRestController;
 import com.minpay.Comiqueria.dto.ClienteResponseDTO;
 import com.minpay.Comiqueria.dto.ClienteRequestDTO;
 import java.util.List;
@@ -11,8 +10,8 @@ import com.minpay.Comiqueria.service.interfaces.IClienteService;
 import java.util.Set;
 import org.springframework.http.ResponseEntity;
 
-@ApiRestController
-@RequestMapping("/clientes")
+@RestController
+@RequestMapping("/api/clientes")
 public class ClienteController {
 
     @Autowired

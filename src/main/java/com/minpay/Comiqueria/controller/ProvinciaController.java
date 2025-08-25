@@ -1,6 +1,5 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.config.rest.ApiRestController;
 import com.minpay.Comiqueria.dto.ProvinciaRequestDTO;
 import com.minpay.Comiqueria.dto.ProvinciaResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.IProvinciaService;
@@ -10,8 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@ApiRestController
-@RequestMapping("/provincias")
+@RestController
+@RequestMapping("/api/provincias")
 public class ProvinciaController {
 
     @Autowired
