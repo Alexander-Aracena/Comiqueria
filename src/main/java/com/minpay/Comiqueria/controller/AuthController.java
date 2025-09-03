@@ -8,8 +8,8 @@ import com.minpay.Comiqueria.dto.ResetPasswordRequestDTO;
 import com.minpay.Comiqueria.dto.UsuarioResponseDTO;
 import com.minpay.Comiqueria.exceptions.ChangePasswordRequiredException;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
-import com.minpay.Comiqueria.service.EmailService;
 import com.minpay.Comiqueria.service.interfaces.IAuthService;
+import com.minpay.Comiqueria.service.interfaces.IEmailService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ public class AuthController {
     private final IAuthService authService;
 
     @Autowired
-    private EmailService emailService;
+    private IEmailService emailService;
 
     // Inyección de dependencia del servicio de autenticación
     public AuthController(IAuthService authService) {
