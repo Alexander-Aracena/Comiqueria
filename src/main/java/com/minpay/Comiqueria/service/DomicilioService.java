@@ -1,115 +1,77 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.DomicilioDTO;
-import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
-import com.minpay.Comiqueria.mapper.DomicilioDTOToDomicilio;
+import com.minpay.Comiqueria.dto.DomicilioRequestDTO;
+import com.minpay.Comiqueria.dto.DomicilioResponseDTO;
+import com.minpay.Comiqueria.exceptions.InvalidOperationException;
+import com.minpay.Comiqueria.mapper.IDomicilioMapper;
 import com.minpay.Comiqueria.service.interfaces.IDomicilioService;
 import com.minpay.Comiqueria.model.Domicilio;
 import com.minpay.Comiqueria.repository.IDomicilioRepository;
-import com.minpay.Comiqueria.service.interfaces.ILocalidadService;
+import com.minpay.Comiqueria.repository.specification.DomicilioSpecifications;
+import com.minpay.Comiqueria.utils.Utils;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class DomicilioService implements IDomicilioService {
     
     @Autowired
     private IDomicilioRepository domicilioRepository;
     
     @Autowired
-    private DomicilioDTOToDomicilio mapper;
-    
-    @Autowired
-    private ILocalidadService localidadService;
+    private IDomicilioMapper domicilioMapper;
 
     @Override
-    public Domicilio getDomicilio(Long id) {
-        return this.domicilioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Domicilio id: " + id + " no encontrado."));
-    }
-    
-    @Override
-    public DomicilioDTO getDomicilioDTO(Domicilio domicilio) {
-        return domicilioADomicilioDTO(domicilio);
+    @Transactional(readOnly = true)
+    public DomicilioResponseDTO getDomicilio(Long id) {
+        Domicilio domicilio = Utils.findByIdOrThrow(domicilioRepository, id, Domicilio.class);
+        return this.domicilioMapper.toDomicilioResponseDTO(domicilio);
     }
 
     @Override
-    public List<Domicilio> getDomicilios() {
-        return this.domicilioRepository.findAll();
-    }
-    
-    @Override
-    public List<Domicilio> getDomicilios(Set<Long> idsDomicilios) {
-        return this.domicilioRepository.findAllById(idsDomicilios);
-    }
-    
-    @Override
-    public List<DomicilioDTO> getDomiciliosDTO() {
-        List<Domicilio> domicilios = this.getDomicilios();
-        return this.traerListaDTO(domicilios);
-    }
-    
-    @Override
-    public List<DomicilioDTO> getDomiciliosDTO(Set<Long> idsDomicilios) {
-        List<Domicilio> domicilios = this.getDomicilios(idsDomicilios);
-        return this.traerListaDTO(domicilios);
+    @Transactional(readOnly = true)
+    public List<DomicilioResponseDTO> getDomicilios(
+        List<Long> ids,
+        String calle,
+        String cp,
+        Boolean estaVigente
+    ) {
+        Specification<Domicilio> specs = DomicilioSpecifications.byCriterios(ids, calle, cp, estaVigente);
+        List<Domicilio> domicilios = this.domicilioRepository.findAll(specs);
+        return Utils.mapearListaA(domicilios, this.domicilioMapper::toDomicilioResponseDTO);
     }
 
     @Override
-    public DomicilioDTO createDomicilio(DomicilioDTO domicilioDTO) {
-        Domicilio domicilio = this.mapper.map(domicilioDTO);
-        domicilio.setLocalidad(
-            this.localidadService.getLocalidad(domicilioDTO.getIdLocalidad())
-        );
-        this.domicilioRepository.save(domicilio);
-        return this.getDomicilioDTO(domicilio);
+    public DomicilioResponseDTO createDomicilio(DomicilioRequestDTO domicilioDTO) {
+        Domicilio domicilio = this.domicilioMapper.toDomicilio(domicilioDTO);
+        domicilio = this.domicilioRepository.save(domicilio);
+        return this.domicilioMapper.toDomicilioResponseDTO(domicilio);
     }
 
     @Override
-    public DomicilioDTO editDomicilio(Long id, DomicilioDTO domicilioDTO) {
-        Domicilio domicilio = this.mapper.map(domicilioDTO, this.getDomicilio(id));
-        domicilio.setLocalidad(
-            this.localidadService.getLocalidad(domicilioDTO.getIdLocalidad())
-        );
-        this.domicilioRepository.save(domicilio);
-        return this.getDomicilioDTO(domicilio);
-    }
-    
-    @Override
-    public void saveDomicilio(Domicilio domicilio) {
-        this.domicilioRepository.save(domicilio);
+    public DomicilioResponseDTO editDomicilio(Long id, DomicilioRequestDTO domicilioDTO) {
+        Domicilio domicilioModificado = Utils.findByIdOrThrow(domicilioRepository, id, Domicilio.class);
+        if (!domicilioModificado.getEstaVigente()) {
+            throw new InvalidOperationException("El domicilio no está vigente");
+        }
+        this.domicilioMapper.updateDomicilioFromDTO(domicilioDTO, domicilioModificado);
+        domicilioModificado = this.domicilioRepository.save(domicilioModificado);
+        return this.domicilioMapper.toDomicilioResponseDTO(domicilioModificado);
     }
 
     @Override
     public void deleteDomicilio(Long id) {
-        this.domicilioRepository.deleteById(id);
-    }
-    
-    @Override
-    public void saveDomicilios(Set<Domicilio> domicilios) {
-        this.domicilioRepository.saveAll(domicilios);
-    }
-
-    @Override
-    public void deleteDomicilios(Set<Long> idsDomicilios) {
-        this.domicilioRepository.deleteAllById(idsDomicilios);
-    }
-    
-    private List<DomicilioDTO> traerListaDTO(List<Domicilio> domicilios) {
-        return domicilios.stream().map(domicilio -> domicilioADomicilioDTO(domicilio)
-        ).toList();
-    }
-    
-    private static DomicilioDTO domicilioADomicilioDTO(Domicilio domicilio) {
-        return new DomicilioDTO(
-            domicilio.getId(),
-            domicilio.getCalle(),
-            domicilio.getAltura(),
-            domicilio.getDepartamento(),
-            domicilio.getCp(),
-            domicilio.getLocalidad().getId()
-        );
+        Domicilio domicilioEliminado = Utils.findByIdOrThrow(domicilioRepository, id, Domicilio.class);
+        if (!domicilioEliminado.getEstaVigente()) {
+            throw new InvalidOperationException("El domicilio ya fue dado de baja");
+        }
+        domicilioEliminado.setFechaBaja(LocalDate.now());
+        domicilioEliminado.setEstaVigente(Boolean.FALSE);
+        this.domicilioRepository.save(domicilioEliminado);
     }
 }

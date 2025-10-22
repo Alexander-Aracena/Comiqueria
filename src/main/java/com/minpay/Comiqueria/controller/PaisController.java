@@ -1,67 +1,56 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.PaisDTO;
-import com.minpay.Comiqueria.model.Pais;
-import com.minpay.Comiqueria.service.interfaces.IPaisProvinciaSyncService;
+import com.minpay.Comiqueria.dto.PaisRequestDTO;
+import com.minpay.Comiqueria.dto.PaisResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.IPaisService;
-import com.minpay.Comiqueria.utils.Accion;
 import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/paises")
+@RequestMapping("/api/paises")
 public class PaisController {
-    
     @Autowired
     private IPaisService paisService;
     
-    @Autowired
-    private IPaisProvinciaSyncService paisProvinciaSyncService;
-    
     @GetMapping("/{id}")
-    public PaisDTO traerPais(@PathVariable Long id){
-        Pais pais = this.paisService.getPais(id);
-        return this.paisService.getPaisDTO(pais);
+    public ResponseEntity<PaisResponseDTO> traerPais(@PathVariable Long id) {
+        PaisResponseDTO response = this.paisService.getPais(id);
+        return ResponseEntity.ok(response);
     }
-    
+
     @GetMapping
-    public List<PaisDTO> traerPaises(){
-        return this.paisService.getPaisesDTO();
+    public ResponseEntity<List<PaisResponseDTO>> traerPaiss(
+            @RequestParam(required = false) List<Long> idsPaiss,
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) Boolean estaVigente
+    ) {
+        List<PaisResponseDTO> response = this.paisService.getPaises(
+                idsPaiss, nombre, estaVigente
+        );
+        return ResponseEntity.ok(response);
     }
-    
+
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public PaisDTO guardarPais(@RequestParam String nombre){
-        return this.paisService.createPais(nombre);
+    public ResponseEntity<PaisResponseDTO> guardarPais(@RequestBody PaisRequestDTO dto) {
+        PaisResponseDTO response = this.paisService.createPais(dto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-    
+
     @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public PaisDTO editarPais(
-        @PathVariable Long id,
-        @RequestBody PaisDTO paisDTO
-    ){
-        return this.paisService.editPaisById(id, paisDTO);
+    public ResponseEntity<PaisResponseDTO> editarPais(
+            @PathVariable Long id,
+            @RequestBody PaisRequestDTO dto
+    ) {
+        PaisResponseDTO response = this.paisService.editPais(id, dto);
+        return ResponseEntity.ok(response);
     }
-    
+
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarPais(@PathVariable Long id){
-        this.paisService.deletePaisById(id);
-    }
-    
-    @PutMapping("/provincias/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void agregarProvincias(@PathVariable Long id, @RequestParam Set<Long> idsProvincias){
-        this.paisProvinciaSyncService.modificarProvincias(id, idsProvincias, Accion.AGREGAR);
-    }
-    
-    @DeleteMapping("/provincias/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarProvincias(@PathVariable Long id, @RequestParam Set<Long> idsProvincias){
-        this.paisProvinciaSyncService.modificarProvincias(id, idsProvincias, Accion.ELIMINAR);
+    public ResponseEntity<Void> eliminarPais(@PathVariable Long id) {
+        this.paisService.deletePais(id);
+        return ResponseEntity.noContent().build();
     }
 }

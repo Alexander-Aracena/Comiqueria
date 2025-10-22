@@ -8,6 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Table(name = "lineas_ventas")
 public class LineaVenta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +35,7 @@ public class LineaVenta {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "linea_vta_id")
+    @JoinColumn(name = "linea_vta_id", nullable = false)
     private Venta venta;
 
     @NonNull
@@ -40,20 +43,19 @@ public class LineaVenta {
     @JoinColumn(name = "linea_prod_id")
     private Producto producto;
 
+    @NonNull
     @Column(name = "linea_cantidad")
     @EqualsAndHashCode.Include
     @ToString.Include
-    private int cantidad;
+    private Integer cantidad;
     
     @NonNull
-    @Column(name = "linea_precio")
+    @Column(name = "linea_precio", nullable = false, precision = 10, scale = 2)
     @EqualsAndHashCode.Include
     @ToString.Include
-    private Double precio;
-
-    public LineaVenta(Producto producto, int cantidad, Double precio) {
-        this.producto = producto;
-        this.cantidad = cantidad;
-        this.precio = precio;
+    private BigDecimal precioUnitario;
+    
+    public BigDecimal getSubtotal() {
+        return this.precioUnitario.multiply(BigDecimal.valueOf(this.cantidad));
     }
 }

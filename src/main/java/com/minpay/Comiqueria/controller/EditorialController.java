@@ -1,45 +1,55 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.EditorialDTO;
-import com.minpay.Comiqueria.model.Editorial;
+import com.minpay.Comiqueria.dto.EditorialRequestDTO;
+import com.minpay.Comiqueria.dto.EditorialResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.IEditorialService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/editoriales")
+@RequestMapping("/api/editoriales")
 public class EditorialController {
+
     @Autowired
     private IEditorialService editorialService;
-    
+
     @GetMapping("/{id}")
-    public EditorialDTO traerEditorial(@PathVariable Long id){
-        Editorial editorial = this.editorialService.getEditorial(id);
-        return this.editorialService.getEditorialDTO(editorial);
+    public ResponseEntity<EditorialResponseDTO> traerEditorial(@PathVariable Long id) {
+        EditorialResponseDTO response = this.editorialService.getEditorial(id);
+        return ResponseEntity.ok(response);
     }
-    
+
     @GetMapping
-    public List<Editorial> traerEditoriales(){
-        return this.editorialService.getEditoriales();
+    public ResponseEntity<List<EditorialResponseDTO>> traerEditoriales(
+        @RequestParam(required = false) List<Long> ids,
+        @RequestParam(required = false) String nombre,
+        @RequestParam(required = false) Boolean estaVigente
+    ) {
+        List<EditorialResponseDTO> response = this.editorialService.getEditoriales(ids, nombre, estaVigente);
+        return ResponseEntity.ok(response);
     }
-    
+
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Editorial guardarEditorial(@RequestParam String nombre){
-        return this.editorialService.createEditorial(nombre);
+    public ResponseEntity<EditorialResponseDTO> guardarEditorial(@RequestBody EditorialRequestDTO dto) {
+        EditorialResponseDTO response = this.editorialService.createEditorial(dto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-    
+
     @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Editorial editarEditorial(@PathVariable Long id, @RequestParam String nombre){
-        return this.editorialService.editEditorialById(id, nombre);
+    public ResponseEntity<EditorialResponseDTO> editarEditorial(
+        @PathVariable Long id,
+        @RequestBody EditorialRequestDTO dto
+    ) {
+        EditorialResponseDTO response = this.editorialService.editEditorial(id, dto);
+        return ResponseEntity.ok(response);
     }
-    
+
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarEditorial(@PathVariable Long id){
-        this.editorialService.deleteEditorialById(id);
+    public ResponseEntity<Void> eliminarEditorial(@PathVariable Long id) {
+        this.editorialService.deleteEditorial(id);
+        return ResponseEntity.noContent().build();
     }
 }

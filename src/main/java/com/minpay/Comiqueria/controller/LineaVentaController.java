@@ -1,44 +1,39 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.LineaVentaDTO;
-import com.minpay.Comiqueria.model.LineaVenta;
+import com.minpay.Comiqueria.dto.LineaVentaResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.ILineaVentaService;
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/lineasVentas")
+@RequestMapping("/api/lineasVentas")
 public class LineaVentaController {
+
     @Autowired
     private ILineaVentaService lineaVentaService;
-    
+
     @GetMapping("/{id}")
-    public LineaVenta traerLineaVenta(@PathVariable Long id){
-        return this.lineaVentaService.getLineaVenta(id);
+    public ResponseEntity<LineaVentaResponseDTO> traerLineaVenta(@PathVariable Long id) {
+        LineaVentaResponseDTO response = this.lineaVentaService.getLineaVenta(id);
+        return ResponseEntity.ok(response);
     }
-    
+
     @GetMapping
-    public List<LineaVenta> traerLineasVentas(){
-        return this.lineaVentaService.getLineasVentas();
-    }
-    
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public LineaVenta guardarLineaVenta(@RequestBody LineaVentaDTO lineaVentaDTO){
-        return this.lineaVentaService.createLineaVenta(lineaVentaDTO);
-    }
-    
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public LineaVenta editarLineaVenta(@PathVariable Long id, @RequestBody LineaVentaDTO lineaVentaDTO){
-        return this.lineaVentaService.editLineaVentaById(id, lineaVentaDTO);
-    }
-    
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarLineaVenta(@PathVariable Long id){
-        this.lineaVentaService.deleteLineaVentaById(id);
+    public ResponseEntity<List<LineaVentaResponseDTO>> traerLineaVentaes(
+        @RequestParam(required = false) List<Long> ids,
+        @RequestParam(required = false) Long idVenta,
+        @RequestParam(required = false) Long idProducto,
+        @RequestParam(required = false) Integer minCantidad,
+        @RequestParam(required = false) Integer maxCantidad,
+        @RequestParam(required = false) BigDecimal minPrecio,
+        @RequestParam(required = false) BigDecimal maxPrecio
+    ) {
+        List<LineaVentaResponseDTO> response = this.lineaVentaService.getLineasVentas(
+            ids, idVenta, idProducto, minCantidad, maxCantidad, minPrecio, maxPrecio
+        );
+        return ResponseEntity.ok(response);
     }
 }

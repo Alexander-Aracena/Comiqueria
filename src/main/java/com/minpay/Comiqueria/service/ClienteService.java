@@ -1,143 +1,158 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.ClienteDTO;
-import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
-import com.minpay.Comiqueria.mapper.ClienteDTOToCliente;
+import com.minpay.Comiqueria.dto.ClienteRequestDTO;
+import com.minpay.Comiqueria.dto.ClienteResponseDTO;
+import com.minpay.Comiqueria.exceptions.InvalidOperationException;
+import com.minpay.Comiqueria.mapper.IClienteMapper;
 import com.minpay.Comiqueria.model.Cliente;
 import com.minpay.Comiqueria.model.Domicilio;
 import com.minpay.Comiqueria.model.Producto;
-import java.util.List;
+import com.minpay.Comiqueria.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.minpay.Comiqueria.repository.IClienteRepository;
+import com.minpay.Comiqueria.repository.IDomicilioRepository;
+import com.minpay.Comiqueria.repository.IProductoRepository;
+import com.minpay.Comiqueria.repository.IUsuarioRepository;
+import com.minpay.Comiqueria.repository.specification.ClienteSpecifications;
 import com.minpay.Comiqueria.service.interfaces.IClienteService;
-import com.minpay.Comiqueria.service.interfaces.IDomicilioService;
-import com.minpay.Comiqueria.service.interfaces.IProductoService;
+import com.minpay.Comiqueria.utils.Utils;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class ClienteService implements IClienteService {
+
     @Autowired
     private IClienteRepository clienteRepository;
-    
+
     @Autowired
-    private IDomicilioService domicilioService;
-    
+    private IClienteMapper clienteMapper;
+
     @Autowired
-    private IProductoService productoService;
-    
+    private IUsuarioRepository usuarioRepository;
+
     @Autowired
-    private ClienteDTOToCliente mapper;
-    
+    private IDomicilioRepository domicilioRepository;
+
+    @Autowired
+    private IProductoRepository productoRepository;
+
     @Override
-    public Cliente getCliente(Long id) {
-        return this.clienteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cliente id: " + id + " no encontrado."));
-    }
-    
-    @Override
-    public ClienteDTO getClienteDTO(Cliente cliente){
-        return clienteAClienteDTO(cliente);
+    @Transactional(readOnly = true)
+    public ClienteResponseDTO getCliente(Long id) {
+        Cliente cliente = Utils.findByIdOrThrow(clienteRepository, id, Cliente.class);
+        return this.clienteMapper.toClienteResponseDTO(cliente);
     }
 
     @Override
-    public List<Cliente> getClientes() {
-        return this.clienteRepository.findAll();
-    }
-    
-    @Override
-    public List<Cliente> getClientes(Set<Long> idsClientes){
-        return this.clienteRepository.findAllById(idsClientes);
-    }
-    
-    @Override
-    public List<ClienteDTO> getClientesDTO(){
-        List<Cliente> clientes = this.getClientes();
-        return this.traerListaDTO(clientes);
-    }
-    
-    @Override
-    public List<ClienteDTO> getClientesDTO(Set<Long> idsClientes){
-        List<Cliente> clientes = this.getClientes(idsClientes);
-        return this.traerListaDTO(clientes);
-    }
-
-
-    @Override
-    public Cliente createCliente(ClienteDTO clienteDTO) {
-        Cliente cliente = this.mapper.map(clienteDTO);
-        return this.clienteRepository.save(cliente);
+    @Transactional(readOnly = true)
+    public List<ClienteResponseDTO> getClientes(List<Long> ids, String nombre, String apellido, String nroDoc, Boolean estaVigente) {
+        Specification<Cliente> specs = ClienteSpecifications.byCriterios(
+            ids, nombre, apellido, nroDoc, estaVigente
+        );
+        List<Cliente> clientes = this.clienteRepository.findAll(specs);
+        return Utils.mapearListaA(clientes, this.clienteMapper::toClienteResponseDTO);
     }
 
     @Override
-    public Cliente editClienteById(Long id, ClienteDTO clienteDTO){
-        Cliente cliente = this.mapper.map(clienteDTO, this.getCliente(id));
-        return this.clienteRepository.save(cliente);
+    public ClienteResponseDTO createCliente(ClienteRequestDTO clienteDTO) {
+        Cliente cliente = this.clienteMapper.toCliente(clienteDTO);
+        Usuario nuevoUsuario = Utils.findByIdOrThrow(
+            usuarioRepository, clienteDTO.getIdUsuario(), Usuario.class
+        );
+        if (!nuevoUsuario.getEstaActivo()) {
+            throw new InvalidOperationException("El usuario no está vigente");
+        }
+        cliente.setUsuario(nuevoUsuario);
+        nuevoUsuario.setCliente(cliente);
+        cliente = this.clienteRepository.save(cliente);
+        return this.clienteMapper.toClienteResponseDTO(cliente);
     }
 
     @Override
-    public void deleteClienteById(Long id) {
-        this.clienteRepository.deleteById(id);
+    public ClienteResponseDTO editCliente(Long id, ClienteRequestDTO clienteDTO) {
+        Cliente clienteModificado = Utils.findByIdOrThrow(clienteRepository, id, Cliente.class);
+        this.clienteMapper.updateClienteFromDTO(clienteDTO, clienteModificado);
+        clienteModificado = this.clienteRepository.save(clienteModificado);
+
+        return this.clienteMapper.toClienteResponseDTO(clienteModificado);
+    }
+
+    @Override
+    public void deleteCliente(Long id) {
+        Cliente clienteEliminado = Utils.findByIdOrThrow(clienteRepository, id, Cliente.class);
+        if (!clienteEliminado.getEstaVigente()) {
+            throw new InvalidOperationException("El cliente ya está dado de baja");
+        }
+        clienteEliminado.setFechaBaja(LocalDateTime.now());
+        clienteEliminado.setEstaVigente(Boolean.FALSE);
+        this.clienteRepository.save(clienteEliminado);
     }
 
     @Override
     public void addFavoritos(Long idCliente, Set<Long> idsProductos) {
-        Cliente cliente = this.getCliente(idCliente);
-        Set<Producto> productos = this.productoService.getProductos(idsProductos)
-                .stream().collect(Collectors.toSet());
-        cliente.getFavoritos().addAll(productos);
-        productos.forEach(producto -> producto.getClientes().add(cliente));
-        this.productoService.saveProductos(productos);
+        Cliente cliente = Utils.findByIdOrThrow(clienteRepository, idCliente, Cliente.class);
+        Set<Producto> productosFavoritos = Utils.findAllById(productoRepository, idsProductos);
+        cliente.getFavoritos().addAll(productosFavoritos);
+        productosFavoritos.forEach(producto -> producto.getClientes().add(cliente));
         this.clienteRepository.save(cliente);
     }
-    
+
     @Override
     public void deleteFavoritos(Long idCliente, Set<Long> idsProductos) {
-        Cliente cliente = this.getCliente(idCliente);
-        Set<Producto> productos = this.productoService.getProductos(idsProductos)
-                .stream().collect(Collectors.toSet());
-        cliente.getFavoritos().removeAll(productos);
-        productos.forEach(producto -> producto.getClientes().remove(cliente));
-        this.productoService.saveProductos(productos);
+        Cliente cliente = Utils.findByIdOrThrow(clienteRepository, idCliente, Cliente.class);
+        Set<Producto> productosFavoritos = Utils.findAllById(productoRepository, idsProductos);
+        cliente.getFavoritos().removeAll(productosFavoritos);
+        productosFavoritos.forEach(producto -> producto.getClientes().remove(cliente));
         this.clienteRepository.save(cliente);
     }
 
     @Override
     public void addDomicilio(Long idCliente, Long idDomicilio) {
-        Cliente cliente = this.getCliente(idCliente);
-        Domicilio domicilio = this.domicilioService.getDomicilio(idDomicilio);
-        cliente.getDomicilios().add(domicilio);
-        domicilio.setCliente(cliente);
-        this.clienteRepository.save(cliente);
-        this.domicilioService.saveDomicilio(domicilio);
+        Cliente cliente = Utils.findByIdOrThrow(clienteRepository, idCliente, Cliente.class);
+        Domicilio nuevoDomicilio = Utils.findByIdOrThrow(
+            domicilioRepository, idDomicilio, Domicilio.class
+        );
+        if (!nuevoDomicilio.getEstaVigente()) {
+            throw new InvalidOperationException(
+                "El domicilio con ID " + idDomicilio + " no está vigente y no puede ser asignado."
+            );
+        }
+        if (nuevoDomicilio.getCliente() != null && !nuevoDomicilio.getCliente().equals(cliente)) {
+            throw new InvalidOperationException(
+                "El domicilio con ID " + idDomicilio + " ya está asociado a otro cliente."
+            );
+        }
+        cliente.getDomicilios().add(nuevoDomicilio);
+        nuevoDomicilio.setCliente(cliente);
+        this.domicilioRepository.save(nuevoDomicilio);
     }
 
     @Override
     public void deleteDomicilio(Long idCliente, Long idDomicilio) {
-        Cliente cliente = this.getCliente(idCliente);
-        Domicilio domicilio = this.domicilioService.getDomicilio(idDomicilio);
-        cliente.getDomicilios().remove(domicilio);
-        this.clienteRepository.save(cliente);
-        this.domicilioService.deleteDomicilio(idDomicilio);
-    }
-    
-    private List<ClienteDTO> traerListaDTO(List<Cliente> clientes) {
-        return clientes.stream().map(cliente -> clienteAClienteDTO(cliente)
-        ).toList();
-    }
-
-    private ClienteDTO clienteAClienteDTO(Cliente cliente) {
-        ClienteDTO clienteDTO =  new ClienteDTO();
-        clienteDTO.setId(cliente.getId());
-        clienteDTO.setNombre(cliente.getNombre());
-        clienteDTO.setApellido(cliente.getApellido());
-        clienteDTO.setFechaNac(cliente.getFecha_nac());
-        clienteDTO.setSexo(cliente.getSexo());
-        clienteDTO.setTipoDoc(cliente.getTipoDoc());
-        clienteDTO.setNroDoc(cliente.getNroDocumento());
-        clienteDTO.setTelefono(cliente.getTelefono());
-        
-        return clienteDTO;
+        Cliente cliente = Utils.findByIdOrThrow(clienteRepository, idCliente, Cliente.class);
+        Domicilio nuevoDomicilio = Utils.findByIdOrThrow(
+            domicilioRepository, idDomicilio, Domicilio.class
+        );
+        if (!cliente.getDomicilios().contains(nuevoDomicilio)) {
+            throw new InvalidOperationException(
+                "El domicilio con ID " + idDomicilio + " no está asociado al cliente con ID "
+                    + idCliente + "."
+            );
+        }
+        if (!nuevoDomicilio.getEstaVigente()) {
+            throw new InvalidOperationException(
+                "El domicilio con ID " + idDomicilio + " ya fue dado de baja."
+            );
+        }
+        nuevoDomicilio.setEstaVigente(Boolean.FALSE);
+        nuevoDomicilio.setFechaBaja(LocalDate.now());
+        this.domicilioRepository.save(nuevoDomicilio);
     }
 }

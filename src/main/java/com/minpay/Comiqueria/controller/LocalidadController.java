@@ -1,50 +1,58 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.LocalidadDTO;
-import com.minpay.Comiqueria.model.Localidad;
+import com.minpay.Comiqueria.dto.LocalidadResponseDTO;
+import com.minpay.Comiqueria.dto.LocalidadRequestDTO;
 import com.minpay.Comiqueria.service.interfaces.ILocalidadService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/localidades")
+@RequestMapping("/api/localidades")
 public class LocalidadController {
     
     @Autowired
     private ILocalidadService localidadService;
     
     @GetMapping("/{id}")
-    public LocalidadDTO traerLocalidad(@PathVariable Long id){
-        Localidad localidad = this.localidadService.getLocalidad(id);
-        return this.localidadService.getLocalidadDTO(localidad);
+    public ResponseEntity<LocalidadResponseDTO> traerLocalidad(@PathVariable Long id) {
+        LocalidadResponseDTO response = this.localidadService.getLocalidad(id);
+        return ResponseEntity.ok(response);
     }
-    
+
     @GetMapping
-    public List<LocalidadDTO> traerLocalidades(){
-        return this.localidadService.getLocalidadesDTO();
+    public ResponseEntity<List<LocalidadResponseDTO>> traerLocalidads(
+            @RequestParam(required = false) List<Long> idsLocalidades,
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) Long idDepartamento,
+            @RequestParam(required = false) Boolean estaVigente
+    ) {
+        List<LocalidadResponseDTO> response = this.localidadService.getLocalidades(
+                idsLocalidades, nombre, idDepartamento, estaVigente
+        );
+        return ResponseEntity.ok(response);
     }
-    
+
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public LocalidadDTO guardarLocalidad(@RequestParam String nombre, @RequestParam Long idProvincia){
-        return this.localidadService.createLocalidad(nombre, idProvincia);
+    public ResponseEntity<LocalidadResponseDTO> guardarLocalidad(@RequestBody LocalidadRequestDTO dto) {
+        LocalidadResponseDTO response = this.localidadService.createLocalidad(dto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-    
+
     @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public LocalidadDTO editarLocalidad(
-        @PathVariable Long id,
-        @RequestParam String nombre,
-        @RequestParam Long idProvincia
-    ){
-        return this.localidadService.editLocalidadById(id, nombre, idProvincia);
+    public ResponseEntity<LocalidadResponseDTO> editarLocalidad(
+            @PathVariable Long id,
+            @RequestBody LocalidadRequestDTO dto
+    ) {
+        LocalidadResponseDTO response = this.localidadService.editLocalidad(id, dto);
+        return ResponseEntity.ok(response);
     }
-    
+
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarLocalidad(@PathVariable Long id){
-        this.localidadService.deleteLocalidadById(id);
+    public ResponseEntity<Void> eliminarLocalidad(@PathVariable Long id) {
+        this.localidadService.deleteLocalidad(id);
+        return ResponseEntity.noContent().build();
     }
 }

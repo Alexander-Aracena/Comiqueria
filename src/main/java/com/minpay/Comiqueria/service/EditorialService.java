@@ -1,83 +1,72 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.EditorialDTO;
-import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
+import com.minpay.Comiqueria.dto.EditorialRequestDTO;
+import com.minpay.Comiqueria.dto.EditorialResponseDTO;
+import com.minpay.Comiqueria.exceptions.InvalidOperationException;
+import com.minpay.Comiqueria.mapper.IEditorialMapper;
 import com.minpay.Comiqueria.service.interfaces.IEditorialService;
 import com.minpay.Comiqueria.model.Editorial;
 import com.minpay.Comiqueria.repository.IEditorialRepository;
+import com.minpay.Comiqueria.repository.specification.EditorialSpecifications;
+import com.minpay.Comiqueria.utils.Utils;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class EditorialService implements IEditorialService {
     
     @Autowired
     private IEditorialRepository editorialRepository;
-
-    @Override
-    public Editorial getEditorial(Long id) {
-        return this.editorialRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Editorial id: " + id + " no encontrado."));
-    }
-
-    @Override
-    public EditorialDTO getEditorialDTO(Editorial editorial) {
-        return new EditorialDTO(editorial.getId(), editorial.getNombre());
-    }
     
+    @Autowired
+    private IEditorialMapper editorialMapper;
+
     @Override
-    public List<Editorial> getEditoriales() {
-        return this.editorialRepository.findAll();
-    }
-    
-    @Override
-    public List<Editorial> getEditoriales(Set<Long> idsEditoriales) {
-        return this.editorialRepository.findAllById(idsEditoriales);
-    }
-    
-    @Override
-    public List<EditorialDTO> getEditorialesDTO() {
-        List<Editorial> editoriales = this.getEditoriales();
-        return this.traerListaDTO(editoriales);
+    @Transactional(readOnly = true)
+    public EditorialResponseDTO getEditorial(Long id) {
+        Editorial editorial = Utils.findByIdOrThrow(editorialRepository, id, Editorial.class);
+        return this.editorialMapper.toEditorialResponseDTO(editorial);
     }
 
     @Override
-    public List<EditorialDTO> getEditorialesDTO(Set<Long> idsEditoriales) {
-        List<Editorial> editoriales = this.getEditoriales(idsEditoriales);
-        return this.traerListaDTO(editoriales);
+    @Transactional(readOnly = true)
+    public List<EditorialResponseDTO> getEditoriales(List<Long> ids, String nombre, Boolean estaVigente) {
+        Specification<Editorial> specs = EditorialSpecifications.byCriterios(ids, nombre, estaVigente);
+        List<Editorial> editoriales = this.editorialRepository.findAll(specs);
+        return Utils.mapearListaA(editoriales, this.editorialMapper::toEditorialResponseDTO);
     }
 
     @Override
-    public Editorial createEditorial(String nombre) {
-        Editorial editorial = new Editorial(nombre);
-        return this.editorialRepository.save(editorial);
+    public EditorialResponseDTO createEditorial(EditorialRequestDTO editorialRequestDTO) {
+        Editorial editorial = this.editorialMapper.toEditorial(editorialRequestDTO);
+        editorial = this.editorialRepository.save(editorial);
+        return this.editorialMapper.toEditorialResponseDTO(editorial);
     }
 
     @Override
-    public Editorial editEditorialById(Long id, String nombre) {
-        Editorial editorial = this.getEditorial(id);
-        editorial.setNombre(nombre);
-        return this.editorialRepository.save(editorial);
-    }
-    
-    @Override
-    public void saveEditorial(Editorial editorial){
-        this.editorialRepository.save(editorial);
+    public EditorialResponseDTO editEditorial(Long id, EditorialRequestDTO editorialRequestDTO) {
+        Editorial editorialModificada = Utils.findByIdOrThrow(editorialRepository, id, Editorial.class);
+        if (!editorialModificada.getEstaVigente()) {
+            throw new InvalidOperationException("La editorial no está vigente");
+        }
+        this.editorialMapper.updateEditorialFromDTO(editorialRequestDTO, editorialModificada);
+        editorialModificada = this.editorialRepository.save(editorialModificada);
+        return this.editorialMapper.toEditorialResponseDTO(editorialModificada);
     }
 
     @Override
-    public void deleteEditorialById(Long id) {
-        this.editorialRepository.deleteById(id);
-    }
-    
-    private List<EditorialDTO> traerListaDTO(List<Editorial> editoriales) {
-        return editoriales.stream().map(
-            editorial -> new EditorialDTO(
-                editorial.getId(),
-                editorial.getNombre()
-            )
-        ).toList();
+    public void deleteEditorial(Long id) {
+        Editorial editorialEliminada = Utils.findByIdOrThrow(editorialRepository, id, Editorial.class);
+        if (!editorialEliminada.getEstaVigente()) {
+            throw new InvalidOperationException("La editorial no está vigente");
+        }
+        editorialEliminada.setFechaBaja(LocalDateTime.now());
+        editorialEliminada.setEstaVigente(Boolean.FALSE);
+        this.editorialRepository.save(editorialEliminada);
     }
 }

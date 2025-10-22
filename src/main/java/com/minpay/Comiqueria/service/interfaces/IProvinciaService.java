@@ -1,20 +1,18 @@
 package com.minpay.Comiqueria.service.interfaces;
 
-import com.minpay.Comiqueria.dto.ProvinciaDTO;
-import com.minpay.Comiqueria.model.Provincia;
+import com.minpay.Comiqueria.dto.ProvinciaRequestDTO;
+import com.minpay.Comiqueria.dto.ProvinciaResponseDTO;
 import java.util.List;
-import java.util.Set;
 
 public interface IProvinciaService {
-    public Provincia getProvincia(Long id);
-    public ProvinciaDTO getProvinciaDTO(Provincia provincia);
-    public List<Provincia> getProvincias();
-    public List<Provincia> getProvincias(Set<Long> idsProvincias);
-    public List<ProvinciaDTO> getProvinciasDTO();
-    public List<ProvinciaDTO> getProvinciasDTO(Set<Long> idsProvincias);
-    public ProvinciaDTO createProvincia(String nombre, Long idPais);
-    public ProvinciaDTO editProvinciaById(Long id, String nombre, Long idPais, Set<Long> idLocalidades);
-    public void saveProvincia(Provincia provincia);
-    public void saveProvincias(Set<Provincia> provincias);
-    public void deleteProvinciaById(Long id);
+    public ProvinciaResponseDTO getProvincia(Long id);
+    public List<ProvinciaResponseDTO> getProvincias(
+        List<Long> ids,
+        String nombre,
+        Long idPais,
+        Boolean estaVigente
+    );
+    public ProvinciaResponseDTO createProvincia(ProvinciaRequestDTO provinciaDTO);
+    public ProvinciaResponseDTO editProvincia(Long id, ProvinciaRequestDTO provinciaDTO);
+    public void deleteProvincia(Long id);
 }

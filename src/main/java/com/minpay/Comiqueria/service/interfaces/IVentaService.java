@@ -1,15 +1,20 @@
 package com.minpay.Comiqueria.service.interfaces;
 
-import com.minpay.Comiqueria.dto.VentaDTO;
-import com.minpay.Comiqueria.model.Producto;
-import com.minpay.Comiqueria.model.Venta;
+import com.minpay.Comiqueria.dto.ProductoResponseDTO;
+import com.minpay.Comiqueria.dto.VentaRequestDTO;
+import com.minpay.Comiqueria.dto.VentaResponseDTO;
+import com.minpay.Comiqueria.model.EstadoVenta;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IVentaService {
-    public Venta getVenta(Long id);
-    public List<Venta> getVentas();
-    public Venta createVenta(VentaDTO ventaDTO);
-    public Venta editVentaById(Long id, VentaDTO ventaDTO);
-    public void deleteVentaById(Long id);
-    public List<Producto> getProductosVenta(Long id);
+    public VentaResponseDTO getVenta(Long id);
+    public List<VentaResponseDTO> getVentas(
+        List<Long> ids, LocalDateTime minFechaVenta, LocalDateTime maxFechaVenta,
+        BigDecimal minTotal, BigDecimal maxTotal, Long idCliente, EstadoVenta estado
+    );
+    public VentaResponseDTO createVenta(VentaRequestDTO ventaDTO);
+    public VentaResponseDTO editVenta(Long id, VentaRequestDTO ventaDTO);
+    public void deleteVenta(Long id);
 }

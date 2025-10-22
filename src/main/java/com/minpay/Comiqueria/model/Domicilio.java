@@ -2,6 +2,7 @@ package com.minpay.Comiqueria.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Table(name = "domicilios")
 public class Domicilio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,12 +53,24 @@ public class Domicilio {
     @ToString.Include
     private String cp;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @NonNull
     @JoinColumn(name = "dom_loc_id", nullable = false)
     private Localidad localidad;
     
     @ManyToOne
-    @JoinColumn(name = "dom_cte_id")
+    @JoinColumn(name = "dom_cte_id", nullable = false)
     private Cliente cliente;
+    
+    @Column(name = "dom_fecha_alta")
+    @ToString.Include
+    private LocalDate fechaAlta = LocalDate.now();
+    
+    @Column(name = "dom_fecha_baja")
+    @ToString.Include
+    private LocalDate fechaBaja;
+    
+    @Column(name = "dom_esta_vigente")
+    @ToString.Include
+    private Boolean estaVigente = true;
 }

@@ -1,69 +1,58 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.ProvinciaDTO;
-import com.minpay.Comiqueria.model.Provincia;
-import com.minpay.Comiqueria.service.interfaces.IProvinciaLocalidadSyncService;
+import com.minpay.Comiqueria.dto.ProvinciaRequestDTO;
+import com.minpay.Comiqueria.dto.ProvinciaResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.IProvinciaService;
-import com.minpay.Comiqueria.utils.Accion;
 import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/provincias")
+@RequestMapping("/api/provincias")
 public class ProvinciaController {
-    
+
     @Autowired
     private IProvinciaService provinciaService;
-    
-    @Autowired
-    private IProvinciaLocalidadSyncService provinciaLocalidadSyncService;
-    
+
     @GetMapping("/{id}")
-    public ProvinciaDTO traerProvincia(@PathVariable Long id){
-        Provincia provincia = this.provinciaService.getProvincia(id);
-        return this.provinciaService.getProvinciaDTO(provincia);
+    public ResponseEntity<ProvinciaResponseDTO> traerProvincia(@PathVariable Long id) {
+        ProvinciaResponseDTO response = this.provinciaService.getProvincia(id);
+        return ResponseEntity.ok(response);
     }
-    
+
     @GetMapping
-    public List<ProvinciaDTO> traerProvincias(){
-        return this.provinciaService.getProvinciasDTO();
+    public ResponseEntity<List<ProvinciaResponseDTO>> traerProvincias(
+        @RequestParam(required = false) List<Long> idsProvincias,
+        @RequestParam(required = false) String nombre,
+        @RequestParam(required = false) Long idPais,
+        @RequestParam(required = false) Boolean estaVigente
+    ) {
+        List<ProvinciaResponseDTO> response = this.provinciaService.getProvincias(
+            idsProvincias, nombre, idPais, estaVigente
+        );
+        return ResponseEntity.ok(response);
     }
-    
+
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ProvinciaDTO guardarProvincia(@RequestParam String nombre, @RequestParam Long idPais){
-        return this.provinciaService.createProvincia(nombre, idPais);
+    public ResponseEntity<ProvinciaResponseDTO> guardarProvincia(@RequestBody ProvinciaRequestDTO dto) {
+        ProvinciaResponseDTO response = this.provinciaService.createProvincia(dto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-    
+
     @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public ProvinciaDTO editarProvincia(
+    public ResponseEntity<ProvinciaResponseDTO> editarProvincia(
         @PathVariable Long id,
-        @RequestParam String nombre,
-        @RequestParam Long idPais,
-        @RequestParam Set<Long> idLocalidades
-    ){
-        return this.provinciaService.editProvinciaById(id, nombre, idPais, idLocalidades);
+        @RequestBody ProvinciaRequestDTO dto
+    ) {
+        ProvinciaResponseDTO response = this.provinciaService.editProvincia(id, dto);
+        return ResponseEntity.ok(response);
     }
-    
+
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarProvincia(@PathVariable Long id){
-        this.provinciaService.deleteProvinciaById(id);
-    }
-    
-    @PostMapping("/localidades/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void agregarLocalidades(@PathVariable Long id, @RequestParam Set<Long> idsLocalidades){
-        this.provinciaLocalidadSyncService.modificarLocalidades(id, idsLocalidades, Accion.AGREGAR);
-    }
-    
-    @DeleteMapping("/localidades/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarLocalidades(@PathVariable Long id, @RequestParam Set<Long> idsLocalidades){
-        this.provinciaLocalidadSyncService.modificarLocalidades(id, idsLocalidades, Accion.ELIMINAR);
+    public ResponseEntity<Void> eliminarProvincia(@PathVariable Long id) {
+        this.provinciaService.deleteProvincia(id);
+        return ResponseEntity.noContent().build();
     }
 }

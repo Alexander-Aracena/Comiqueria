@@ -1,50 +1,60 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.SubcategoriaDTO;
+import com.minpay.Comiqueria.dto.SubcategoriaRequestDTO;
+import com.minpay.Comiqueria.dto.SubcategoriaResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.ISubcategoriaService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/subcategorias")
+@RequestMapping("/api/subcategorias")
 public class SubcategoriaController {
+
     @Autowired
     private ISubcategoriaService subcategoriaService;
-    
+
     @GetMapping("/{id}")
-    public SubcategoriaDTO traerSubcategoria(@PathVariable Long id){
-        return this.subcategoriaService.getSubcategoriaDTO(id);
+    public ResponseEntity<SubcategoriaResponseDTO> traerSubcategoria(@PathVariable Long id) {
+        SubcategoriaResponseDTO response = this.subcategoriaService.getSubcategoria(id);
+        return ResponseEntity.ok(response);
     }
-    
+
     @GetMapping
-    public List<SubcategoriaDTO> traerSubcategorias(){
-        return this.subcategoriaService.getSubcategoriasDTO();
+    public ResponseEntity<List<SubcategoriaResponseDTO>> traerSubcategorias(
+        @RequestParam(required = false) List<Long> idsSubcategorias,
+        @RequestParam(required = false) String nombre,
+        @RequestParam(required = false) Long idCategoria,
+        @RequestParam(required = false) Boolean estaVigente
+    ) {
+        List<SubcategoriaResponseDTO> response = this.subcategoriaService.getSubcategorias(
+            idsSubcategorias, nombre, idCategoria, estaVigente
+        );
+        return ResponseEntity.ok(response);
     }
-    
+
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public SubcategoriaDTO guardarSubcategoria(
-            @RequestParam String nombreSubcategoria,
-            @RequestParam Long idCategoria
-    ){
-        return this.subcategoriaService.createSubcategoria(nombreSubcategoria, idCategoria);
+    public ResponseEntity<SubcategoriaResponseDTO> guardarSubcategoria(
+        @RequestBody SubcategoriaRequestDTO dto
+    ) {
+        SubcategoriaResponseDTO response = this.subcategoriaService.createSubcategoria(dto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-    
+
     @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public SubcategoriaDTO editarSubcategoria(
-            @PathVariable Long id,
-            @RequestParam String nombreSubcategoria,
-            @RequestParam Long idCategoria
-    ){
-        return this.subcategoriaService.editSubcategoriaById(id, nombreSubcategoria, idCategoria);
+    public ResponseEntity<SubcategoriaResponseDTO> editarSubcategoria(
+        @PathVariable Long id,
+        @RequestBody SubcategoriaRequestDTO dto
+    ) {
+        SubcategoriaResponseDTO response = this.subcategoriaService.editSubcategoria(id, dto);
+        return ResponseEntity.ok(response);
     }
-    
+
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarSubcategoria(@PathVariable Long id){
-        this.subcategoriaService.deleteSubcategoriaById(id);
+    public ResponseEntity<Void> eliminarSubcategoria(@PathVariable Long id) {
+        this.subcategoriaService.deleteSubcategoria(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static com.minpay.Comiqueria.utils.TestsUtils.*;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -174,7 +173,7 @@ public class DomicilioTest {
 
     @Test
     @Order(4)
-    void shouldDeleteAnDomicilio() throws Exception {
+    void shouldDeleteADomicilio() throws Exception {
         mockMvc.perform(delete("/domicilios/{idDomicilio}", idDomicilio))
             .andExpect(status().isAccepted());
 

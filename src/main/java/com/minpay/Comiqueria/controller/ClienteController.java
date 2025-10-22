@@ -1,69 +1,82 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.ClienteDTO;
-import com.minpay.Comiqueria.model.Cliente;
+import com.minpay.Comiqueria.dto.ClienteResponseDTO;
+import com.minpay.Comiqueria.dto.ClienteRequestDTO;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.minpay.Comiqueria.service.interfaces.IClienteService;
 import java.util.Set;
+import org.springframework.http.ResponseEntity;
 
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping("/api/clientes")
 public class ClienteController {
+
     @Autowired
     private IClienteService clienteService;
-    
+
     @GetMapping("/{id}")
-    public Cliente traerCliente(@PathVariable Long id){
-        return this.clienteService.getCliente(id);
+    public ResponseEntity<ClienteResponseDTO> traerCliente(@PathVariable Long id) {
+        ClienteResponseDTO response = this.clienteService.getCliente(id);
+        return ResponseEntity.ok(response);
     }
-    
+
     @GetMapping
-    public List<Cliente> traerClientes(){
-        return this.clienteService.getClientes();
+    public ResponseEntity<List<ClienteResponseDTO>> traerClientes(
+        @RequestParam(required = false) List<Long> ids,
+        @RequestParam(required = false) String nombre,
+        @RequestParam(required = false) String apellido,
+        @RequestParam(required = false) String nroDoc,
+        @RequestParam(required = false) Boolean estaVigente
+    ) {
+        List<ClienteResponseDTO> response = this.clienteService.getClientes(ids, nombre, apellido, nroDoc, estaVigente);
+        return ResponseEntity.ok(response);
     }
-    
+
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Cliente guardarCliente(@RequestBody ClienteDTO clienteDTO){
-        return this.clienteService.createCliente(clienteDTO);
+    public ResponseEntity<ClienteResponseDTO> guardarCliente(@RequestBody ClienteRequestDTO dto) {
+        ClienteResponseDTO response = this.clienteService.createCliente(dto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-    
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Cliente editarCliente(@PathVariable Long idCliente, @RequestBody ClienteDTO clienteDTO){
-        return this.clienteService.editClienteById(idCliente, clienteDTO);
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ClienteResponseDTO> editarCliente(
+        @PathVariable Long id,
+        @RequestBody ClienteRequestDTO dto
+    ) {
+        ClienteResponseDTO response = this.clienteService.editCliente(id, dto);
+        return ResponseEntity.ok(response);
     }
-    
+
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarCliente(@PathVariable Long id){
-        this.clienteService.deleteClienteById(id);
+    public ResponseEntity<Void> eliminarCliente(@PathVariable Long id) {
+        this.clienteService.deleteCliente(id);
+        return ResponseEntity.noContent().build();
     }
-    
-    @PostMapping("/favoritos/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void agregarFavoritos(@PathVariable Long id, @RequestBody Set<Long> idsProductos){
+
+    @PostMapping("/{id}/favoritos")
+    public ResponseEntity<Void> agregarFavoritos(@PathVariable Long id, @RequestParam Set<Long> idsProductos) {
         this.clienteService.addFavoritos(id, idsProductos);
+        return ResponseEntity.noContent().build();
     }
-    
-    @DeleteMapping("/favoritos/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarFavoritos(@PathVariable Long id, @RequestBody Set<Long> idsProductos){
+
+    @DeleteMapping("/{id}/favoritos")
+    public ResponseEntity<Void> eliminarFavoritos(@PathVariable Long id, @RequestParam Set<Long> idsProductos) {
         this.clienteService.deleteFavoritos(id, idsProductos);
+        return ResponseEntity.noContent().build();
     }
-    
-    @PostMapping("/domicilio/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void agregarDomicilio(@PathVariable Long id, @RequestBody Long idDomicilio){
+
+    @PostMapping("/{id}/domicilios")
+    public ResponseEntity<Void> agregarDomicilio(@PathVariable Long id, @RequestParam Long idDomicilio) {
         this.clienteService.addDomicilio(id, idDomicilio);
+        return ResponseEntity.noContent().build();
     }
-    
-    @DeleteMapping("/domicilio/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarDomicilio(@PathVariable Long id, @RequestBody Long idDomicilio){
+
+    @DeleteMapping("/{id}/domicilios")
+    public ResponseEntity<Void> eliminarDomicilio(@PathVariable Long id, @RequestParam Long idDomicilio) {
         this.clienteService.deleteDomicilio(id, idDomicilio);
+        return ResponseEntity.noContent().build();
     }
 }

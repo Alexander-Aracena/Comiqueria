@@ -1,45 +1,69 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.ProductoDTO;
-import com.minpay.Comiqueria.model.Producto;
+import com.minpay.Comiqueria.dto.ProductoRequestDTO;
+import com.minpay.Comiqueria.dto.ProductoResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.IProductoService;
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/productos")
+@RequestMapping("/api/productos")
 public class ProductoController {
+
     @Autowired
     private IProductoService productoService;
-    
+
     @GetMapping("/{id}")
-    public ProductoDTO traerProducto(@PathVariable Long id){
-        Producto producto = this.productoService.getProducto(id);
-        return this.productoService.getProductoDTO(producto);
+    public ResponseEntity<ProductoResponseDTO> traerProducto(@PathVariable Long id) {
+        ProductoResponseDTO response = this.productoService.getProducto(id);
+        return ResponseEntity.ok(response);
     }
-    
+
     @GetMapping
-    public List<ProductoDTO> traerProductos(){
-        return this.productoService.getProductosDTO();
+    public ResponseEntity<List<ProductoResponseDTO>> traerProductos(
+        @RequestParam(required = false) List<Long> idsProductos,
+        @RequestParam(required = false) String titulo,
+        @RequestParam(required = false) BigDecimal minPrecio,
+        @RequestParam(required = false) BigDecimal maxPrecio,
+        @RequestParam(required = false) String descripcion,
+        @RequestParam(required = false) Long idAutor,
+        @RequestParam(required = false) Long idSubcategoria,
+        @RequestParam(required = false) Long idEditorial,
+        @RequestParam(required = false) Boolean esNovedad,
+        @RequestParam(required = false) Boolean esOferta,
+        @RequestParam(required = false) Boolean esMasVendido,
+        @RequestParam(required = false) Boolean esVisibleEnHome,
+        @RequestParam(required = false) Boolean estaVigente
+    ) {
+        List<ProductoResponseDTO> response = this.productoService.getProductos(
+            idsProductos, titulo, minPrecio, maxPrecio, descripcion, idAutor, idSubcategoria,
+            idEditorial, esNovedad, esOferta, esMasVendido, esVisibleEnHome, estaVigente
+        );
+        return ResponseEntity.ok(response);
     }
-    
+
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ProductoDTO guardarProducto(@RequestBody ProductoDTO productoDTO){
-        return this.productoService.createProducto(productoDTO);
+    public ResponseEntity<ProductoResponseDTO> guardarProducto(@RequestBody ProductoRequestDTO dto) {
+        ProductoResponseDTO response = this.productoService.createProducto(dto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-    
+
     @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public ProductoDTO editarProducto(@PathVariable Long id, @RequestBody ProductoDTO productoDTO){
-        return this.productoService.editProductoById(id, productoDTO);
+    public ResponseEntity<ProductoResponseDTO> editarProducto(
+        @PathVariable Long id,
+        @RequestBody ProductoRequestDTO dto
+    ) {
+        ProductoResponseDTO response = this.productoService.editProducto(id, dto);
+        return ResponseEntity.ok(response);
     }
-    
+
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarProducto(@PathVariable Long id){
+    public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
         this.productoService.deleteProducto(id);
+        return ResponseEntity.noContent().build();
     }
 }

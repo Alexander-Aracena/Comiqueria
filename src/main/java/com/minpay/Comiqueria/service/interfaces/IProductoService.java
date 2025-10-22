@@ -1,21 +1,18 @@
 package com.minpay.Comiqueria.service.interfaces;
 
-import com.minpay.Comiqueria.dto.ProductoDTO;
-import com.minpay.Comiqueria.model.*;
+import com.minpay.Comiqueria.dto.ProductoRequestDTO;
+import com.minpay.Comiqueria.dto.ProductoResponseDTO;
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
 
 public interface IProductoService {
-    public Producto getProducto(Long id);
-    public ProductoDTO getProductoDTO(Producto producto);
-    public List<Producto> getProductos();
-    public List<Producto> getProductos(Set<Long> idsProductos);
-    public List<ProductoDTO> getProductosDTO();
-    public List<ProductoDTO> getProductosDTO(Set<Long> idsProductos);
-    public ProductoDTO createProducto(ProductoDTO productoDTO);
-    public ProductoDTO editProductoById(Long id, ProductoDTO productoDTO);
-    public void saveProducto(Producto producto);
+    public ProductoResponseDTO getProducto(Long id);
+    public List<ProductoResponseDTO> getProductos(
+        List<Long> ids, String titulo, BigDecimal minPrecio, BigDecimal maxPrecio, String descripcion,
+        Long idAutor, Long idSubcategoria, Long idEditorial, Boolean esNovedad, Boolean esOferta,
+        Boolean esMasVendido, Boolean esVisibleEnHome, Boolean estaVigente
+    );
+    public ProductoResponseDTO createProducto(ProductoRequestDTO productoDTO);
+    public ProductoResponseDTO editProducto(Long id, ProductoRequestDTO productoDTO);
     public void deleteProducto(Long id);
-    public void saveProductos(Set<Producto> productos);
-    public void deleteProductos(Set<Long> idsProductos);
 }

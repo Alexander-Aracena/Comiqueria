@@ -1,65 +1,55 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.model.Categoria;
+import com.minpay.Comiqueria.dto.CategoriaRequestDTO;
+import com.minpay.Comiqueria.dto.CategoriaResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.ICategoriaService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/categorias")
+@RequestMapping("/api/categorias")
 public class CategoriaController {
+
     @Autowired
     private ICategoriaService categoriaService;
-    
+
     @GetMapping("/{id}")
-    public Categoria traerCategoria(@PathVariable Long id){
-        return this.categoriaService.getCategoria(id);
+    public ResponseEntity<CategoriaResponseDTO> traerCategoria(@PathVariable Long id) {
+        CategoriaResponseDTO response = this.categoriaService.getCategoria(id);
+        return ResponseEntity.ok(response);
     }
-    
+
     @GetMapping
-    public List<Categoria> traerCategorias(){
-        return this.categoriaService.getCategorias();
+    public ResponseEntity<List<CategoriaResponseDTO>> traerCategoriaes(
+        @RequestParam(required = false) List<Long> ids,
+        @RequestParam(required = false) String nombre,
+        @RequestParam(required = false) Boolean estaVigente
+    ) {
+        List<CategoriaResponseDTO> response = this.categoriaService.getCategorias(ids, nombre, estaVigente);
+        return ResponseEntity.ok(response);
     }
-    
+
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Categoria guardarCategoria(@RequestBody String nombre){
-        return this.categoriaService.createCategoria(nombre);
+    public ResponseEntity<CategoriaResponseDTO> guardarCategoria(@RequestBody CategoriaRequestDTO dto) {
+        CategoriaResponseDTO response = this.categoriaService.createCategoria(dto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-    
+
     @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Categoria editarCategoria(
-            @PathVariable Long id,
-            @RequestBody String nombre){
-        return this.categoriaService.editCategoriaById(id, nombre);
+    public ResponseEntity<CategoriaResponseDTO> editarCategoria(
+        @PathVariable Long id,
+        @RequestBody CategoriaRequestDTO dto
+    ) {
+        CategoriaResponseDTO response = this.categoriaService.editCategoria(id, dto);
+        return ResponseEntity.ok(response);
     }
-    
+
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarCategoria(@PathVariable Long id){
-        this.categoriaService.deleteCategoriaById(id);
+    public ResponseEntity<Void> eliminarCategoria(@PathVariable Long id) {
+        this.categoriaService.deleteCategoria(id);
+        return ResponseEntity.noContent().build();
     }
-    
-    /*
-    @PostMapping("/subcategorias/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void agregarSubcategorias(
-            @PathVariable Long id,
-            @RequestBody Set<Long> idsSubcategorias
-    ){
-        this.categoriaService.addSubcategories(id, idsSubcategorias);
-    }
-    
-    @DeleteMapping("/subcategorias/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void eliminarSubcategorias(
-            @PathVariable Long id,
-            @RequestBody Set<Long> idsSubcategorias
-    ){
-        this.categoriaService.deleteSubcategories(id, idsSubcategorias);
-    }
-    */
 }
