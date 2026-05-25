@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AutorService implements IAutorService {
-    
     @Autowired
     private IAutorRepository autorRepository;
     

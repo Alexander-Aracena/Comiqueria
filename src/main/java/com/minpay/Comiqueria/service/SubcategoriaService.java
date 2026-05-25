@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class SubcategoriaService implements ISubcategoriaService {
-
     @Autowired
     private ISubcategoriaRepository subcategoriaRepository;
 

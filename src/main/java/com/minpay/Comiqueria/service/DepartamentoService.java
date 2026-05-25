@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class DepartamentoService implements IDepartamentoService {
-
     @Autowired
     private IDepartamentoRepository departamentoRepository;
 

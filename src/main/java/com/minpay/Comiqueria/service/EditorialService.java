@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class EditorialService implements IEditorialService {
-    
     @Autowired
     private IEditorialRepository editorialRepository;
     

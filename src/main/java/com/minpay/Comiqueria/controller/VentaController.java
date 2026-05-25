@@ -1,6 +1,5 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.config.rest.ApiRestController;
 import com.minpay.Comiqueria.dto.VentaRequestDTO;
 import com.minpay.Comiqueria.dto.VentaResponseDTO;
 import com.minpay.Comiqueria.model.EstadoVenta;
@@ -13,10 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@ApiRestController
-@RequestMapping("/ventas")
+@RequestMapping("/api/ventas")
 public class VentaController {
-
     @Autowired
     private IVentaService ventaService;
 

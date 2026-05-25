@@ -1,6 +1,5 @@
 package com.minpay.Comiqueria.service.interfaces;
 
-import com.minpay.Comiqueria.dto.ProductoResponseDTO;
 import com.minpay.Comiqueria.dto.VentaRequestDTO;
 import com.minpay.Comiqueria.dto.VentaResponseDTO;
 import com.minpay.Comiqueria.model.EstadoVenta;

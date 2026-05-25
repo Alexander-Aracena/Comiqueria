@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class DomicilioService implements IDomicilioService {
-    
     @Autowired
     private IDomicilioRepository domicilioRepository;
     

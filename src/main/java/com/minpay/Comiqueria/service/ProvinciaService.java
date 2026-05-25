@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProvinciaService implements IProvinciaService {
-
     @Autowired
     private IProvinciaRepository provinciaRepository;
 

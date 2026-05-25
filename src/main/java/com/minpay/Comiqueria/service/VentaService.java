@@ -30,7 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class VentaService implements IVentaService {
-
     @Autowired
     private IVentaRepository ventaRepository;
 

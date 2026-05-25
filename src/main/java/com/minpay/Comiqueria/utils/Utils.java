@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public class Utils {
-    
     /**
      * Busca una entidad por su ID utilizando un repositorio de JPA. Si la entidad no se encuentra,
      * lanza una {@link ResourceNotFoundException} con un mensaje descriptivo.

@@ -1,6 +1,5 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.config.rest.ApiRestController;
 import com.minpay.Comiqueria.dto.LineaVentaResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.ILineaVentaService;
 import java.math.BigDecimal;
@@ -9,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@ApiRestController
-@RequestMapping("/lineasVentas")
+@RequestMapping("/api/lineasVentas")
 public class LineaVentaController {
-
     @Autowired
     private ILineaVentaService lineaVentaService;
 

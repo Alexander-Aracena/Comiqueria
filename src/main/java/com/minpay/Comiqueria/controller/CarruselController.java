@@ -1,6 +1,5 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.config.rest.ApiRestController;
 import com.minpay.Comiqueria.dto.CarruselRequestDTO;
 import com.minpay.Comiqueria.dto.CarruselResponseDTO;
 import java.util.List;
@@ -10,8 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.minpay.Comiqueria.service.interfaces.ICarruselService;
 import org.springframework.http.ResponseEntity;
 
-@ApiRestController
-@RequestMapping("/carrusel")
+@RequestMapping("/api/carrusel")
 public class CarruselController {
 
     @Autowired

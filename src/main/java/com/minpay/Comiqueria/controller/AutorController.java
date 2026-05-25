@@ -1,6 +1,5 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.config.rest.ApiRestController;
 import com.minpay.Comiqueria.dto.AutorRequestDTO;
 import com.minpay.Comiqueria.dto.AutorResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.IAutorService;
@@ -11,8 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@ApiRestController
-@RequestMapping("/autores")
+@RequestMapping("/api/autores")
 public class AutorController {
 
     @Autowired

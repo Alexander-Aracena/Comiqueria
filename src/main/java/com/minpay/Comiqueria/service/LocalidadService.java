@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LocalidadService implements ILocalidadService {
-    
     @Autowired
     private ILocalidadRepository localidadRepository;
     

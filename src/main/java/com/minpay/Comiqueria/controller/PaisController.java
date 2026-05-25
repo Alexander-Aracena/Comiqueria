@@ -1,6 +1,5 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.config.rest.ApiRestController;
 import com.minpay.Comiqueria.dto.PaisRequestDTO;
 import com.minpay.Comiqueria.dto.PaisResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.IPaisService;
@@ -10,8 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@ApiRestController
-@RequestMapping("/paises")
+@RequestMapping("/api/paises")
 public class PaisController {
     @Autowired
     private IPaisService paisService;

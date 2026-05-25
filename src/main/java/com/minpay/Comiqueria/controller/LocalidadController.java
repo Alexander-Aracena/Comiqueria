@@ -1,6 +1,5 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.config.rest.ApiRestController;
 import com.minpay.Comiqueria.dto.LocalidadResponseDTO;
 import com.minpay.Comiqueria.dto.LocalidadRequestDTO;
 import com.minpay.Comiqueria.service.interfaces.ILocalidadService;
@@ -10,10 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@ApiRestController
-@RequestMapping("/localidades")
+@RequestMapping("/api/localidades")
 public class LocalidadController {
-    
     @Autowired
     private ILocalidadService localidadService;
     

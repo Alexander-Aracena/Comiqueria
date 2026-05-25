@@ -2,6 +2,7 @@ package com.minpay.Comiqueria.config;
 
 import com.minpay.Comiqueria.security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -15,7 +16,8 @@ public class AuthConfig {
     // Inyectamos nuestro CustomUserDetailsService y el PasswordEncoder
     // Spring ya sabe cómo crearlos porque CustomUserDetailsService tiene @Service
     // y PasswordEncoder es un @Bean.
-    private final CustomUserDetailsService customUserDetailsService;
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
     
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -16,7 +16,6 @@ import org.springframework.data.jpa.domain.Specification;
 
 @Service
 public class CarruselService implements ICarruselService {
-    
     @Autowired
     private ICarruselRepository carruselRepository;
     
