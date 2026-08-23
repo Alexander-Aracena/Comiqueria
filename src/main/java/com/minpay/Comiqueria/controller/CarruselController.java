@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.minpay.Comiqueria.service.interfaces.ICarruselService;
 import org.springframework.http.ResponseEntity;
 
+@RestController
 @RequestMapping("/api/carrusel")
 public class CarruselController {
 

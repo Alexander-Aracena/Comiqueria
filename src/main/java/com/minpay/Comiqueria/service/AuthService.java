@@ -87,7 +87,7 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public void forgotPassword(String email) {
+    public String forgotPassword(String email) {
         Usuario usuario = this.usuarioRepository.findByEmail(email)
             .orElseThrow(() -> new ResourceNotFoundException(
             "No se encontró un usuario con el email proporcionado."
@@ -102,7 +102,7 @@ public class AuthService implements IAuthService {
         usuario.setResetTokenExpirationDate(expirationDate);
         this.usuarioRepository.save(usuario);
         
-        
+        return resetToken;
     }
 
     @Override

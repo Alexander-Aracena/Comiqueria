@@ -10,6 +10,7 @@ import com.minpay.Comiqueria.service.interfaces.IClienteService;
 import java.util.Set;
 import org.springframework.http.ResponseEntity;
 
+@RestController
 @RequestMapping("/api/clientes")
 public class ClienteController {
 

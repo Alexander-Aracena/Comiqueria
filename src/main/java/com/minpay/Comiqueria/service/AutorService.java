@@ -17,9 +17,12 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class AutorService implements IAutorService {
+    
     @Autowired
     private IAutorRepository autorRepository;
     
@@ -30,12 +33,14 @@ public class AutorService implements IAutorService {
     private IAutorMapper autorMapper;
     
     @Override
+    @Transactional(readOnly = true)
     public AutorResponseDTO getAutor(Long id) {
         Autor autor = Utils.findByIdOrThrow(autorRepository, id, Autor.class);
         return this.autorMapper.toAutorResponseDTO(autor);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<AutorResponseDTO> getAutores(List<Long> ids, String nombre, String apellido, Boolean estaVigente) {
         Specification<Autor> spec = AutorSpecifications.byCriterios(ids, nombre, apellido, estaVigente);
         List<Autor> autores = this.autorRepository.findAll(spec);
