@@ -13,6 +13,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
 
 /**
  * Representa un cliente registrado en la Comiquería.
@@ -26,6 +27,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@SQLDelete(sql = "UPDATE clientes SET cte_fecha_baja = NOW() WHERE cte_id = ?")
 @Table(name = "clientes")
 public class Cliente {
     /**
@@ -147,13 +149,6 @@ public class Cliente {
      */
     @Column(name = "cte_fecha_baja")
     private LocalDateTime fechaBaja;
-
-    /**
-     * Indica si el cliente está activo y vigente en el sistema.
-     * Utilizado para la baja lógica. Por defecto es 'true'.
-     */
-    @Column(name = "cte_esta_vigente")
-    private Boolean estaVigente = Boolean.TRUE;
 
     /**
      * Conjunto de productos marcados como favoritos por el cliente.

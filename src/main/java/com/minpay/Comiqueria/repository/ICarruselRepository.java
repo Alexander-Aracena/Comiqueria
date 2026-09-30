@@ -7,6 +7,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ICarruselRepository extends JpaRepository<Carrusel, Long>,
-    JpaSpecificationExecutor<Carrusel> {
-    
-}
+    JpaSpecificationExecutor<Carrusel> {}

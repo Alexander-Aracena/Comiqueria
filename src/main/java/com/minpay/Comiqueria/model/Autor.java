@@ -12,6 +12,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
 
 /**
  * Representa un Autor dentro del sistema de la Comiquería.
@@ -25,9 +26,13 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table(name = "autores", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"aut_nombre", "aut_apellido"})
-})
+@SQLDelete(sql = "UPDATE autores SET aut_fecha_baja = NOW() where aut_id = ?")
+@Table(
+    name = "autores",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"aut_nombre", "aut_apellido"})
+    }
+)
 public class Autor {
     /**
      * Identificador único del autor en la base de datos.
@@ -90,12 +95,4 @@ public class Autor {
     @Column(name = "aut_fecha_baja")
     @ToString.Include
     private LocalDate fechaBaja;
-    
-    /**
-     * Indica si el autor está activo y vigente dentro del sistema.
-     * Utilizado para la baja lógica. Por defecto es true.
-     */
-    @Column(name = "aut_esta_vigente")
-    @ToString.Include
-    private Boolean estaVigente = true;
 }

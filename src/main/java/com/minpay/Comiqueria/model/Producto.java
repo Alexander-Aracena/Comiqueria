@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
 
 @Getter
 @Setter
@@ -21,6 +22,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@SQLDelete(sql = "UPDATE productos SET prod_fecha_baja = NOW() WHERE prod_id = ?")
 @Table(name = "productos")
 public class Producto {
     @Id
@@ -41,6 +43,11 @@ public class Producto {
     @EqualsAndHashCode.Include
     @ToString.Include
     private BigDecimal precio;
+    
+    @Column(name = "prod_descuento")
+    @EqualsAndHashCode.Include
+    @ToString.Include
+    private BigDecimal descuento;
     
     @NonNull
     @Column(columnDefinition = "TEXT", name = "prod_descripcion")
@@ -94,16 +101,6 @@ public class Producto {
     @ToString.Include
     private Boolean esNovedad;
     
-    @Column(name = "prod_esOferta")
-    @EqualsAndHashCode.Include
-    @ToString.Include
-    private Boolean esOferta;
-    
-    @Column(name = "prod_esMasVendido")
-    @EqualsAndHashCode.Include
-    @ToString.Include
-    private Boolean esMasVendido;
-    
     @Column(name = "prod_index")
     @EqualsAndHashCode.Include
     @ToString.Include
@@ -117,13 +114,17 @@ public class Producto {
     @ToString.Include
     private LocalDateTime fechaBaja;
     
-    @Column(name = "prod_esta_vigente")
-    @ToString.Include
-    private Boolean estaVigente = true;
-    
     @ManyToMany(mappedBy = "favoritos")
     private Set<Cliente> clientes = new LinkedHashSet<>();
     
     @OneToMany(mappedBy = "producto")
     private Set<LineaVenta> lineasVenta = new LinkedHashSet<>();
+    
+    public int obtenerCantidadVendida() {
+        return this.lineasVenta.stream().mapToInt(LineaVenta::getCantidad).sum();
+    }
+    
+    public boolean esOferta() {
+        return this.descuento != null && this.descuento.compareTo(BigDecimal.ZERO) > 0;
+    }
 }

@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.mapper;
 
-import com.minpay.Comiqueria.dto.SubcategoriaRequestDTO;
-import com.minpay.Comiqueria.dto.SubcategoriaResponseDTO;
+import com.minpay.Comiqueria.dto.request.SubcategoriaRequestDTO;
+import com.minpay.Comiqueria.dto.response.SubcategoriaResponseDTO;
 import com.minpay.Comiqueria.model.Subcategoria;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -17,7 +17,6 @@ public interface ISubcategoriaMapper {
     @Mapping(target = "categoria", ignore = true)
     @Mapping(target = "fechaAlta", ignore = true)
     @Mapping(target = "fechaBaja", ignore = true)
-    @Mapping(target = "estaVigente", ignore = true)
     @Mapping(target = "productos", ignore = true)
     Subcategoria toSubcategoria(SubcategoriaRequestDTO dto);
     
@@ -25,7 +24,6 @@ public interface ISubcategoriaMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "fechaAlta", ignore = true)
     @Mapping(target = "fechaBaja", ignore = true)
-    @Mapping(target = "estaVigente", ignore = true)
     @Mapping(target = "productos", ignore = true)
     @Mapping(target = "categoria", ignore = true)
     void updateSubcategoriaFromDTO(SubcategoriaRequestDTO dto, @MappingTarget Subcategoria subcategoria);

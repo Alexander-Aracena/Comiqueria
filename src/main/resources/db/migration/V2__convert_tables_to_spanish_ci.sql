@@ -1,0 +1,21 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+ALTER TABLE autores CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+ALTER TABLE carruseles CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+ALTER TABLE categorias CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+ALTER TABLE clientes CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+ALTER TABLE cte_producto_favorito CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+ALTER TABLE departamentos CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+ALTER TABLE domicilios CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+ALTER TABLE editoriales CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+ALTER TABLE lineas_ventas CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+ALTER TABLE localidades CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+ALTER TABLE paises CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+ALTER TABLE productos CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+ALTER TABLE `productos-autores` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+ALTER TABLE provincias CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+ALTER TABLE subcategorias CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+ALTER TABLE usuarios CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+ALTER TABLE ventas CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+
+SET FOREIGN_KEY_CHECKS = 1;

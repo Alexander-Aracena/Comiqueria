@@ -1,11 +1,11 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.ForgotPasswordRequestDTO;
-import com.minpay.Comiqueria.dto.LoginRequestDTO;
-import com.minpay.Comiqueria.dto.LoginResponseDTO;
-import com.minpay.Comiqueria.dto.RegisterRequestDTO;
-import com.minpay.Comiqueria.dto.ResetPasswordRequestDTO;
-import com.minpay.Comiqueria.dto.UsuarioResponseDTO;
+import com.minpay.Comiqueria.dto.request.ForgotPasswordRequestDTO;
+import com.minpay.Comiqueria.dto.request.LoginRequestDTO;
+import com.minpay.Comiqueria.dto.response.LoginResponseDTO;
+import com.minpay.Comiqueria.dto.request.RegisterRequestDTO;
+import com.minpay.Comiqueria.dto.request.ResetPasswordRequestDTO;
+import com.minpay.Comiqueria.dto.response.UsuarioResponseDTO;
 import com.minpay.Comiqueria.exceptions.ChangePasswordRequiredException;
 import com.minpay.Comiqueria.exceptions.ResourceNotFoundException;
 import com.minpay.Comiqueria.service.interfaces.IAuthService;
@@ -88,15 +88,15 @@ public class AuthController {
 
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequestDTO request) {
-        String resetToken = authService.forgotPassword(request.getEmail());
-        emailService.sendPasswordResetEmail(request.getEmail(), resetToken);
+        String resetToken = authService.forgotPassword(request.email());
+        emailService.sendPasswordResetEmail(request.email(), resetToken);
 
         return ResponseEntity.ok("Si el email está registrado, recibirás un enlace para restablecer tu contraseña.");
     }
 
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequestDTO request) {
-        authService.resetPassword(request.getToken(), request.getNewPassword());
+        authService.resetPassword(request.token(), request.newPassword());
         return ResponseEntity.ok("La contraseña ha sido restablecida con éxito.");
     }
 }

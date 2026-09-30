@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service.interfaces;
 
-import com.minpay.Comiqueria.dto.VentaRequestDTO;
-import com.minpay.Comiqueria.dto.VentaResponseDTO;
+import com.minpay.Comiqueria.dto.request.VentaRequestDTO;
+import com.minpay.Comiqueria.dto.response.VentaResponseDTO;
 import com.minpay.Comiqueria.model.EstadoVenta;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.ProvinciaRequestDTO;
-import com.minpay.Comiqueria.dto.ProvinciaResponseDTO;
+import com.minpay.Comiqueria.dto.request.ProvinciaRequestDTO;
+import com.minpay.Comiqueria.dto.response.ProvinciaResponseDTO;
 import com.minpay.Comiqueria.exceptions.InvalidOperationException;
 import com.minpay.Comiqueria.mapper.IProvinciaMapper;
 import com.minpay.Comiqueria.model.Pais;
@@ -57,7 +57,7 @@ public class ProvinciaService implements IProvinciaService {
     @Override
     public ProvinciaResponseDTO createProvincia(ProvinciaRequestDTO provinciaDTO) {
         Provincia provincia = this.provinciaMapper.toProvincia(provinciaDTO);
-        Pais nuevoPais = Utils.findByIdOrThrow(paisRepository, provinciaDTO.getIdPais(), Pais.class);
+        Pais nuevoPais = Utils.findByIdOrThrow(paisRepository, provinciaDTO.idPais(), Pais.class);
         provincia.setPais(nuevoPais);
         provincia = this.provinciaRepository.save(provincia);
         return this.provinciaMapper.toProvinciaResponseDTO(provincia);
@@ -66,17 +66,15 @@ public class ProvinciaService implements IProvinciaService {
     @Override
     public ProvinciaResponseDTO editProvincia(Long id, ProvinciaRequestDTO provinciaDTO) {
         Provincia provinciaModificada = Utils.findByIdOrThrow(provinciaRepository, id, Provincia.class);
-        if (!provinciaModificada.getEstaVigente()) {
+        if (provinciaModificada.getFechaBaja() != null) {
             throw new InvalidOperationException("La provincia no está vigente");
         }
-        if (provinciaDTO.getIdPais() != null) {
-            Pais nuevoPais = Utils.findByIdOrThrow(paisRepository, provinciaDTO.getIdPais(), Pais.class);
-            if (!nuevoPais.getEstaVigente()) {
-                throw new InvalidOperationException("El pais seleccionado no está vigente");
-            }
-            if (!Objects.equals(provinciaModificada.getPais().getId(), provinciaDTO.getIdPais())) {
-                provinciaModificada.setPais(nuevoPais);
-            }
+        Pais nuevoPais = Utils.findByIdOrThrow(paisRepository, provinciaDTO.idPais(), Pais.class);
+        if (nuevoPais.getFechaBaja() != null) {
+            throw new InvalidOperationException("El pais seleccionado no está vigente");
+        }
+        if (!Objects.equals(provinciaModificada.getPais().getId(), provinciaDTO.idPais())) {
+            provinciaModificada.setPais(nuevoPais);
         }
         this.provinciaMapper.updateProvinciaFromDTO(provinciaDTO, provinciaModificada);
         provinciaModificada = this.provinciaRepository.save(provinciaModificada);
@@ -86,11 +84,9 @@ public class ProvinciaService implements IProvinciaService {
     @Override
     public void deleteProvincia(Long id) {
         Provincia provinciaEliminada = Utils.findByIdOrThrow(provinciaRepository, id, Provincia.class);
-        if (!provinciaEliminada.getEstaVigente()) {
+        if (provinciaEliminada.getFechaBaja() != null) {
             throw new InvalidOperationException("La provincia ya fue dada de baja");
         }
-        provinciaEliminada.setEstaVigente(Boolean.FALSE);
-        provinciaEliminada.setFechaBaja(LocalDateTime.now());
-        this.provinciaRepository.save(provinciaEliminada);
+        this.provinciaRepository.delete(provinciaEliminada);
     }
 }

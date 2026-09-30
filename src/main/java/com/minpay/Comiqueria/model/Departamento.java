@@ -22,6 +22,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
 
 @Getter
 @Setter
@@ -30,8 +31,9 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@SQLDelete(sql = "UPDATE departamentos SET dep_fecha_baja = NOW() WHERE dep_id = ?")
 @Table(name = "departamentos", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"dep_nombre", "prov_id"}) // Nombre de depto. + ID de Provincia debe ser único
+    @UniqueConstraint(columnNames = {"dep_nombre", "prov_id"})
 })
 public class Departamento {
     @Id
@@ -48,9 +50,9 @@ public class Departamento {
     @ToString.Include
     private String nombre;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Un depto. pertenece a una provincia
+    @ManyToOne(fetch = FetchType.LAZY)
     @NonNull
-    @JoinColumn(name = "dep_prov_id", nullable = false) // FK a Provincia
+    @JoinColumn(name = "dep_prov_id", nullable = false)
     private Provincia provincia;
 
     @OneToMany(mappedBy = "departamento")
@@ -61,7 +63,4 @@ public class Departamento {
     
     @Column(name = "dep_fecha_baja")
     private LocalDateTime fechaBaja;
-    
-    @Column(name = "dep_esta_vigente")
-    private Boolean estaVigente = true;
 }

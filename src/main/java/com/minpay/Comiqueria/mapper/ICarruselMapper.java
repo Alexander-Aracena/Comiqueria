@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.mapper;
 
-import com.minpay.Comiqueria.dto.CarruselRequestDTO;
-import com.minpay.Comiqueria.dto.CarruselResponseDTO;
+import com.minpay.Comiqueria.dto.request.CarruselRequestDTO;
+import com.minpay.Comiqueria.dto.response.CarruselResponseDTO;
 import com.minpay.Comiqueria.model.Carrusel;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

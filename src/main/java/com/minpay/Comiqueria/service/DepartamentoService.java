@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.DepartamentoRequestDTO;
-import com.minpay.Comiqueria.dto.DepartamentoResponseDTO;
+import com.minpay.Comiqueria.dto.request.DepartamentoRequestDTO;
+import com.minpay.Comiqueria.dto.response.DepartamentoResponseDTO;
 import com.minpay.Comiqueria.exceptions.InvalidOperationException;
 import com.minpay.Comiqueria.mapper.IDepartamentoMapper;
 import com.minpay.Comiqueria.model.Departamento;
@@ -11,7 +11,6 @@ import com.minpay.Comiqueria.repository.IProvinciaRepository;
 import com.minpay.Comiqueria.repository.specification.DepartamentoSpecifications;
 import com.minpay.Comiqueria.service.interfaces.IDepartamentoService;
 import com.minpay.Comiqueria.utils.Utils;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,9 +65,9 @@ public class DepartamentoService implements IDepartamentoService {
     public DepartamentoResponseDTO createDepartamento(DepartamentoRequestDTO departamentoDTO) {
         Departamento departamento = this.departamentoMapper.toDepartamento(departamentoDTO);
         Provincia provincia = Utils.findByIdOrThrow(
-            provinciaRepository, departamentoDTO.getIdProvincia(), Provincia.class
+            provinciaRepository, departamentoDTO.idProvincia(), Provincia.class
         );
-        if (!provincia.getEstaVigente()) {
+        if (provincia.getFechaBaja() != null) {
             throw new InvalidOperationException("La provincia seleccionada no está vigente");
         }
         departamento.setProvincia(provincia);
@@ -81,20 +80,18 @@ public class DepartamentoService implements IDepartamentoService {
         Departamento deptoModificado = Utils.findByIdOrThrow(
             departamentoRepository, id, Departamento.class
         );
-        if (!deptoModificado.getEstaVigente()) {
+        if (deptoModificado.getFechaBaja() != null) {
             throw new InvalidOperationException("El departamento ya está dado de baja.");
         }
-        if (departamentoDTO.getIdProvincia() != null) {
-            Provincia nuevaProvincia = Utils.findByIdOrThrow(
-                provinciaRepository, departamentoDTO.getIdProvincia(), Provincia.class
-            );
-            if (!nuevaProvincia.getEstaVigente()) {
-                throw new InvalidOperationException("La provincia seleccionada no está vigente.");
-            }
-            
-            if (!Objects.equals(deptoModificado.getProvincia().getId(), departamentoDTO.getIdProvincia())) {
-                deptoModificado.setProvincia(nuevaProvincia); 
-            }
+        Provincia nuevaProvincia = Utils.findByIdOrThrow(
+            provinciaRepository, departamentoDTO.idProvincia(), Provincia.class
+        );
+        if (nuevaProvincia.getFechaBaja() != null) {
+            throw new InvalidOperationException("La provincia seleccionada no está vigente.");
+        }
+
+        if (!Objects.equals(deptoModificado.getProvincia().getId(), departamentoDTO.idProvincia())) {
+            deptoModificado.setProvincia(nuevaProvincia); 
         }
         this.departamentoMapper.updateDepartamentoFromDTO(departamentoDTO, deptoModificado);
         deptoModificado = this.departamentoRepository.save(deptoModificado);
@@ -109,8 +106,6 @@ public class DepartamentoService implements IDepartamentoService {
         if (deptoEliminado.getFechaBaja() != null) {
             throw new InvalidOperationException("El departamento ya está dado de baja.");
         }
-        deptoEliminado.setFechaBaja(LocalDateTime.now());
-        deptoEliminado.setEstaVigente(Boolean.FALSE);
-        this.departamentoRepository.save(deptoEliminado);
+        this.departamentoRepository.delete(deptoEliminado);
     }
 }

@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.LineaVentaResponseDTO;
+import com.minpay.Comiqueria.dto.response.LineaVentaResponseDTO;
 import com.minpay.Comiqueria.mapper.ILineaVentaMapper;
 import com.minpay.Comiqueria.model.LineaVenta;
 import java.util.List;

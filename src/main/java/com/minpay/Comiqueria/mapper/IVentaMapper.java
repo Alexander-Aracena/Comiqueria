@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.mapper;
 
-import com.minpay.Comiqueria.dto.VentaRequestDTO;
-import com.minpay.Comiqueria.dto.VentaResponseDTO;
+import com.minpay.Comiqueria.dto.request.VentaRequestDTO;
+import com.minpay.Comiqueria.dto.response.VentaResponseDTO;
 import com.minpay.Comiqueria.model.Venta;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.ProductoRequestDTO;
-import com.minpay.Comiqueria.dto.ProductoResponseDTO;
+import com.minpay.Comiqueria.dto.request.ProductoRequestDTO;
+import com.minpay.Comiqueria.dto.response.ProductoResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.IProductoService;
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,13 +35,12 @@ public class ProductoController {
         @RequestParam(required = false) Long idEditorial,
         @RequestParam(required = false) Boolean esNovedad,
         @RequestParam(required = false) Boolean esOferta,
-        @RequestParam(required = false) Boolean esMasVendido,
         @RequestParam(required = false) Boolean esVisibleEnHome,
-        @RequestParam(required = false) Boolean estaVigente
+        @RequestParam(required = false) Boolean productosMasVendidos
     ) {
         List<ProductoResponseDTO> response = this.productoService.getProductos(
             idsProductos, titulo, minPrecio, maxPrecio, descripcion, idAutor, idSubcategoria,
-            idEditorial, esNovedad, esOferta, esMasVendido, esVisibleEnHome, estaVigente
+            idEditorial, esNovedad, esOferta, productosMasVendidos, esVisibleEnHome
         );
         return ResponseEntity.ok(response);
     }

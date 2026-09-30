@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.ClienteRequestDTO;
-import com.minpay.Comiqueria.dto.ClienteResponseDTO;
+import com.minpay.Comiqueria.dto.request.ClienteRequestDTO;
+import com.minpay.Comiqueria.dto.response.ClienteResponseDTO;
 import com.minpay.Comiqueria.exceptions.InvalidOperationException;
 import com.minpay.Comiqueria.mapper.IClienteMapper;
 import com.minpay.Comiqueria.model.Cliente;
@@ -17,8 +17,6 @@ import com.minpay.Comiqueria.repository.IUsuarioRepository;
 import com.minpay.Comiqueria.repository.specification.ClienteSpecifications;
 import com.minpay.Comiqueria.service.interfaces.IClienteService;
 import com.minpay.Comiqueria.utils.Utils;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class ClienteService implements IClienteService {
-
     @Autowired
     private IClienteRepository clienteRepository;
 
@@ -64,9 +61,9 @@ public class ClienteService implements IClienteService {
     public ClienteResponseDTO createCliente(ClienteRequestDTO clienteDTO) {
         Cliente cliente = this.clienteMapper.toCliente(clienteDTO);
         Usuario nuevoUsuario = Utils.findByIdOrThrow(
-            usuarioRepository, clienteDTO.getIdUsuario(), Usuario.class
+            usuarioRepository, clienteDTO.idUsuario(), Usuario.class
         );
-        if (!nuevoUsuario.getEstaActivo()) {
+        if (nuevoUsuario.getFechaBaja() != null) {
             throw new InvalidOperationException("El usuario no está vigente");
         }
         cliente.setUsuario(nuevoUsuario);
@@ -87,12 +84,10 @@ public class ClienteService implements IClienteService {
     @Override
     public void deleteCliente(Long id) {
         Cliente clienteEliminado = Utils.findByIdOrThrow(clienteRepository, id, Cliente.class);
-        if (!clienteEliminado.getEstaVigente()) {
+        if (clienteEliminado.getFechaBaja() != null) {
             throw new InvalidOperationException("El cliente ya está dado de baja");
         }
-        clienteEliminado.setFechaBaja(LocalDateTime.now());
-        clienteEliminado.setEstaVigente(Boolean.FALSE);
-        this.clienteRepository.save(clienteEliminado);
+        this.clienteRepository.delete(clienteEliminado);
     }
 
     @Override
@@ -119,7 +114,7 @@ public class ClienteService implements IClienteService {
         Domicilio nuevoDomicilio = Utils.findByIdOrThrow(
             domicilioRepository, idDomicilio, Domicilio.class
         );
-        if (!nuevoDomicilio.getEstaVigente()) {
+        if (nuevoDomicilio.getFechaBaja() != null) {
             throw new InvalidOperationException(
                 "El domicilio con ID " + idDomicilio + " no está vigente y no puede ser asignado."
             );
@@ -146,13 +141,11 @@ public class ClienteService implements IClienteService {
                     + idCliente + "."
             );
         }
-        if (!nuevoDomicilio.getEstaVigente()) {
+        if (nuevoDomicilio.getFechaBaja() != null) {
             throw new InvalidOperationException(
                 "El domicilio con ID " + idDomicilio + " ya fue dado de baja."
             );
         }
-        nuevoDomicilio.setEstaVigente(Boolean.FALSE);
-        nuevoDomicilio.setFechaBaja(LocalDate.now());
-        this.domicilioRepository.save(nuevoDomicilio);
+        this.domicilioRepository.delete(nuevoDomicilio);
     }
 }

@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service.interfaces;
 
-import com.minpay.Comiqueria.dto.DomicilioRequestDTO;
-import com.minpay.Comiqueria.dto.DomicilioResponseDTO;
+import com.minpay.Comiqueria.dto.request.DomicilioRequestDTO;
+import com.minpay.Comiqueria.dto.response.DomicilioResponseDTO;
 import java.util.List;
 
 public interface IDomicilioService {

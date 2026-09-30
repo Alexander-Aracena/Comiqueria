@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.mapper;
 
-import com.minpay.Comiqueria.dto.ClienteRequestDTO;
-import com.minpay.Comiqueria.dto.ClienteResponseDTO;
+import com.minpay.Comiqueria.dto.request.ClienteRequestDTO;
+import com.minpay.Comiqueria.dto.response.ClienteResponseDTO;
 import com.minpay.Comiqueria.model.Cliente;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -19,7 +19,6 @@ public interface IClienteMapper {
     @Mapping(target = "usuario", ignore = true)
     @Mapping(target = "fechaAlta", ignore = true)
     @Mapping(target = "fechaBaja", ignore = true)
-    @Mapping(target = "estaVigente", ignore = true)
     @Mapping(target = "favoritos", ignore = true)
     @Mapping(target = "ventas", ignore = true)
     Cliente toCliente(ClienteRequestDTO dto);
@@ -30,7 +29,6 @@ public interface IClienteMapper {
     @Mapping(target = "usuario", ignore = true)
     @Mapping(target = "fechaAlta", ignore = true)
     @Mapping(target = "fechaBaja", ignore = true)
-    @Mapping(target = "estaVigente", ignore = true)
     @Mapping(target = "favoritos", ignore = true)
     @Mapping(target = "ventas", ignore = true)
     void updateClienteFromDTO(ClienteRequestDTO dto, @MappingTarget Cliente cliente);

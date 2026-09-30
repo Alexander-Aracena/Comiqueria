@@ -12,6 +12,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
 
 @Getter
 @Setter
@@ -20,8 +21,9 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@SQLDelete(sql = "UPDATE localidades SET loc_fecha_baja = NOW() WHERE loc_id = ?")
 @Table(name = "localidades", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"loc_nombre", "dep_id"})  // Nombre de loc. + ID de Departamento debe ser único
+    @UniqueConstraint(columnNames = {"loc_nombre", "dep_id"})
 })
 public class Localidad {
 
@@ -40,11 +42,11 @@ public class Localidad {
     private String nombre;
 
     @NonNull
-    @ManyToOne(fetch = FetchType.LAZY) // Una localidad pertenece a un departamento
-    @JoinColumn(name = "loc_dep_id", nullable = false) // <-- FK a Departamento
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "loc_dep_id", nullable = false)
     private Departamento departamento;
 
-    @OneToMany(mappedBy = "localidad") // Un domicilio pertenece a una localidad
+    @OneToMany(mappedBy = "localidad")
     private Set<Domicilio> domicilios = new LinkedHashSet<>();
 
     @Column(name = "loc_fecha_alta")
@@ -52,7 +54,4 @@ public class Localidad {
 
     @Column(name = "loc_fecha_baja")
     private LocalDateTime fechaBaja;
-
-    @Column(name = "loc_esta_vigente")
-    private Boolean estaVigente = true;
 }

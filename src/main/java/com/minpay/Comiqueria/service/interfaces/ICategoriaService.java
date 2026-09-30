@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service.interfaces;
 
-import com.minpay.Comiqueria.dto.CategoriaRequestDTO;
-import com.minpay.Comiqueria.dto.CategoriaResponseDTO;
+import com.minpay.Comiqueria.dto.request.CategoriaRequestDTO;
+import com.minpay.Comiqueria.dto.response.CategoriaResponseDTO;
 import java.util.List;
 import java.util.Set;
 

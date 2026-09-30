@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.DomicilioRequestDTO;
-import com.minpay.Comiqueria.dto.DomicilioResponseDTO;
+import com.minpay.Comiqueria.dto.request.DomicilioRequestDTO;
+import com.minpay.Comiqueria.dto.response.DomicilioResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.IDomicilioService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

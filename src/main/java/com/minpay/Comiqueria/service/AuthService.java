@@ -1,9 +1,9 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.LoginRequestDTO;
-import com.minpay.Comiqueria.dto.LoginResponseDTO;
-import com.minpay.Comiqueria.dto.RegisterRequestDTO;
-import com.minpay.Comiqueria.dto.UsuarioResponseDTO;
+import com.minpay.Comiqueria.dto.request.LoginRequestDTO;
+import com.minpay.Comiqueria.dto.response.LoginResponseDTO;
+import com.minpay.Comiqueria.dto.request.RegisterRequestDTO;
+import com.minpay.Comiqueria.dto.response.UsuarioResponseDTO;
 import com.minpay.Comiqueria.exceptions.InvalidOperationException;
 import com.minpay.Comiqueria.exceptions.InvalidTokenException;
 import com.minpay.Comiqueria.exceptions.ResourceAlreadyExistsException;
@@ -48,8 +48,8 @@ public class AuthService implements IAuthService {
     public LoginResponseDTO login(LoginRequestDTO request) {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
-                request.getEmail(),
-                request.getContrasenia()
+                request.email(),
+                request.contrasenia()
             )
         );
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -71,16 +71,15 @@ public class AuthService implements IAuthService {
 
     @Override
     public UsuarioResponseDTO register(RegisterRequestDTO request) {
-        if (usuarioRepository.findByEmail(request.getEmail()).isPresent()) {
+        if (usuarioRepository.findByEmail(request.email()).isPresent()) {
             throw new ResourceAlreadyExistsException(
-                "El email '" + request.getEmail() + "' ya está registrado."
+                "El email '" + request.email() + "' ya está registrado."
             );
         }
 
         Usuario nuevoUsuario = this.usuarioMapper.toUsuario(request);
-        nuevoUsuario.setPasswordHash(passwordEncoder.encode(request.getContrasenia()));
+        nuevoUsuario.setPasswordHash(passwordEncoder.encode(request.contrasenia()));
         nuevoUsuario.setRol(Rol.CLIENTE);
-        nuevoUsuario.setEstaActivo(Boolean.TRUE);
         Usuario usuarioGuardado = this.usuarioRepository.save(nuevoUsuario);
 
         return this.usuarioMapper.toUsuarioResponseDTO(usuarioGuardado);

@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.mapper;
 
-import com.minpay.Comiqueria.dto.DepartamentoRequestDTO;
-import com.minpay.Comiqueria.dto.DepartamentoResponseDTO;
+import com.minpay.Comiqueria.dto.request.DepartamentoRequestDTO;
+import com.minpay.Comiqueria.dto.response.DepartamentoResponseDTO;
 import com.minpay.Comiqueria.model.Departamento;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -18,7 +18,6 @@ public interface IDepartamentoMapper {
     @Mapping(target = "localidades", ignore = true)
     @Mapping(target = "fechaAlta", ignore = true)
     @Mapping(target = "fechaBaja", ignore = true)
-    @Mapping(target = "estaVigente", ignore = true)
     Departamento toDepartamento(DepartamentoRequestDTO dto);
     
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -27,6 +26,5 @@ public interface IDepartamentoMapper {
     @Mapping(target = "localidades", ignore = true)
     @Mapping(target = "fechaAlta", ignore = true)
     @Mapping(target = "fechaBaja", ignore = true)
-    @Mapping(target = "estaVigente", ignore = true)
     void updateDepartamentoFromDTO(DepartamentoRequestDTO dto, @MappingTarget Departamento departamento);
 }

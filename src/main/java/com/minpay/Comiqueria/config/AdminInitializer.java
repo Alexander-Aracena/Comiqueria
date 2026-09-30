@@ -28,7 +28,6 @@ public class AdminInitializer implements CommandLineRunner {
             admin.setEmail("admin@lacomiqueria.com");
             admin.setPasswordHash(passwordEncoder.encode(PASS_ADMIN)); // Contraseña 'admin' hasheada
             admin.setRol(Rol.ADMIN);
-            admin.setEstaActivo(Boolean.TRUE);
             admin.setFechaAlta(LocalDateTime.now());
             
             // Campo para forzar el cambio de contraseña:

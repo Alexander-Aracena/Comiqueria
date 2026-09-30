@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service.interfaces;
 
-import com.minpay.Comiqueria.dto.ProductoRequestDTO;
-import com.minpay.Comiqueria.dto.ProductoResponseDTO;
+import com.minpay.Comiqueria.dto.request.ProductoRequestDTO;
+import com.minpay.Comiqueria.dto.response.ProductoResponseDTO;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -10,7 +10,7 @@ public interface IProductoService {
     public List<ProductoResponseDTO> getProductos(
         List<Long> ids, String titulo, BigDecimal minPrecio, BigDecimal maxPrecio, String descripcion,
         Long idAutor, Long idSubcategoria, Long idEditorial, Boolean esNovedad, Boolean esOferta,
-        Boolean esMasVendido, Boolean esVisibleEnHome, Boolean estaVigente
+        Boolean productosMasVendidos, Boolean esVisibleEnHome
     );
     public ProductoResponseDTO createProducto(ProductoRequestDTO productoDTO);
     public ProductoResponseDTO editProducto(Long id, ProductoRequestDTO productoDTO);

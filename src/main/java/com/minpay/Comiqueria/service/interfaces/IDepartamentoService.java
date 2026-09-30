@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service.interfaces;
 
-import com.minpay.Comiqueria.dto.DepartamentoRequestDTO;
-import com.minpay.Comiqueria.dto.DepartamentoResponseDTO;
+import com.minpay.Comiqueria.dto.request.DepartamentoRequestDTO;
+import com.minpay.Comiqueria.dto.response.DepartamentoResponseDTO;
 import java.util.List;
 
 public interface IDepartamentoService {

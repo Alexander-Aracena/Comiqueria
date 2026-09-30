@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.mapper;
 
-import com.minpay.Comiqueria.dto.EditorialRequestDTO;
-import com.minpay.Comiqueria.dto.EditorialResponseDTO;
+import com.minpay.Comiqueria.dto.request.EditorialRequestDTO;
+import com.minpay.Comiqueria.dto.response.EditorialResponseDTO;
 import com.minpay.Comiqueria.model.Editorial;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -16,7 +16,6 @@ public interface IEditorialMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "fechaAlta", ignore = true)
     @Mapping(target = "fechaBaja", ignore = true)
-    @Mapping(target = "estaVigente", ignore = true)
     @Mapping(target = "productos", ignore = true)
     Editorial toEditorial(EditorialRequestDTO dto);
     
@@ -24,7 +23,6 @@ public interface IEditorialMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "fechaAlta", ignore = true)
     @Mapping(target = "fechaBaja", ignore = true)
-    @Mapping(target = "estaVigente", ignore = true)
     @Mapping(target = "productos", ignore = true)
     void updateEditorialFromDTO(EditorialRequestDTO dto, @MappingTarget Editorial editorial);
 }

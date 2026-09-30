@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.ProductoRequestDTO;
-import com.minpay.Comiqueria.dto.ProductoResponseDTO;
+import com.minpay.Comiqueria.dto.request.ProductoRequestDTO;
+import com.minpay.Comiqueria.dto.response.ProductoResponseDTO;
 import com.minpay.Comiqueria.exceptions.InvalidOperationException;
 import com.minpay.Comiqueria.mapper.IProductoMapper;
 import com.minpay.Comiqueria.model.Autor;
@@ -16,8 +16,8 @@ import com.minpay.Comiqueria.repository.ISubcategoriaRepository;
 import com.minpay.Comiqueria.repository.specification.ProductoSpecifications;
 import com.minpay.Comiqueria.utils.Utils;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -53,29 +53,38 @@ public class ProductoService implements IProductoService {
     public List<ProductoResponseDTO> getProductos(
         List<Long> ids, String titulo, BigDecimal minPrecio, BigDecimal maxPrecio, String descripcion,
         Long idAutor, Long idSubcategoria, Long idEditorial, Boolean esNovedad, Boolean esOferta,
-        Boolean esMasVendido, Boolean esVisibleEnHome, Boolean estaVigente
+        Boolean productosMasVendidos, Boolean esVisibleEnHome
     ) {
         Specification<Producto> specs = ProductoSpecifications.byCriterios(
-            ids, titulo, minPrecio, maxPrecio, descripcion, idAutor, idSubcategoria, idEditorial,
-            esNovedad, esOferta, esMasVendido, esVisibleEnHome, estaVigente
+            ids, titulo, minPrecio, maxPrecio, descripcion, idAutor, idSubcategoria,
+            idEditorial, esNovedad, esVisibleEnHome, esOferta, productosMasVendidos
         );
         List<Producto> productos = this.productoRepository.findAll(specs);
-        return Utils.mapearListaA(productos, this.productoMapper::toProductoResponseDTO);
+        return IntStream.range(0, productos.size())
+            .mapToObj(i ->
+                productoMapper.toProductoResponseDTO(
+                    productos.get(i),
+                    Boolean.TRUE.equals(productosMasVendidos)?
+                        i + 1
+                        : null
+                )
+            )
+            .toList();
     }
 
     @Override
     public ProductoResponseDTO createProducto(ProductoRequestDTO productoDTO) {
         Producto producto = this.productoMapper.toProducto(productoDTO);
         Subcategoria subcategoria = Utils.findByIdOrThrow(
-            subcategoriaRepository, productoDTO.getIdSubcategoria(), Subcategoria.class
+            subcategoriaRepository, productoDTO.idSubcategoria(), Subcategoria.class
         );
-        if (!subcategoria.getEstaVigente()) {
+        if (subcategoria.getFechaBaja() != null) {
             throw new InvalidOperationException("La subcategoría no está vigente");
         }
         Editorial editorial = Utils.findByIdOrThrow(
-            editorialRepository, productoDTO.getIdEditorial(), Editorial.class
+            editorialRepository, productoDTO.idEditorial(), Editorial.class
         );
-        if (!editorial.getEstaVigente()) {
+        if (editorial.getFechaBaja() != null) {
             throw new InvalidOperationException("La editorial no está vigente");
         }
         producto.setSubcategoria(subcategoria);
@@ -88,24 +97,24 @@ public class ProductoService implements IProductoService {
     public ProductoResponseDTO editProducto(Long id, ProductoRequestDTO productoDTO) {
         Producto productoEditado = Utils.findByIdOrThrow(productoRepository, id, Producto.class);
         this.productoMapper.updateProductoFromDTO(productoDTO, productoEditado);
-        if (!productoDTO.getIdAutores().isEmpty()) {
-            List<Autor> nuevosAutores = this.autorRepository.findAllById(productoDTO.getIdAutores());
+        if (!productoDTO.idAutores().isEmpty()) {
+            List<Autor> nuevosAutores = this.autorRepository.findAllById(productoDTO.idAutores());
             productoEditado.setAutores(Utils.convertirListaASet(nuevosAutores));
         }
-        if (productoDTO.getIdSubcategoria() != null) {
+        if (productoDTO.idSubcategoria() != null) {
             Subcategoria nuevaSubcategoria = Utils.findByIdOrThrow(
-                subcategoriaRepository, productoDTO.getIdSubcategoria(), Subcategoria.class
+                subcategoriaRepository, productoDTO.idSubcategoria(), Subcategoria.class
             );
-            if (!nuevaSubcategoria.getEstaVigente()) {
+            if (nuevaSubcategoria.getFechaBaja() != null) {
                 throw new InvalidOperationException("La subcategoría seleccionada no está vigente");
             }
             productoEditado.setSubcategoria(nuevaSubcategoria);
         }
-        if (productoDTO.getIdEditorial() != null) {
+        if (productoDTO.idEditorial() != null) {
             Editorial nuevaEditorial = Utils.findByIdOrThrow(
-                editorialRepository, productoDTO.getIdEditorial(), Editorial.class
+                editorialRepository, productoDTO.idEditorial(), Editorial.class
             );
-            if (!nuevaEditorial.getEstaVigente()) {
+            if (nuevaEditorial.getFechaBaja() != null) {
                 throw new InvalidOperationException("La editorial seleccionada no está vigente");
             }
             productoEditado.setEditorial(nuevaEditorial);
@@ -117,11 +126,9 @@ public class ProductoService implements IProductoService {
     @Override
     public void deleteProducto(Long id) {
         Producto productoEliminado = Utils.findByIdOrThrow(productoRepository, id, Producto.class);
-        if (!productoEliminado.getEstaVigente()) {
+        if (productoEliminado.getFechaBaja() != null) {
             throw new InvalidOperationException("El producto ya fue dado de baja");
         }
-        productoEliminado.setFechaBaja(LocalDateTime.now());
-        productoEliminado.setEstaVigente(Boolean.FALSE);
-        this.productoRepository.save(productoEliminado);
+        this.productoRepository.delete(productoEliminado);
     }
 }

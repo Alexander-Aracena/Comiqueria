@@ -6,6 +6,4 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IAutorRepository extends JpaRepository<Autor, Long>, JpaSpecificationExecutor<Autor> {
-    
-}
+public interface IAutorRepository extends JpaRepository<Autor, Long>, JpaSpecificationExecutor<Autor> {}

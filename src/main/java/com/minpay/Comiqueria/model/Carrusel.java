@@ -9,6 +9,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
 
 /**
  * Representa un elemento de carrusel (slide) que se muestra en la interfaz de usuario,
@@ -23,6 +24,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@SQLDelete(sql = "UPDATE carruseles SET car_esta_activo = FALSE WHERE car_id = ?")
 @Table(name = "carruseles")
 public class Carrusel {
     /**

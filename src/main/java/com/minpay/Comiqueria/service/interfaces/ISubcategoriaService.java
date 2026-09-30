@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service.interfaces;
 
-import com.minpay.Comiqueria.dto.SubcategoriaRequestDTO;
-import com.minpay.Comiqueria.dto.SubcategoriaResponseDTO;
+import com.minpay.Comiqueria.dto.request.SubcategoriaRequestDTO;
+import com.minpay.Comiqueria.dto.response.SubcategoriaResponseDTO;
 import java.util.List;
 
 public interface ISubcategoriaService {

@@ -1,6 +1,6 @@
 package com.minpay.Comiqueria.service.interfaces;
 
-import com.minpay.Comiqueria.dto.LineaVentaResponseDTO;
+import com.minpay.Comiqueria.dto.response.LineaVentaResponseDTO;
 import java.math.BigDecimal;
 import java.util.List;
 

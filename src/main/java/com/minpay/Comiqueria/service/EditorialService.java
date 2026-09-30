@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.EditorialRequestDTO;
-import com.minpay.Comiqueria.dto.EditorialResponseDTO;
+import com.minpay.Comiqueria.dto.request.EditorialRequestDTO;
+import com.minpay.Comiqueria.dto.response.EditorialResponseDTO;
 import com.minpay.Comiqueria.exceptions.InvalidOperationException;
 import com.minpay.Comiqueria.mapper.IEditorialMapper;
 import com.minpay.Comiqueria.service.interfaces.IEditorialService;
@@ -50,7 +50,7 @@ public class EditorialService implements IEditorialService {
     @Override
     public EditorialResponseDTO editEditorial(Long id, EditorialRequestDTO editorialRequestDTO) {
         Editorial editorialModificada = Utils.findByIdOrThrow(editorialRepository, id, Editorial.class);
-        if (!editorialModificada.getEstaVigente()) {
+        if (editorialModificada.getFechaBaja() != null) {
             throw new InvalidOperationException("La editorial no está vigente");
         }
         this.editorialMapper.updateEditorialFromDTO(editorialRequestDTO, editorialModificada);
@@ -61,11 +61,9 @@ public class EditorialService implements IEditorialService {
     @Override
     public void deleteEditorial(Long id) {
         Editorial editorialEliminada = Utils.findByIdOrThrow(editorialRepository, id, Editorial.class);
-        if (!editorialEliminada.getEstaVigente()) {
+        if (editorialEliminada.getFechaBaja() != null) {
             throw new InvalidOperationException("La editorial no está vigente");
         }
-        editorialEliminada.setFechaBaja(LocalDateTime.now());
-        editorialEliminada.setEstaVigente(Boolean.FALSE);
-        this.editorialRepository.save(editorialEliminada);
+        this.editorialRepository.delete(editorialEliminada);
     }
 }

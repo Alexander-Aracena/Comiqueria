@@ -12,6 +12,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
 
 @Getter
 @Setter
@@ -20,6 +21,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@SQLDelete(sql = "UPDATE editoriales SET edit_fecha_baja = NOW() WHERE edit_id = ?")
 @Table(name = "editoriales")
 public class Editorial {
     @Id
@@ -43,9 +45,6 @@ public class Editorial {
     @Column(name = "edit_fecha_baja")
     @ToString.Include
     private LocalDateTime fechaBaja;
-    
-    @Column(name = "edit_esta_vigente")
-    private Boolean estaVigente = true;
     
     @OneToMany(mappedBy = "editorial")
     private Set<Producto> productos = new LinkedHashSet<>();

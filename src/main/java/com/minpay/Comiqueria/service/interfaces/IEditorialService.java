@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service.interfaces;
 
-import com.minpay.Comiqueria.dto.EditorialRequestDTO;
-import com.minpay.Comiqueria.dto.EditorialResponseDTO;
+import com.minpay.Comiqueria.dto.request.EditorialRequestDTO;
+import com.minpay.Comiqueria.dto.response.EditorialResponseDTO;
 import java.util.List;
 
 public interface IEditorialService {

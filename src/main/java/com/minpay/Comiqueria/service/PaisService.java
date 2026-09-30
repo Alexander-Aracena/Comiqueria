@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.PaisRequestDTO;
-import com.minpay.Comiqueria.dto.PaisResponseDTO;
+import com.minpay.Comiqueria.dto.request.PaisRequestDTO;
+import com.minpay.Comiqueria.dto.response.PaisResponseDTO;
 import com.minpay.Comiqueria.exceptions.InvalidOperationException;
 import com.minpay.Comiqueria.mapper.IPaisMapper;
 import com.minpay.Comiqueria.service.interfaces.IPaisService;
@@ -9,7 +9,6 @@ import com.minpay.Comiqueria.model.Pais;
 import com.minpay.Comiqueria.repository.IPaisRepository;
 import com.minpay.Comiqueria.repository.specification.PaisSpecifications;
 import com.minpay.Comiqueria.utils.Utils;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -51,7 +50,7 @@ public class PaisService implements IPaisService {
     @Override
     public PaisResponseDTO editPais(Long id, PaisRequestDTO paisDTO) {
         Pais paisModificado = Utils.findByIdOrThrow(paisRepository, id, Pais.class);
-        if (!paisModificado.getEstaVigente()) {
+        if (paisModificado.getFechaBaja() != null) {
             throw new InvalidOperationException("El pais ya no está vigente");
         }
         this.paisMapper.updatePaisFromDTO(paisDTO, paisModificado);
@@ -62,11 +61,9 @@ public class PaisService implements IPaisService {
     @Override
     public void deletePais(Long id) {
         Pais paisEliminado = Utils.findByIdOrThrow(paisRepository, id, Pais.class);
-        if (!paisEliminado.getEstaVigente()) {
+        if (paisEliminado.getFechaBaja() != null) {
             throw new InvalidOperationException("El pais ya no está vigente");
         }
-        paisEliminado.setFechaBaja(LocalDateTime.now());
-        paisEliminado.setEstaVigente(Boolean.FALSE);
-        this.paisRepository.save(paisEliminado);
+        this.paisRepository.delete(paisEliminado);
     }
 }

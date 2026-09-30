@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service.interfaces;
 
-import com.minpay.Comiqueria.dto.CarruselRequestDTO;
-import com.minpay.Comiqueria.dto.CarruselResponseDTO;
+import com.minpay.Comiqueria.dto.request.CarruselRequestDTO;
+import com.minpay.Comiqueria.dto.response.CarruselResponseDTO;
 import java.util.List;
 
 public interface ICarruselService {

@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.CategoriaRequestDTO;
-import com.minpay.Comiqueria.dto.CategoriaResponseDTO;
+import com.minpay.Comiqueria.dto.request.CategoriaRequestDTO;
+import com.minpay.Comiqueria.dto.response.CategoriaResponseDTO;
 import com.minpay.Comiqueria.exceptions.InvalidOperationException;
 import com.minpay.Comiqueria.mapper.ICategoriaMapper;
 import com.minpay.Comiqueria.service.interfaces.ICategoriaService;
@@ -57,7 +57,7 @@ public class CategoriaService implements ICategoriaService {
     @Override
     public CategoriaResponseDTO editCategoria(Long id, CategoriaRequestDTO dto) {
         Categoria categoriaModificada = Utils.findByIdOrThrow(categoriaRepository, id, Categoria.class);
-        if (!categoriaModificada.getEstaVigente()) {
+        if (categoriaModificada.getFechaBaja() != null) {
             throw new InvalidOperationException("La categoría no está vigente");
         }
         this.categoriaMapper.updateCategoriaFromDTO(dto, categoriaModificada);
@@ -68,18 +68,16 @@ public class CategoriaService implements ICategoriaService {
     @Override
     public void deleteCategoria(Long id) {
         Categoria categoriaEliminada = Utils.findByIdOrThrow(categoriaRepository, id, Categoria.class);
-        if (!categoriaEliminada.getEstaVigente()) {
+        if (categoriaEliminada.getFechaBaja() != null) {
             throw new InvalidOperationException("La categoría ya fue dada de baja");
         }
-        categoriaEliminada.setFechaBaja(LocalDateTime.now());
-        categoriaEliminada.setEstaVigente(Boolean.FALSE);
-        this.categoriaRepository.save(categoriaEliminada);
+        this.categoriaRepository.delete(categoriaEliminada);
     }
 
     @Override
     public void addSubcategories(Long idCategoria, Set<Long> idsSubcategorias) {
         Categoria categoria = Utils.findByIdOrThrow(categoriaRepository, idCategoria, Categoria.class);
-        if (!categoria.getEstaVigente()) {
+        if (categoria.getFechaBaja() != null) {
             throw new InvalidOperationException("La categoría no está vigente");
         }
         Set<Subcategoria> subcategorias = Utils.findAllById(subcategoriaRepository, idsSubcategorias);
@@ -91,7 +89,7 @@ public class CategoriaService implements ICategoriaService {
     @Override
     public void deleteSubcategories(Long idCategoria, Set<Long> idsSubcategorias) {
         Categoria categoria = Utils.findByIdOrThrow(categoriaRepository, idCategoria, Categoria.class);
-        if (!categoria.getEstaVigente()) {
+        if (categoria.getFechaBaja() != null) {
             throw new InvalidOperationException("La categoría no está vigente");
         }
         Set<Subcategoria> subcategorias = Utils.findAllById(subcategoriaRepository, idsSubcategorias);

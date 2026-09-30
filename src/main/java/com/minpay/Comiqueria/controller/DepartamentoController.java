@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.DepartamentoRequestDTO;
-import com.minpay.Comiqueria.dto.DepartamentoResponseDTO;
+import com.minpay.Comiqueria.dto.request.DepartamentoRequestDTO;
+import com.minpay.Comiqueria.dto.response.DepartamentoResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.IDepartamentoService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

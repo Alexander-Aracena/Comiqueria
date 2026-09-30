@@ -12,6 +12,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
 
 /**
  * Representa una categoría principal para organizar los productos (ej. "Cómics", "Manga", "Figuras").
@@ -25,6 +26,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@SQLDelete(sql = "UPDATE categorias SET cat_fecha_baja = NOW() WHERE cat_id = ?")
 @Table(name = "categorias")
 public class Categoria {
     /**
@@ -64,13 +66,6 @@ public class Categoria {
     @Column(name = "cat_fecha_baja")
     @ToString.Include
     private LocalDateTime fechaBaja;
-    
-    /**
-     * Indica si la categoría está activa y vigente en el sistema.
-     * Utilizado para la baja lógica. Por defecto es 'true'.
-     */
-    @Column(name = "cat_esta_vigente")
-    private Boolean estaVigente = true;
     
     /**
      * Conjunto de subcategorías asociadas a esta categoría.

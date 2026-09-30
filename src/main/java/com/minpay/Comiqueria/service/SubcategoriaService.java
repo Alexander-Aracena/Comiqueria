@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.SubcategoriaRequestDTO;
-import com.minpay.Comiqueria.dto.SubcategoriaResponseDTO;
+import com.minpay.Comiqueria.dto.request.SubcategoriaRequestDTO;
+import com.minpay.Comiqueria.dto.response.SubcategoriaResponseDTO;
 import com.minpay.Comiqueria.exceptions.InvalidOperationException;
 import com.minpay.Comiqueria.mapper.ISubcategoriaMapper;
 import com.minpay.Comiqueria.model.Categoria;
@@ -11,7 +11,6 @@ import com.minpay.Comiqueria.repository.ICategoriaRepository;
 import com.minpay.Comiqueria.repository.ISubcategoriaRepository;
 import com.minpay.Comiqueria.repository.specification.SubcategoriaSpecifications;
 import com.minpay.Comiqueria.utils.Utils;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,9 +51,9 @@ public class SubcategoriaService implements ISubcategoriaService {
     public SubcategoriaResponseDTO createSubcategoria(SubcategoriaRequestDTO subcategoriaDTO) {
         Subcategoria subcategoria = this.subcategoriaMapper.toSubcategoria(subcategoriaDTO);
         Categoria categoria = Utils.findByIdOrThrow(
-            categoriaRepository, subcategoriaDTO.getIdCategoria(), Categoria.class
+            categoriaRepository, subcategoriaDTO.idCategoria(), Categoria.class
         );
-        if (!categoria.getEstaVigente()) {
+        if (categoria.getFechaBaja() != null) {
             throw new InvalidOperationException("La categoría seleccionada ya no está vigente");
         }
         subcategoria.setCategoria(categoria);
@@ -68,22 +67,20 @@ public class SubcategoriaService implements ISubcategoriaService {
         Subcategoria subcategoriaModificada = Utils.findByIdOrThrow(
             subcategoriaRepository, id, Subcategoria.class
         );
-        if (!subcategoriaModificada.getEstaVigente()) {
+        if (subcategoriaModificada.getFechaBaja() != null) {
             throw new InvalidOperationException("La subcategoría no está vigente");
         }
-        if (subcategoriaDTO.getIdCategoria() != null) {
-            Categoria nuevaCategoria = Utils.findByIdOrThrow(
-                categoriaRepository, subcategoriaDTO.getIdCategoria(), Categoria.class
-            );
-            Categoria categoriaAnterior = subcategoriaModificada.getCategoria();
-            if (!nuevaCategoria.getEstaVigente()) {
-                throw new InvalidOperationException("La categoría seleccionada ya no está vigente");
-            }
-            if (!Objects.equals(subcategoriaModificada.getCategoria().getId(), nuevaCategoria.getId())) {
-                categoriaAnterior.getSubcategorias().remove(subcategoriaModificada);
-                subcategoriaModificada.setCategoria(nuevaCategoria);
-                nuevaCategoria.getSubcategorias().add(subcategoriaModificada);
-            }
+        Categoria nuevaCategoria = Utils.findByIdOrThrow(
+            categoriaRepository, subcategoriaDTO.idCategoria(), Categoria.class
+        );
+        Categoria categoriaAnterior = subcategoriaModificada.getCategoria();
+        if (nuevaCategoria.getFechaBaja() != null) {
+            throw new InvalidOperationException("La categoría seleccionada ya no está vigente");
+        }
+        if (!Objects.equals(subcategoriaModificada.getCategoria().getId(), nuevaCategoria.getId())) {
+            categoriaAnterior.getSubcategorias().remove(subcategoriaModificada);
+            subcategoriaModificada.setCategoria(nuevaCategoria);
+            nuevaCategoria.getSubcategorias().add(subcategoriaModificada);
         }
         this.subcategoriaMapper.updateSubcategoriaFromDTO(subcategoriaDTO, subcategoriaModificada);
         subcategoriaModificada = this.subcategoriaRepository.save(subcategoriaModificada);
@@ -95,11 +92,9 @@ public class SubcategoriaService implements ISubcategoriaService {
         Subcategoria subcategoriaEliminada = Utils.findByIdOrThrow(
             subcategoriaRepository, id, Subcategoria.class
         );
-        if (!subcategoriaEliminada.getEstaVigente()) {
+        if (subcategoriaEliminada.getFechaBaja() != null) {
             throw new InvalidOperationException("La subcategoría ya fue dada de baja");
         }
-        subcategoriaEliminada.setEstaVigente(Boolean.FALSE);
-        subcategoriaEliminada.setFechaBaja(LocalDateTime.now());
-        this.subcategoriaRepository.save(subcategoriaEliminada);
+        this.subcategoriaRepository.delete(subcategoriaEliminada);
     }
 }

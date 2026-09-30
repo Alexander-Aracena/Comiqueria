@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.EditorialRequestDTO;
-import com.minpay.Comiqueria.dto.EditorialResponseDTO;
+import com.minpay.Comiqueria.dto.request.EditorialRequestDTO;
+import com.minpay.Comiqueria.dto.response.EditorialResponseDTO;
 import com.minpay.Comiqueria.service.interfaces.IEditorialService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

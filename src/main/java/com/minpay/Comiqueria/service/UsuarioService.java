@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.UsuarioRequestDTO;
-import com.minpay.Comiqueria.dto.UsuarioResponseDTO;
+import com.minpay.Comiqueria.dto.request.UsuarioRequestDTO;
+import com.minpay.Comiqueria.dto.response.UsuarioResponseDTO;
 import com.minpay.Comiqueria.exceptions.InvalidOperationException;
 import com.minpay.Comiqueria.exceptions.ResourceAlreadyExistsException;
 import com.minpay.Comiqueria.mapper.IUsuarioMapper;
@@ -52,7 +52,7 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public UsuarioResponseDTO createUsuario(UsuarioRequestDTO usuarioDTO) {
-        String email = usuarioDTO.getEmail();
+        String email = usuarioDTO.email();
         if (this.usuarioRepository.existsByEmail(email)) {
             throw new ResourceAlreadyExistsException("Ya existe un usuario creado con ese email en uso");
         }
@@ -63,22 +63,22 @@ public class UsuarioService implements IUsuarioService {
         boolean isAdminCaller = authentication != null && authentication.getAuthorities().stream()
             .anyMatch(user -> user.getAuthority().equals("ROLE_ADMIN"));
         
-        if (isAdminCaller && usuarioDTO.getRol() != null) {
-            rolAAsignar = usuarioDTO.getRol();
+        if (isAdminCaller && usuarioDTO.rol() != null) {
+            rolAAsignar = usuarioDTO.rol();
         }
         
         Usuario usuario = this.usuarioMapper.toUsuario(usuarioDTO);
         usuario.setRol(rolAAsignar);
-        usuario.setPasswordHash(this.passwordEncoder.encode(usuarioDTO.getPassword()));
+        usuario.setPasswordHash(this.passwordEncoder.encode(usuarioDTO.password()));
         usuario = this.usuarioRepository.save(usuario);
         return this.usuarioMapper.toUsuarioResponseDTO(usuario);
     }
 
     @Override
     public UsuarioResponseDTO editUsuario(Long id, UsuarioRequestDTO usuarioDTO) {
-        String emailElegido = usuarioDTO.getEmail();
-        Rol rolElegido = usuarioDTO.getRol();
-        String nuevaContrasenia = usuarioDTO.getPassword();
+        String emailElegido = usuarioDTO.email();
+        Rol rolElegido = usuarioDTO.rol();
+        String nuevaContrasenia = usuarioDTO.password();
 
         Usuario usuario = Utils.findByIdOrThrow(usuarioRepository, id, Usuario.class);
         usuarioMapper.updateUsuarioFromDTO(usuarioDTO, usuario);
@@ -110,11 +110,9 @@ public class UsuarioService implements IUsuarioService {
     @Override
     public void deleteUsuario(Long id) {
         Usuario usuario = Utils.findByIdOrThrow(usuarioRepository, id, Usuario.class);
-        if (usuario.getEstaActivo().equals(Boolean.FALSE)) {
+        if (usuario.getFechaBaja() != null) {
             throw new InvalidOperationException("El usuario ya fue dado de baja");
         }
-        usuario.setFechaBaja(LocalDateTime.now());
-        usuario.setEstaActivo(Boolean.FALSE);
-        this.usuarioRepository.save(usuario);
+        this.usuarioRepository.delete(usuario);
     }
 }

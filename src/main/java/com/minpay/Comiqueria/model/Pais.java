@@ -12,6 +12,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
 
 @Getter
 @Setter
@@ -20,6 +21,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@SQLDelete(sql = "UPDATE paises SET pais_fecha_baja = NOW() WHERE pais_id = ?")
 @Table(name = "paises")
 public class Pais {
     @Id
@@ -46,7 +48,4 @@ public class Pais {
     @Column(name = "pais_fecha_baja")
     @ToString.Include
     private LocalDateTime fechaBaja;
-    
-    @Column(name = "pais_esta_vigente")
-    private Boolean estaVigente = true;
 }

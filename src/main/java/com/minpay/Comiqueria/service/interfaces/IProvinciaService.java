@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service.interfaces;
 
-import com.minpay.Comiqueria.dto.ProvinciaRequestDTO;
-import com.minpay.Comiqueria.dto.ProvinciaResponseDTO;
+import com.minpay.Comiqueria.dto.request.ProvinciaRequestDTO;
+import com.minpay.Comiqueria.dto.response.ProvinciaResponseDTO;
 import java.util.List;
 
 public interface IProvinciaService {

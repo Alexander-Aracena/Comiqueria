@@ -1,8 +1,8 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.LineaVentaRequestDTO;
-import com.minpay.Comiqueria.dto.VentaRequestDTO;
-import com.minpay.Comiqueria.dto.VentaResponseDTO;
+import com.minpay.Comiqueria.dto.request.LineaVentaRequestDTO;
+import com.minpay.Comiqueria.dto.request.VentaRequestDTO;
+import com.minpay.Comiqueria.dto.response.VentaResponseDTO;
 import com.minpay.Comiqueria.exceptions.InvalidOperationException;
 import com.minpay.Comiqueria.mapper.IVentaMapper;
 import com.minpay.Comiqueria.model.Cliente;
@@ -66,15 +66,15 @@ public class VentaService implements IVentaService {
     public VentaResponseDTO createVenta(VentaRequestDTO ventaDTO) {
         Venta venta = this.ventaMapper.toVenta(ventaDTO);
         Cliente cliente = Utils.findByIdOrThrow(
-            clienteRepository, ventaDTO.getIdCliente(), Cliente.class
+            clienteRepository, ventaDTO.idCliente(), Cliente.class
         );
-        Set<LineaVenta> lineasVenta = Utils.mapearSetA(ventaDTO.getLineas(), this::crearLineaVenta);
+        Set<LineaVenta> lineasVenta = Utils.mapearSetA(ventaDTO.lineas(), this::crearLineaVenta);
         // Falta asignar 'venta' a cada línea
         venta.getLineas().addAll(lineasVenta);
         lineasVenta.forEach(linea -> linea.setVenta(venta));
         BigDecimal totalVenta = this.calcularVenta(ventaDTO);
         venta.setTotal(totalVenta);
-        if (!cliente.getEstaVigente()) {
+        if (cliente.getFechaBaja() != null) {
             throw new InvalidOperationException(
                 "El cliente no está vigente y no puede continuar la operación"
             );
@@ -94,18 +94,18 @@ public class VentaService implements IVentaService {
             );
         }
 
-        if (!ventaModificada.getCliente().getId().equals(ventaDTO.getIdCliente())) {
+        if (!ventaModificada.getCliente().getId().equals(ventaDTO.idCliente())) {
             Cliente nuevoCliente = Utils.findByIdOrThrow(
-                clienteRepository, ventaDTO.getIdCliente(), Cliente.class
+                clienteRepository, ventaDTO.idCliente(), Cliente.class
             );
-            if (!nuevoCliente.getEstaVigente()) {
+            if (nuevoCliente.getFechaBaja() != null) {
                 throw new InvalidOperationException(
                     "El nuevo cliente seleccionado no está vigente y no puede continuar la operación."
                 );
             }
             ventaModificada.setCliente(nuevoCliente);
         }
-        this.sincronizarLineasVenta(ventaModificada, ventaDTO.getLineas());
+        this.sincronizarLineasVenta(ventaModificada, ventaDTO.lineas());
         BigDecimal totalVenta = this.calcularVenta(ventaDTO);
         ventaModificada.setTotal(totalVenta.setScale(2, RoundingMode.HALF_UP));
         ventaModificada = this.ventaRepository.save(ventaModificada);
@@ -120,20 +120,20 @@ public class VentaService implements IVentaService {
     }
 
     private BigDecimal calcularVenta(VentaRequestDTO ventaDTO) {
-        Set<LineaVentaRequestDTO> lineas = ventaDTO.getLineas();
+        Set<LineaVentaRequestDTO> lineas = ventaDTO.lineas();
         BigDecimal total = BigDecimal.ZERO;
 
         for (LineaVentaRequestDTO linea : lineas) {
             Producto producto = Utils.findByIdOrThrow(
-                productoRepository, linea.getIdProducto(), Producto.class
+                productoRepository, linea.idProducto(), Producto.class
             );
-            if (!producto.getEstaVigente()) {
+            if (producto.getFechaBaja() != null) {
                 throw new InvalidOperationException(
-                    "El producto con ID " + linea.getIdProducto()
+                    "El producto con ID " + linea.idProducto()
                     + " no está vigente y no puede ser vendido."
                 );
             }
-            BigDecimal cantidad = new BigDecimal(linea.getCantidad());
+            BigDecimal cantidad = new BigDecimal(linea.cantidad());
             BigDecimal subtotalLinea = cantidad.multiply(producto.getPrecio());
             total = total.add(subtotalLinea);
         }
@@ -144,10 +144,10 @@ public class VentaService implements IVentaService {
     private LineaVenta crearLineaVenta(LineaVentaRequestDTO dto) {
         LineaVenta linea = new LineaVenta();
         Producto producto = Utils.findByIdOrThrow(
-            productoRepository, dto.getIdProducto(), Producto.class
+            productoRepository, dto.idProducto(), Producto.class
         );
         linea.setProducto(producto);
-        linea.setCantidad(dto.getCantidad());
+        linea.setCantidad(dto.cantidad());
         linea.setPrecioUnitario(producto.getPrecio());
         return linea;
     }
@@ -158,17 +158,17 @@ public class VentaService implements IVentaService {
         
         for (LineaVenta lineaExistente : ventaExistente.getLineas()) {
             LineaVentaRequestDTO lineaDtoCoincidente = lineasDto.stream()
-                .filter(dto -> dto.getIdProducto().equals(lineaExistente.getProducto().getId()))
+                .filter(dto -> dto.idProducto().equals(lineaExistente.getProducto().getId()))
                 .findFirst()
                 .orElse(null);
 
             if (lineaDtoCoincidente != null) {
-                lineaExistente.setCantidad(lineaDtoCoincidente.getCantidad());
+                lineaExistente.setCantidad(lineaDtoCoincidente.cantidad());
                 Producto producto = Utils.findByIdOrThrow(
                     productoRepository, lineaExistente.getProducto().getId(), Producto.class
                 );
                 
-                if (!producto.getEstaVigente()) {
+                if (producto.getFechaBaja() != null) {
                     throw new InvalidOperationException(
                         "El producto '" + producto.getTitulo()
                         + "' (ID: " + producto.getId() + ") no está vigente y no puede ser parte de la venta."

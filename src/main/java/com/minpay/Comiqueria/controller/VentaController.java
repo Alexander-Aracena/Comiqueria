@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.controller;
 
-import com.minpay.Comiqueria.dto.VentaRequestDTO;
-import com.minpay.Comiqueria.dto.VentaResponseDTO;
+import com.minpay.Comiqueria.dto.request.VentaRequestDTO;
+import com.minpay.Comiqueria.dto.response.VentaResponseDTO;
 import com.minpay.Comiqueria.model.EstadoVenta;
 import com.minpay.Comiqueria.service.interfaces.IVentaService;
 import java.math.BigDecimal;

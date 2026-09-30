@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.CarruselRequestDTO;
-import com.minpay.Comiqueria.dto.CarruselResponseDTO;
+import com.minpay.Comiqueria.dto.request.CarruselRequestDTO;
+import com.minpay.Comiqueria.dto.response.CarruselResponseDTO;
 import com.minpay.Comiqueria.exceptions.InvalidOperationException;
 import com.minpay.Comiqueria.mapper.ICarruselMapper;
 import com.minpay.Comiqueria.model.Carrusel;
@@ -55,6 +55,9 @@ public class CarruselService implements ICarruselService {
     @Override
     public CarruselResponseDTO editCarrusel(Long id, CarruselRequestDTO carouselDTO) {
         Carrusel carruselModificado = Utils.findByIdOrThrow(carruselRepository, id, Carrusel.class);
+        if (!carruselModificado.getEstaActivo()) {
+            throw new InvalidOperationException("El carrusel ya está dado de baja.");
+        }
         this.carruselMapper.updateCarruselFromDTO(carouselDTO, carruselModificado);
         carruselModificado = this.carruselMapper.toCarrusel(carouselDTO);
         return this.carruselMapper.toCarruselResponseDTO(carruselModificado);
@@ -66,7 +69,6 @@ public class CarruselService implements ICarruselService {
         if (!carrusel.getEstaActivo()) {
             throw new InvalidOperationException("El carrusel ya está dado de baja.");
         }
-        carrusel.setEstaActivo(Boolean.FALSE);
-        this.carruselRepository.save(carrusel);
+        this.carruselRepository.delete(carrusel);
     }
 }

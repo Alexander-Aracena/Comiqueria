@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.AutorRequestDTO;
-import com.minpay.Comiqueria.dto.AutorResponseDTO;
+import com.minpay.Comiqueria.dto.request.AutorRequestDTO;
+import com.minpay.Comiqueria.dto.response.AutorResponseDTO;
 import com.minpay.Comiqueria.exceptions.InvalidOperationException;
 import com.minpay.Comiqueria.mapper.IAutorMapper;
 import com.minpay.Comiqueria.service.interfaces.IAutorService;
@@ -11,7 +11,6 @@ import com.minpay.Comiqueria.repository.IAutorRepository;
 import com.minpay.Comiqueria.repository.IProductoRepository;
 import com.minpay.Comiqueria.repository.specification.AutorSpecifications;
 import com.minpay.Comiqueria.utils.Utils;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,16 +67,14 @@ public class AutorService implements IAutorService {
         if (autor.getFechaBaja() != null) {
             throw new InvalidOperationException("El autor ya está dado de baja.");
         }
-        autor.setFechaBaja(LocalDate.now());
-        autor.setEstaVigente(Boolean.FALSE);
-        this.autorRepository.save(autor);
+        this.autorRepository.delete(autor);
     }
     
     @Override
     public void addProductos(Long idAutor, Set<Long> idsProductos) {
         Autor autor = Utils.findByIdOrThrow(autorRepository, idAutor, Autor.class);
         List<Producto> productos = this.productoRepository.findAllById(idsProductos);
-        if (!autor.getEstaVigente()) {
+        if (autor.getFechaBaja() != null) {
             throw new InvalidOperationException("El autor ya está dado de baja.");
         }
         Set<Producto> productosOrdenados = Utils.ordenarPorIds(idsProductos, productos, Producto::getId);
@@ -90,7 +87,7 @@ public class AutorService implements IAutorService {
     public void deleteProductos(Long idAutor, Set<Long> idsProductos) {
         Autor autor = Utils.findByIdOrThrow(autorRepository, idAutor, Autor.class);
         List<Producto> productos = this.productoRepository.findAllById(idsProductos);
-        if (!autor.getEstaVigente()) {
+        if (autor.getFechaBaja() != null) {
             throw new InvalidOperationException("El autor ya está dado de baja.");
         }
         autor.getProductos().removeAll(productos);

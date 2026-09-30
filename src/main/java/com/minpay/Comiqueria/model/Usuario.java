@@ -21,6 +21,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
 
 @Getter
 @Setter
@@ -29,6 +30,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@SQLDelete(sql = "UPDATE usuarios SET usr_fecha_baja = NOW() WHERE usr_id = ?")
 @Table(name = "usuarios")
 public class Usuario {
     @Id
@@ -63,9 +65,6 @@ public class Usuario {
     @Column(name = "usr_fecha_baja")
     @ToString.Include
     private LocalDateTime fechaBaja;
-
-    @Column(name = "usr_esta_activo")
-    private Boolean estaActivo = true;
     
     @Column(name = "usr_ultimo_login")
     @ToString.Include

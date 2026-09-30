@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.mapper;
 
-import com.minpay.Comiqueria.dto.LocalidadRequestDTO;
-import com.minpay.Comiqueria.dto.LocalidadResponseDTO;
+import com.minpay.Comiqueria.dto.request.LocalidadRequestDTO;
+import com.minpay.Comiqueria.dto.response.LocalidadResponseDTO;
 import com.minpay.Comiqueria.model.Localidad;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -18,7 +18,6 @@ public interface ILocalidadMapper {
     @Mapping(target = "domicilios", ignore = true)
     @Mapping(target = "fechaAlta", ignore = true)
     @Mapping(target = "fechaBaja", ignore = true)
-    @Mapping(target = "estaVigente", ignore = true)
     Localidad toLocalidad(LocalidadRequestDTO dto);
     
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -27,6 +26,5 @@ public interface ILocalidadMapper {
     @Mapping(target = "domicilios", ignore = true)
     @Mapping(target = "fechaAlta", ignore = true)
     @Mapping(target = "fechaBaja", ignore = true)
-    @Mapping(target = "estaVigente", ignore = true)
     void updateLocalidadFromDTO(LocalidadRequestDTO dto, @MappingTarget Localidad localidad);
 }

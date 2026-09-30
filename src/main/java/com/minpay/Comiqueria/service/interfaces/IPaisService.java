@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service.interfaces;
 
-import com.minpay.Comiqueria.dto.PaisRequestDTO;
-import com.minpay.Comiqueria.dto.PaisResponseDTO;
+import com.minpay.Comiqueria.dto.request.PaisRequestDTO;
+import com.minpay.Comiqueria.dto.response.PaisResponseDTO;
 import java.util.List;
 
 public interface IPaisService {

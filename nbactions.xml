@@ -15,15 +15,15 @@
                 <exec.appArgs></exec.appArgs>
                 <exec.mainClass>com.minpay.Comiqueria.ComiqueriaApplication</exec.mainClass>
                 <exec.executable>java</exec.executable>
-                <Env.DB_URL>jdbc:mysql://localhost:3306/comiqueria_db?allowPublicKeyRetrieval=true&amp;useSSL=false&amp;serverTimezone=UTC</Env.DB_URL>
-                <Env.DB_USERNAME>root</Env.DB_USERNAME>
-                <Env.DB_PASSWORD>KalEl1706</Env.DB_PASSWORD>
-                <Env.DB_PLATFORM>org.hibernate.dialect.MySQL8Dialect</Env.DB_PLATFORM>
-                <Env.JWT_SECRET_KEY>usqcDy0Z73XHe35oMJbnJfS1I4jvDXEsYtk5vDLBRVo=</Env.JWT_SECRET_KEY>
-                <Env.GMAIL_PORT>587</Env.GMAIL_PORT>
-                <Env.GMAIL_USERNAME>alexander.aracena.cc@gmail.com</Env.GMAIL_USERNAME>
-                <Env.GMAIL_PASSWORD>vaxb lqyr xyab ltha</Env.GMAIL_PASSWORD>
-                <Env.FRONT_RESET_PASSWORD_URL>http://localhost:4200/reset-password</Env.FRONT_RESET_PASSWORD_URL>
+                
+                
+                
+                
+                
+                
+                
+                
+                
             </properties>
         </action>
         <action>

@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.DomicilioRequestDTO;
-import com.minpay.Comiqueria.dto.DomicilioResponseDTO;
+import com.minpay.Comiqueria.dto.request.DomicilioRequestDTO;
+import com.minpay.Comiqueria.dto.response.DomicilioResponseDTO;
 import com.minpay.Comiqueria.exceptions.InvalidOperationException;
 import com.minpay.Comiqueria.mapper.IDomicilioMapper;
 import com.minpay.Comiqueria.service.interfaces.IDomicilioService;
@@ -9,7 +9,6 @@ import com.minpay.Comiqueria.model.Domicilio;
 import com.minpay.Comiqueria.repository.IDomicilioRepository;
 import com.minpay.Comiqueria.repository.specification.DomicilioSpecifications;
 import com.minpay.Comiqueria.utils.Utils;
-import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -55,7 +54,7 @@ public class DomicilioService implements IDomicilioService {
     @Override
     public DomicilioResponseDTO editDomicilio(Long id, DomicilioRequestDTO domicilioDTO) {
         Domicilio domicilioModificado = Utils.findByIdOrThrow(domicilioRepository, id, Domicilio.class);
-        if (!domicilioModificado.getEstaVigente()) {
+        if (domicilioModificado.getFechaBaja() != null) {
             throw new InvalidOperationException("El domicilio no está vigente");
         }
         this.domicilioMapper.updateDomicilioFromDTO(domicilioDTO, domicilioModificado);
@@ -66,11 +65,9 @@ public class DomicilioService implements IDomicilioService {
     @Override
     public void deleteDomicilio(Long id) {
         Domicilio domicilioEliminado = Utils.findByIdOrThrow(domicilioRepository, id, Domicilio.class);
-        if (!domicilioEliminado.getEstaVigente()) {
+        if (domicilioEliminado.getFechaBaja() != null) {
             throw new InvalidOperationException("El domicilio ya fue dado de baja");
         }
-        domicilioEliminado.setFechaBaja(LocalDate.now());
-        domicilioEliminado.setEstaVigente(Boolean.FALSE);
-        this.domicilioRepository.save(domicilioEliminado);
+        this.domicilioRepository.delete(domicilioEliminado);
     }
 }

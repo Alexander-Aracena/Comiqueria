@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.mapper;
 
-import com.minpay.Comiqueria.dto.ProvinciaRequestDTO;
-import com.minpay.Comiqueria.dto.ProvinciaResponseDTO;
+import com.minpay.Comiqueria.dto.request.ProvinciaRequestDTO;
+import com.minpay.Comiqueria.dto.response.ProvinciaResponseDTO;
 import com.minpay.Comiqueria.model.Provincia;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -18,7 +18,6 @@ public interface IProvinciaMapper {
     @Mapping(target = "pais", ignore = true)
     @Mapping(target = "fechaAlta", ignore = true)
     @Mapping(target = "fechaBaja", ignore = true)
-    @Mapping(target = "estaVigente", ignore = true)
     Provincia toProvincia(ProvinciaRequestDTO dto);
     
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -27,6 +26,5 @@ public interface IProvinciaMapper {
     @Mapping(target = "pais", ignore = true)
     @Mapping(target = "fechaAlta", ignore = true)
     @Mapping(target = "fechaBaja", ignore = true)
-    @Mapping(target = "estaVigente", ignore = true)
     void updateProvinciaFromDTO(ProvinciaRequestDTO dto, @MappingTarget Provincia provincia);
 }

@@ -1,7 +1,7 @@
 package com.minpay.Comiqueria.service;
 
-import com.minpay.Comiqueria.dto.LocalidadRequestDTO;
-import com.minpay.Comiqueria.dto.LocalidadResponseDTO;
+import com.minpay.Comiqueria.dto.request.LocalidadRequestDTO;
+import com.minpay.Comiqueria.dto.response.LocalidadResponseDTO;
 import com.minpay.Comiqueria.exceptions.InvalidOperationException;
 import com.minpay.Comiqueria.mapper.ILocalidadMapper;
 import com.minpay.Comiqueria.model.Departamento;
@@ -11,7 +11,6 @@ import com.minpay.Comiqueria.repository.IDepartamentoRepository;
 import com.minpay.Comiqueria.repository.ILocalidadRepository;
 import com.minpay.Comiqueria.repository.specification.LocalidadSpecifications;
 import com.minpay.Comiqueria.utils.Utils;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,9 +57,9 @@ public class LocalidadService implements ILocalidadService {
     public LocalidadResponseDTO createLocalidad(LocalidadRequestDTO localidadRequestDTO) {
         Localidad localidad = this.localidadMapper.toLocalidad(localidadRequestDTO);
         Departamento nuevoDepartamento = Utils.findByIdOrThrow(
-            departamentoRepository, localidadRequestDTO.getIdDepartamento(), Departamento.class
+            departamentoRepository, localidadRequestDTO.idDepartamento(), Departamento.class
         );
-        if (!nuevoDepartamento.getEstaVigente()) {
+        if (nuevoDepartamento.getFechaBaja() != null) {
             throw new InvalidOperationException("El nuevoDepartamento seleccionado no está vigente");
         }
         localidad.setDepartamento(nuevoDepartamento);
@@ -71,22 +70,20 @@ public class LocalidadService implements ILocalidadService {
     @Override
     public LocalidadResponseDTO editLocalidad(Long id, LocalidadRequestDTO localidadRequestDTO) {
         Localidad localidadModificada = Utils.findByIdOrThrow(localidadRepository, id, Localidad.class);
-        if (!localidadModificada.getEstaVigente()) {
+        if (localidadModificada.getFechaBaja() != null) {
             throw new InvalidOperationException("La localidad ya no está vigente");
         }
-        if (localidadRequestDTO.getIdDepartamento() != null) {
-            Departamento nuevoDepartamento = Utils.findByIdOrThrow(
-                departamentoRepository, localidadRequestDTO.getIdDepartamento(), Departamento.class
-            );
-            if (!nuevoDepartamento.getEstaVigente()) {
-                throw new InvalidOperationException("El departamento seleccionado no está vigente");
-            }
-            
-            if (!Objects.equals(
-                localidadModificada.getDepartamento().getId(), localidadRequestDTO.getIdDepartamento()
-            )) {
-                localidadModificada.setDepartamento(nuevoDepartamento); 
-            }
+        Departamento nuevoDepartamento = Utils.findByIdOrThrow(
+            departamentoRepository, localidadRequestDTO.idDepartamento(), Departamento.class
+        );
+        if (nuevoDepartamento.getFechaBaja() != null) {
+            throw new InvalidOperationException("El departamento seleccionado no está vigente");
+        }
+
+        if (!Objects.equals(
+            localidadModificada.getDepartamento().getId(), localidadRequestDTO.idDepartamento()
+        )) {
+            localidadModificada.setDepartamento(nuevoDepartamento); 
         }
         this.localidadMapper.updateLocalidadFromDTO(localidadRequestDTO, localidadModificada);
         localidadModificada = this.localidadRepository.save(localidadModificada);
@@ -96,11 +93,9 @@ public class LocalidadService implements ILocalidadService {
     @Override
     public void deleteLocalidad(Long id) {
         Localidad localidadEliminada = Utils.findByIdOrThrow(localidadRepository, id, Localidad.class);
-        if (!localidadEliminada.getEstaVigente()) {
+        if (localidadEliminada.getFechaBaja() != null) {
             throw new InvalidOperationException("La localidad ya no está vigente");
         }
-        localidadEliminada.setFechaBaja(LocalDateTime.now());
-        localidadEliminada.setEstaVigente(Boolean.FALSE);
-        this.localidadRepository.save(localidadEliminada);
+        this.localidadRepository.delete(localidadEliminada);
     }
 }
